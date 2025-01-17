@@ -39,3 +39,22 @@ async def get_shop_urls(product_id: str):
     result_data = [{"shop_id": shop["shop_id"], "url": shop["url"]} for shop in shop_urls]
 
     return  result_data
+
+
+# 제품 내 가장 최근 최저가 정보 조회 API
+#  현재 날짜 최저가 조회로 변경 해야함
+
+@app.get("/product/{product_id}/cheapest")
+async def get_cheapest(product_id: str):
+    product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    cheapest = product.get("cheapest", [])
+    if not cheapest:
+        raise HTTPException(status_code=404, detail="No cheapest price found for this product")
+
+    # 최저가 정보 중 현재 날짜에서 가장 최근 정보 조회
+    current_cheapest = sorted(cheapest, key=lambda x: x["date"], reverse=True)[0]
+
+    return current_cheapest

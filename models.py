@@ -2,6 +2,8 @@
 from pydantic import BaseModel, HttpUrl, Field
 from typing import List, Optional
 from datetime import datetime
+from enum import Enum
+
 
 # Size 모델 (size 정보)
 class Size(BaseModel):
@@ -41,3 +43,9 @@ class Product(BaseModel):
     main_image_url: str  # 이미지 URL
     cheapest: List[Cheapest]  # 가격 이력 리스트
     brand_kr: str
+
+class Period(str, Enum):
+    one_week = "1week"
+    one_month = "1month"
+    one_year = "1year"
+    all_time = "all"

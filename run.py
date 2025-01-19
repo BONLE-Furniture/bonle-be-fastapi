@@ -11,11 +11,7 @@ async def root():
     return {"message": "Hello World"}
 
 
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
-
-# product 모델 조회 API
+# product 조회 API
 @app.get("/product/{product_id}")
 async def get_product(product_id: str):
     product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
@@ -45,8 +41,7 @@ async def get_shop_urls(product_id: str):
 
 
 # 제품 내 가장 최근 최저가 정보 조회 API
-#  현재 날짜 최저가 조회로 변경 해야함
-
+#  TODO 현재 날짜 최저가 조회로 변경 해야함
 @app.get("/product/{product_id}/cheapest")
 async def get_cheapest(product_id: str):
     product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
@@ -63,6 +58,7 @@ async def get_cheapest(product_id: str):
     return current_cheapest
 
 
+# 최저가 그래프 조회 API
 @app.get("/product/{product_id}/cheapest-graph")
 async def get_cheapest_prices(product_id: str, period: Period):
     """

@@ -110,3 +110,5 @@ async def get_cheapest_prices(product_id: str, period: Period):
     # 결과 정렬 및 반환
     sorted_prices = [{"date": date, "price": price} for date, price in sorted(daily_prices.items())]
     return {"period": period.value, "data": sorted_prices}
+
+# TODO 북마크 수 업데이트 API

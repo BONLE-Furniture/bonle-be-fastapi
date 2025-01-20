@@ -110,3 +110,140 @@ async def get_cheapest_prices(product_id: str, period: Period):
     # 결과 정렬 및 반환
     sorted_prices = [{"date": date, "price": price} for date, price in sorted(daily_prices.items())]
     return {"period": period.value, "data": sorted_prices}
+
+
+################hyundong#####################
+
+def sanitize_data(data):
+    sanitized_data = []
+    for item in data:
+        sanitized_item = {}
+        for key, value in item.items():
+            if isinstance(value, ObjectId):
+                sanitized_item[key] = str(value)
+            elif isinstance(value, float):
+                if value == float('inf') or value == float('-inf') or value != value:
+                    sanitized_item[key] = None
+                else:
+                    sanitized_item[key] = value
+            elif isinstance(value, dict): 
+                sanitized_item[key] = sanitize_data([value])[0]
+            elif isinstance(value, list): 
+                sanitized_item[key] = [
+                    str(v) if isinstance(v, ObjectId)
+                    else sanitize_data([v])[0] if isinstance(v, dict)
+                    else v
+                    for v in value
+                ]
+            else:
+                sanitized_item[key] = value
+        sanitized_data.append(sanitized_item)
+    return sanitized_data
+
+"""
+FAST API 연결, MongoDB 연결 테스트
+"""
+@app.get("/")
+async def read_root():
+    return {"message": "welcome to bonle"}
+
+@app.get("/check_connection")
+async def get_bonre_brands():
+    collections = await database.list_collection_names()
+    return collections
+
+"""
+제품 페이지 브랜드 API
+"""
+# test : /brands/get_bonre_brand_by_id/brand_andtrandition
+# brand_id를 받아서 해당 브랜드 정보를 반환하는 API
+@app.get("/brands/get_bonre_brand_by_id/{brand_id}")
+async def get_bonre_brand_by_id(brand_id: str):
+    item = await database["bonre_brands"].find_one({"_id": brand_id})
+    if item is not None:
+        return item
+    raise HTTPException(status_code=404, detail="Item not found")
+
+# test : http://127.0.0.1:8000/brands/get_bonre_products_by_brandId/brand_andtrandition
+# brand_id를 받아서 해당 브랜드의 상품 정보를 반환하는 API
+@app.get('/brands/get_bonre_products_by_brandId/{brand_id}')
+async def get_bonre_products_by_brandId(brand_id: str):
+    items = await database["bonre_products"].find({"brand": brand_id}).to_list(1000)
+    if items:
+        filtered_items = [
+            {
+                "_id": str(item["_id"]),
+                "name_kr": item["name_kr"],
+                "name": item["name"],
+                "brand": item["brand"],
+                "main_image_url": item["main_image_url"],
+                # "cheapest": str(item["cheapest"][-1])
+                "cheapest": str(item["cheapest"][-1]["price"] if item.get("cheapest") and len(item["cheapest"]) > 0 else None)
+            }
+            for item in items
+        ]
+        return filtered_items
+    raise HTTPException(status_code=404, detail="Items not found")
+
+# test : /home/products/?page=3&limit=2
+@app.get("/home/products/")
+async def get_products(page: int = 1, limit: int = 2):
+    skip = (page - 1) * limit
+    total_count = await database["bonre_products"].count_documents({})
+    
+    cursor = database["bonre_products"].find().skip(skip).limit(limit)
+    items = await cursor.to_list(length=limit)
+    
+    sanitized_items = sanitize_data(items)
+    
+    return {
+        "items": sanitized_items,
+        "total": total_count,
+        "page": page,
+        "limit": limit,
+        "total_pages": ceil(total_count / limit)
+    }
+
+"""
+모든 정보 반환 API
+"""
+# bonre_brands 컬렉션에 있는 모든 브랜드 정보를 반환하는 API
+@app.get("/brands/get_bonre_brands")
+async def get_bonre_brands():
+    collections = await database.list_collection_names()
+    if "bonre_brands" not in collections:
+        raise HTTPException(status_code=404, detail="Collection not found")
+    items = await database["bonre_brands"].find().to_list(1000)
+    sanitized_items = sanitize_data(items)
+    return sanitized_items
+
+# bonre_brands 컬렉션에 있는 모든 상품 정보를 반환하는 API
+@app.get("/brands/get_bonre_products")
+async def get_bonre_products():
+    collections = await database.list_collection_names()
+    if "bonre_products" not in collections:
+        raise HTTPException(status_code=404, detail="Collection not found")
+    
+    items = await database["bonre_products"].find().to_list(1000)
+    sanitized_items = sanitize_data(items)
+    return sanitized_items
+
+"""
+CRUD API
+"""
+
+#  test in : http://localhost:8000/docs
+@app.post("/brands/create_bonre_brand")
+async def create_bonre_brand(brand: Bonre_brand):
+    brand_dict = brand.dict(by_alias=True)
+    await database["bonre_brands"].insert_one(brand_dict)
+    return brand_dict
+
+@app.patch("/brands/update_bonre_brand/{brand_id}")
+async def update_bonre_brand(brand_id: str, brand: Bonre_brand_update):
+    brand_dict = brand.dict(exclude_unset=True)
+    brand_dict["_id"] = brand_id
+    if not brand_dict:
+        raise HTTPException(status_code=400, detail="No valid fields to update")
+    await database["bonre_brands"].update_one({"_id": brand_id}, {"$set": brand_dict})
+    return {"message": "Brand updated successfully"}

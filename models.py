@@ -49,3 +49,21 @@ class Period(str, Enum):
     one_month = "1month"
     one_year = "1year"
     all_time = "all"
+    
+class Bonre_brand(BaseModel):
+    id: str = Field(alias="_id")
+    brand_kr: str | None = None
+    brand: str | None = None
+    comment: str | None = None
+    bookmark_count: int | None = None
+    main_image_url: str | None = None
+    
+    class Config:
+        allow_population_by_field_name = True
+        
+class Bonre_brand_update(BaseModel):
+    brand_kr: Optional[str] = None
+    brand: Optional[str] = None
+    comment: Optional[str] = None
+    bookmark_count: Optional[int] = None
+    main_image_url: Optional[str] = None

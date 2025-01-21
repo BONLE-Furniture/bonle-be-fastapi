@@ -111,4 +111,35 @@ async def get_cheapest_prices(product_id: str, period: Period):
     sorted_prices = [{"date": date, "price": price} for date, price in sorted(daily_prices.items())]
     return {"period": period.value, "data": sorted_prices}
 
-# TODO 북마크 수 업데이트 API
+
+# 북마크 수 업데이트 API
+@app.post("/product/{product_id}/bookmark")
+async def add_bookmark(product_id: str):
+    """
+    특정 상품의 bookmark_counts를 1 증가시키는 엔드포인트.
+    :param product_id: 제품 ID
+    """
+    # ObjectId로 변환 가능한지 확인
+    try:
+        obj_id = ObjectId(product_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid product ID format")
+
+    # 해당 상품 조회
+    product = await db["bonre_products"].find_one({"_id": obj_id})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    # 기존 북마크 카운트 가져오기 (기본값 0)
+    current_count = product.get("bookmark_counts", 0)
+
+    # bookmark_counts 필드를 +1 증가
+    result = await db["bonre_products"].update_one(
+        {"_id": obj_id},
+        {"$set": {"bookmark_counts": current_count + 1}}
+    )
+
+    if result.modified_count == 0:
+        raise HTTPException(status_code=500, detail="Failed to update bookmark count")
+
+    return {"product_id": product_id, "bookmark_counts": current_count + 1}

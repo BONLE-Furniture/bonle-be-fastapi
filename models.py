@@ -79,8 +79,8 @@ class Brand_Update(BaseModel):
     
 class Shop(BaseModel):
     id: str = Field(alias="_id")
-    shop_kr: str
-    shop: str
+    shop_kr: Optional[str] = None
+    shop: Optional[str] = None
     comment: Optional[str] = None
     bookmark_count: Optional[int] = 0
     link: str
@@ -93,16 +93,16 @@ class Price(BaseModel):
     id: str = None
     date: datetime
     price: int
-    product_id :ObjectId
+    product_id :str
     shop_sld :str
     name : str #(?)
     
 class bookmark(BaseModel):
     id: str = None
     userId:str
-    productId: ObjectId
-    createdAt: datetime
-    updatedAt: datetime
+    product_id: str
+    created_at: datetime
+    updated_at: datetime
     __v : Optional[int] = 0
     
 # Object Type to STR변환

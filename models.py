@@ -45,7 +45,7 @@ class Product(BaseModel):
     brand_kr: str
 
 class Period(str, Enum):
-    one_week = "1week"
-    one_month = "1month"
-    one_year = "1year"
-    all_time = "all"
+    one_week = "1주"
+    one_month = "1달"
+    one_year = "1년"
+    all_time = "전체"

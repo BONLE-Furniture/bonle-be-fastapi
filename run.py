@@ -97,7 +97,7 @@ async def get_cheapest_prices(product_id: str, period: Period):
             filtered_data.append({"date": entry_date.date().isoformat(), "price": entry["price"]})
 
     if not filtered_data:
-        raise HTTPException(status_code=404, detail=f"No cheapest data available for period: {period}")
+        raise HTTPException(status_code=404, detail=f"{period}간 해당 품목의 최저가 정보가 없습니다.")
 
     # 날짜별 최저가 계산
     daily_prices = {}

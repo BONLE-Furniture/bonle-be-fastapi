@@ -49,10 +49,10 @@ class Product(BaseModel):
     brand_kr: str
 
 class Product_Period(str, Enum):
-    one_week = "1week"
-    one_month = "1month"
-    one_year = "1year"
-    all_time = "all"
+    one_week = "1주"
+    one_month = "1달"
+    one_year = "1년"
+    all_time = "전체"
 
 """
 Brand
@@ -93,14 +93,14 @@ class Price(BaseModel):
     id: str = None
     date: datetime
     price: int
-    product_id :ObjectId
+    product_id :str = None
     shop_sld :str
     name : str #(?)
 
 class bookmark(BaseModel):
     id: str = None
     userId:str
-    productId: ObjectId
+    productId: str = None
     createdAt: datetime
     updatedAt: datetime
     __v : Optional[int] = 0

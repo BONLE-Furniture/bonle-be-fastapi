@@ -64,7 +64,7 @@ class Brand(BaseModel):
     comment: Optional[str] = None
     bookmark_count: Optional[int] = 0
     main_image_url: str
-    
+
     class Config:
         allow_population_by_field_name = True
 
@@ -75,8 +75,8 @@ class Brand_Update(BaseModel):
     comment: Optional[str] = None
     bookmark_count: Optional[int] = None
     main_image_url: Optional[str] = None
-    
-    
+
+
 class Shop(BaseModel):
     id: str = Field(alias="_id")
     shop_kr: str
@@ -85,10 +85,10 @@ class Shop(BaseModel):
     bookmark_count: Optional[int] = 0
     link: str
     sld: str #(?)
-    
+
     class Config:
-        allow_population_by_field_name = True  
-        
+        allow_population_by_field_name = True
+
 class Price(BaseModel):
     id: str = None
     date: datetime
@@ -96,7 +96,7 @@ class Price(BaseModel):
     product_id :ObjectId
     shop_sld :str
     name : str #(?)
-    
+
 class bookmark(BaseModel):
     id: str = None
     userId:str
@@ -104,7 +104,7 @@ class bookmark(BaseModel):
     createdAt: datetime
     updatedAt: datetime
     __v : Optional[int] = 0
-    
+
 # Object Type to STR변환
 def sanitize_data(data):
     sanitized_data = []
@@ -118,9 +118,9 @@ def sanitize_data(data):
                     sanitized_item[key] = None
                 else:
                     sanitized_item[key] = value
-            elif isinstance(value, dict): 
+            elif isinstance(value, dict):
                 sanitized_item[key] = sanitize_data([value])[0]
-            elif isinstance(value, list): 
+            elif isinstance(value, list):
                 sanitized_item[key] = [
                     str(v) if isinstance(v, ObjectId)
                     else sanitize_data([v])[0] if isinstance(v, dict)

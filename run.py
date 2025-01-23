@@ -25,7 +25,7 @@ async def get_all_products():
     collections = await db.list_collection_names()
     if "bonre_products" not in collections:
         raise HTTPException(status_code=404, detail="Collection not found")
-    
+
     items = await db["bonre_products"].find().to_list(1000)
     sanitized_items = sanitize_data(items)
     return sanitized_items
@@ -116,7 +116,7 @@ async def get_cheapest_prices(product_id: str, period: Product_Period):
             filtered_data.append({"date": entry_date.date().isoformat(), "price": entry["price"]})
 
     if not filtered_data:
-        raise HTTPException(status_code=404, detail=f"No cheapest data available for period: {period}")
+        raise HTTPException(status_code=404, detail=f"{period}간 해당 품목의 최저가 정보가 없습니다.")
 
     # 날짜별 최저가 계산
     daily_prices = {}
@@ -181,10 +181,10 @@ async def get_products_info_by_brand_id(brand_id: str):
 async def get_products_list_in_page(page: int = 1, limit: int = 2):
     skip = (page - 1) * limit
     total_count = await db["bonre_products"].count_documents({})
-    
+
     cursor = db["bonre_products"].find().skip(skip).limit(limit)
     items = await cursor.to_list(length=limit)
-    
+
     sanitized_items = sanitize_data(items)
     if sanitized_items:
         filtered_items = [
@@ -233,3 +233,36 @@ async def delete_brand(brand_id: str):
     if result.deleted_count == 1:
         return {"message": "Brand deleted successfully"}
     raise HTTPException(status_code=404, detail="Brand not found")
+
+
+# 북마크 수 업데이트 API
+@app.post("/product/{product_id}/bookmark")
+async def add_bookmark(product_id: str):
+    """
+    특정 상품의 bookmark_counts를 1 증가시키는 엔드포인트.
+    :param product_id: 제품 ID
+    """
+    # ObjectId로 변환 가능한지 확인
+    try:
+        obj_id = ObjectId(product_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid product ID format")
+
+    # 해당 상품 조회
+    product = await db["bonre_products"].find_one({"_id": obj_id})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    # 기존 북마크 카운트 가져오기 (기본값 0)
+    current_count = product.get("bookmark_counts", 0)
+
+    # bookmark_counts 필드를 +1 증가
+    result = await db["bonre_products"].update_one(
+        {"_id": obj_id},
+        {"$set": {"bookmark_counts": current_count + 1}}
+    )
+
+    if result.modified_count == 0:
+        raise HTTPException(status_code=500, detail="Failed to update bookmark count")
+
+    return {"product_id": product_id, "bookmark_counts": current_count + 1}

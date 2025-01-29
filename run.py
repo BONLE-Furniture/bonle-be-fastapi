@@ -25,7 +25,7 @@ async def get_all_products():
     collections = await db.list_collection_names()
     if "bonre_products" not in collections:
         raise HTTPException(status_code=404, detail="Collection not found")
-    
+
     items = await db["bonre_products"].find().to_list(1000)
     sanitized_items = sanitize_data(items)
     return sanitized_items
@@ -116,7 +116,7 @@ async def get_cheapest_prices(product_id: str, period: Product_Period):
             filtered_data.append({"date": entry_date.date().isoformat(), "price": entry["price"]})
 
     if not filtered_data:
-        raise HTTPException(status_code=404, detail=f"No cheapest data available for period: {period}")
+        raise HTTPException(status_code=404, detail=f"{period}간 해당 품목의 최저가 정보가 없습니다.")
 
     # 날짜별 최저가 계산
     daily_prices = {}
@@ -130,6 +130,38 @@ async def get_cheapest_prices(product_id: str, period: Product_Period):
     sorted_prices = [{"date": date, "price": price} for date, price in sorted(daily_prices.items())]
     return {"period": period.value, "data": sorted_prices}
 
+
+# 북마크 수 업데이트 API
+@app.post("/product/{product_id}/bookmark", tags=["product"])
+async def add_bookmark(product_id: str):
+    """
+    특정 상품의 bookmark_counts를 1 증가시키는 엔드포인트.
+    :param product_id: 제품 ID
+    """
+    # ObjectId로 변환 가능한지 확인
+    try:
+        obj_id = ObjectId(product_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid product ID format")
+
+    # 해당 상품 조회
+    product = await db["bonre_products"].find_one({"_id": obj_id})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    # 기존 북마크 카운트 가져오기 (기본값 0)
+    current_count = product.get("bookmark_counts", 0)
+
+    # bookmark_counts 필드를 +1 증가
+    result = await db["bonre_products"].update_one(
+        {"_id": obj_id},
+        {"$set": {"bookmark_counts": current_count + 1}}
+    )
+
+    if result.modified_count == 0:
+        raise HTTPException(status_code=500, detail="Failed to update bookmark count")
+
+    return {"product_id": product_id, "bookmark_counts": current_count + 1}
 
 
 """
@@ -146,8 +178,8 @@ async def get_all_brands():
     sanitized_items = sanitize_data(items)
     return sanitized_items
 
-# test : /brands/get_bonre_brand_by_id/brand_andtrandition
 # brand_id를 받아서 해당 브랜드 정보를 반환하는 API
+# test : /brands/get_bonre_brand_by_id/brand_andtrandition
 @app.get("/brand/{brand_id}", tags=["brand"])
 async def get_brand_info_by_brand_id(brand_id: str):
     item = await db["bonre_brands"].find_one({"_id": brand_id})
@@ -155,8 +187,8 @@ async def get_brand_info_by_brand_id(brand_id: str):
         return item
     raise HTTPException(status_code=404, detail="Item not found")
 
-# test : http://127.0.0.1:8000/brands/get_bonre_products_by_brandId/brand_andtrandition
 # brand_id를 받아서 해당 브랜드의 상품 정보를 반환하는 API
+# test : http://127.0.0.1:8000/brands/get_bonre_products_by_brandId/brand_andtrandition
 @app.get('/brand/{brand_id}/products', tags=["brand"])
 async def get_products_info_by_brand_id(brand_id: str):
     items = await db["bonre_products"].find({"brand": brand_id}).to_list(1000)
@@ -176,15 +208,16 @@ async def get_products_info_by_brand_id(brand_id: str):
         return filtered_items
     raise HTTPException(status_code=404, detail="Items not found")
 
+# home 화면에 페이징 처리된 상품 리스트를 반환하는 API
 # test : /home/products/?page=3&limit=2
 @app.get("/home/products/", tags=["home"])
 async def get_products_list_in_page(page: int = 1, limit: int = 2):
     skip = (page - 1) * limit
     total_count = await db["bonre_products"].count_documents({})
-    
+
     cursor = db["bonre_products"].find().skip(skip).limit(limit)
     items = await cursor.to_list(length=limit)
-    
+
     sanitized_items = sanitize_data(items)
     if sanitized_items:
         filtered_items = [
@@ -193,7 +226,7 @@ async def get_products_list_in_page(page: int = 1, limit: int = 2):
                 "name": item["name"],
                 "brand": item["brand_kr"],
                 "main_image_url": item["main_image_url"],
-                "bookmark_counts": item["bookmark_counts"],
+                "bookmark_counts": [item["bookmark_counts"]],
             }
             for item in sanitized_items
         ]
@@ -207,10 +240,27 @@ async def get_products_list_in_page(page: int = 1, limit: int = 2):
     }
 
 
+# 특정 shop & product의 날짜별 price 조회 API
+@app.get("/price/{product_id}/{shop_sld}/", tags=["price CRUD"])
+async def get_price(product_id: str, shop_sld: str):
+    items = await db["bonre_prices"].find({"name": product_id,"shop_sld":shop_sld}).to_list(1000)
+    sanitized_items = sanitize_data(items)
+    
+    if sanitized_items:
+        filtered_items = [
+            {
+                "date": item["date"],
+                "price": item["price"],
+            }
+            for item in sanitized_items
+        ]
+    return filtered_items
+    
 """
 CRUD API
 """
 
+# brand 생성 API
 #  test in : http://localhost:8000/docs
 @app.post("/brand/create_brand",tags=["brand CRUD"])
 async def create_brand(brand: Brand):
@@ -218,6 +268,7 @@ async def create_brand(brand: Brand):
     await db["bonre_brands"].insert_one(brand_dict)
     return brand_dict
 
+# brand 수정 API
 @app.patch("/brand/update_brand/{brand_id}",tags=["brand CRUD"])
 async def update_brand(brand_id: str, brand: Brand_Update):
     brand_dict = brand.dict(exclude_unset=True)
@@ -227,9 +278,24 @@ async def update_brand(brand_id: str, brand: Brand_Update):
     await db["bonre_brands"].update_one({"_id": brand_id}, {"$set": brand_dict})
     return {"message": "Brand updated successfully"}
 
+# brand 삭제 API
 @app.delete("/brand/delete_bonre_brand/{brand_id}",tags=["brand CRUD"])
 async def delete_brand(brand_id: str):
     result = await db["bonre_brands"].delete_one({"_id": brand_id})
     if result.deleted_count == 1:
         return {"message": "Brand deleted successfully"}
     raise HTTPException(status_code=404, detail="Brand not found")
+
+# shop 생성 API
+@app.post("/brand/create_shop",tags=["shop CRUD"])
+async def create_shop(shop: Shop):
+    shop_dict = shop.dict(by_alias=True)
+    await db["bonre_shops"].insert_one(shop_dict)
+    return shop_dict
+
+# product 생성 API
+@app.patch("/product/create_product",tags=["product CRUD"])
+async def create_product(product: Create_Product):
+    product_dict = product.dict(by_alias=True)
+    await db["bonre_products"].insert_one(product_dict)
+    return product_dict

@@ -48,6 +48,27 @@ class Product(BaseModel):
     cheapest: List[Product_Cheapest]  # 가격 이력 리스트
     brand_kr: str
 
+# Product update용 모델
+class Create_Product(BaseModel):
+    id: str = None # MongoDB의 ObjectId는 자동으로 처리
+    name_kr: Optional[str] =""
+    name: Optional[str] =""
+    type: Optional[str] = None
+    brand: Optional[str] =""
+    designer: Optional[List[str]] = []
+    color: Optional[str] =""
+    size: Product_Size
+    description: Optional[str] =""
+    material: Optional[str] =""
+    filter: dict  # 색상과 재질 필터
+    category: Optional[str] =""
+    sales_links: List[HttpUrl]  # 판매 링크
+    bookmark_counts: Optional[int] = 0
+    shop_urls: List[Product_ShopUrl]  # 각 상점 URL 정보
+    main_image_url: Optional[str] = ""  # 이미지 URL
+    cheapest: Optional[List[Product_Cheapest]] = []# 가격 이력 리스트
+    brand_kr: Optional[str] =""
+
 class Product_Period(str, Enum):
     one_week = "1week"
     one_month = "1month"
@@ -79,30 +100,42 @@ class Brand_Update(BaseModel):
     
 class Shop(BaseModel):
     id: str = Field(alias="_id")
-    shop_kr: Optional[str] = None
-    shop: Optional[str] = None
-    comment: Optional[str] = None
+    shop_kr: Optional[str] = ""
+    shop: Optional[str] = ""
+    comment: Optional[str] = ""
     bookmark_count: Optional[int] = 0
-    link: str
-    sld: str #(?)
+    link: Optional[str] = ""
+    sld: Optional[str] = ""
+    brand_list: Optional[List[str]] = []
     
     class Config:
         allow_population_by_field_name = True  
         
-class Price(BaseModel):
+# Pre_price -> Product_Price로 변경
+class Pre_Price(BaseModel):
     id: str = None
     date: datetime
     price: int
     product_id :str
     shop_sld :str
     name : str #(?)
+
+class price(BaseModel):
+    date: datetime
+    price: int
+    
+class Product_Price(BaseModel):
+    product_id: str
+    brand_id : str
+    shop_sld : str
+    prices : List[Pre_Price]
     
 class bookmark(BaseModel):
     id: str = None
     userId:str
     product_id: str
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
     __v : Optional[int] = 0
     
 # Object Type to STR변환

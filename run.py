@@ -4,6 +4,8 @@ from bson import ObjectId
 from database import db
 from datetime import datetime, timedelta
 from models import *
+from crawling import inart_crawling
+from googletrans import Translator
 
 app = FastAPI()
 
@@ -279,7 +281,7 @@ async def update_brand(brand_id: str, brand: Brand_Update):
     return {"message": "Brand updated successfully"}
 
 # brand 삭제 API
-@app.delete("/brand/delete_bonre_brand/{brand_id}",tags=["brand CRUD"])
+@app.delete("/brand/delete_brand/{brand_id}",tags=["brand CRUD"])
 async def delete_brand(brand_id: str):
     result = await db["bonre_brands"].delete_one({"_id": brand_id})
     if result.deleted_count == 1:
@@ -293,9 +295,24 @@ async def create_shop(shop: Shop):
     await db["bonre_shops"].insert_one(shop_dict)
     return shop_dict
 
-# product 생성 API
-@app.patch("/product/create_product",tags=["product CRUD"])
-async def create_product(product: Create_Product):
-    product_dict = product.dict(by_alias=True)
-    await db["bonre_products"].insert_one(product_dict)
+# product & price 최조 등록 API
+@app.post("/product/create_product",tags=["product CRUD"])
+async def create_product(product: Create_Product, price: Product_Price):
+    # inart_crawling() 함수를 통해 크롤링한 데이터를 DB에 저장
+    items = inart_crawling()
+    for item in items:
+        product_dict = product.dict(by_alias=True)
+        price_dict = price.dict(by_alias=True)
+        product_dict["name_kr"] = item["name"]
+        product_dict["brand"] = item["brand_id"]
+        product_dict["shop_urls"] = [item["shop_url"]]
+        
+        price_dict["product_id"] = item["name"]
+        price_dict["shop_sld"] = item["shop_id"]
+        price_dict["brand_id"] = item["brand_id"]
+        price_dict["prices"] = [{"date": datetime.now(), "price": item["price"]}]
+
+        await db["bonre_products"].insert_one(product_dict)
+        await db["bonre_prices"].insert_one(price_dict)
     return product_dict
+

@@ -57,10 +57,10 @@ class Create_Product(BaseModel):
     brand: Optional[str] =""
     designer: Optional[List[str]] = []
     color: Optional[str] =""
-    size: Product_Size
+    size: Optional[Product_Size] = Product_Size()
     description: Optional[str] =""
     material: Optional[str] =""
-    filter: dict  # 색상과 재질 필터
+    filter: Optional[list] = []   # 색상과 재질 필터
     category: Optional[str] =""
     sales_links: List[HttpUrl]  # 판매 링크
     bookmark_counts: Optional[int] = 0

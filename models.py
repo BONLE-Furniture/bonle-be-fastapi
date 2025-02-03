@@ -50,7 +50,6 @@ class Product(BaseModel):
 
 # Product update용 모델
 class Create_Product(BaseModel):
-    id: str = None # MongoDB의 ObjectId는 자동으로 처리
     name_kr: Optional[str] =""
     name: Optional[str] =""
     type: Optional[str] = None
@@ -111,24 +110,16 @@ class Shop(BaseModel):
     class Config:
         allow_population_by_field_name = True  
         
-# Pre_price -> Product_Price로 변경
-class Pre_Price(BaseModel):
-    id: str = None
-    date: datetime
-    price: int
-    product_id :str
-    shop_sld :str
-    name : str #(?)
-
-class price(BaseModel):
+class Price(BaseModel):
     date: datetime
     price: int
     
 class Product_Price(BaseModel):
     product_id: str
+    color : str
     brand_id : str
     shop_sld : str
-    prices : List[Pre_Price]
+    prices : List[Price]
     
 class bookmark(BaseModel):
     id: str = None

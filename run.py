@@ -4,6 +4,8 @@ from bson import ObjectId
 from database import db
 from datetime import datetime, timedelta
 from models import *
+from crawling import inart_crawling
+from googletrans import Translator
 
 app = FastAPI()
 
@@ -178,8 +180,8 @@ async def get_all_brands():
     sanitized_items = sanitize_data(items)
     return sanitized_items
 
-# test : /brands/get_bonre_brand_by_id/brand_andtrandition
 # brand_id를 받아서 해당 브랜드 정보를 반환하는 API
+# test : /brands/get_bonre_brand_by_id/brand_andtrandition
 @app.get("/brand/{brand_id}", tags=["brand"])
 async def get_brand_info_by_brand_id(brand_id: str):
     item = await db["bonre_brands"].find_one({"_id": brand_id})
@@ -187,8 +189,8 @@ async def get_brand_info_by_brand_id(brand_id: str):
         return item
     raise HTTPException(status_code=404, detail="Item not found")
 
-# test : http://127.0.0.1:8000/brands/get_bonre_products_by_brandId/brand_andtrandition
 # brand_id를 받아서 해당 브랜드의 상품 정보를 반환하는 API
+# test : http://127.0.0.1:8000/brands/get_bonre_products_by_brandId/brand_andtrandition
 @app.get('/brand/{brand_id}/products', tags=["brand"])
 async def get_products_info_by_brand_id(brand_id: str):
     items = await db["bonre_products"].find({"brand": brand_id}).to_list(1000)
@@ -208,6 +210,7 @@ async def get_products_info_by_brand_id(brand_id: str):
         return filtered_items
     raise HTTPException(status_code=404, detail="Items not found")
 
+# home 화면에 페이징 처리된 상품 리스트를 반환하는 API
 # test : /home/products/?page=3&limit=2
 @app.get("/home/products/", tags=["home"])
 async def get_products_list_in_page(page: int = 1, limit: int = 2):
@@ -225,7 +228,7 @@ async def get_products_list_in_page(page: int = 1, limit: int = 2):
                 "name": item["name"],
                 "brand": item["brand_kr"],
                 "main_image_url": item["main_image_url"],
-                "bookmark_counts": item["bookmark_counts"],
+                "bookmark_counts": [item["bookmark_counts"]],
             }
             for item in sanitized_items
         ]
@@ -239,10 +242,27 @@ async def get_products_list_in_page(page: int = 1, limit: int = 2):
     }
 
 
+# 특정 shop & product의 날짜별 price 조회 API
+@app.get("/price/{product_id}/{shop_sld}/", tags=["price CRUD"])
+async def get_price(product_id: str, shop_sld: str):
+    items = await db["bonre_prices"].find({"name": product_id,"shop_sld":shop_sld}).to_list(1000)
+    sanitized_items = sanitize_data(items)
+    
+    if sanitized_items:
+        filtered_items = [
+            {
+                "date": item["date"],
+                "price": item["price"],
+            }
+            for item in sanitized_items
+        ]
+    return filtered_items
+    
 """
 CRUD API
 """
 
+# brand 생성 API
 #  test in : http://localhost:8000/docs
 @app.post("/brand/create_brand",tags=["brand CRUD"])
 async def create_brand(brand: Brand):
@@ -250,6 +270,7 @@ async def create_brand(brand: Brand):
     await db["bonre_brands"].insert_one(brand_dict)
     return brand_dict
 
+# brand 수정 API
 @app.patch("/brand/update_brand/{brand_id}",tags=["brand CRUD"])
 async def update_brand(brand_id: str, brand: Brand_Update):
     brand_dict = brand.dict(exclude_unset=True)
@@ -259,9 +280,39 @@ async def update_brand(brand_id: str, brand: Brand_Update):
     await db["bonre_brands"].update_one({"_id": brand_id}, {"$set": brand_dict})
     return {"message": "Brand updated successfully"}
 
-@app.delete("/brand/delete_bonre_brand/{brand_id}",tags=["brand CRUD"])
+# brand 삭제 API
+@app.delete("/brand/delete_brand/{brand_id}",tags=["brand CRUD"])
 async def delete_brand(brand_id: str):
     result = await db["bonre_brands"].delete_one({"_id": brand_id})
     if result.deleted_count == 1:
         return {"message": "Brand deleted successfully"}
     raise HTTPException(status_code=404, detail="Brand not found")
+
+# shop 생성 API
+@app.post("/brand/create_shop",tags=["shop CRUD"])
+async def create_shop(shop: Shop):
+    shop_dict = shop.dict(by_alias=True)
+    await db["bonre_shops"].insert_one(shop_dict)
+    return shop_dict
+
+# product & price 최조 등록 API
+@app.post("/product/create_product",tags=["product CRUD"])
+async def create_product(product: Create_Product, price: Product_Price):
+    # inart_crawling() 함수를 통해 크롤링한 데이터를 DB에 저장
+    items = inart_crawling()
+    for item in items:
+        product_dict = product.dict(by_alias=True)
+        price_dict = price.dict(by_alias=True)
+        product_dict["name_kr"] = item["name"]
+        product_dict["brand"] = item["brand_id"]
+        product_dict["shop_urls"] = [item["shop_url"]]
+        
+        price_dict["product_id"] = item["name"]
+        price_dict["shop_sld"] = item["shop_id"]
+        price_dict["brand_id"] = item["brand_id"]
+        price_dict["prices"] = [{"date": datetime.now(), "price": item["price"]}]
+
+        await db["bonre_products"].insert_one(product_dict)
+        await db["bonre_prices"].insert_one(price_dict)
+    return product_dict
+

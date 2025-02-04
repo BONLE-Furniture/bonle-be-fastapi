@@ -48,11 +48,31 @@ class Product(BaseModel):
     cheapest: List[Product_Cheapest]  # 가격 이력 리스트
     brand_kr: str
 
+# Product update용 모델
+class Create_Product(BaseModel):
+    name_kr: Optional[str] =""
+    name: Optional[str] =""
+    type: Optional[str] = None
+    brand: Optional[str] =""
+    designer: Optional[List[str]] = []
+    color: Optional[str] =""
+    size: Optional[Product_Size] = Product_Size()
+    description: Optional[str] =""
+    material: Optional[str] =""
+    filter: Optional[list] = []   # 색상과 재질 필터
+    category: Optional[str] =""
+    sales_links: List[HttpUrl]  # 판매 링크
+    bookmark_counts: Optional[int] = 0
+    shop_urls: List[Product_ShopUrl]  # 각 상점 URL 정보
+    main_image_url: Optional[str] = ""  # 이미지 URL
+    cheapest: Optional[List[Product_Cheapest]] = []# 가격 이력 리스트
+    brand_kr: Optional[str] =""
+
 class Product_Period(str, Enum):
-    one_week = "1주"
-    one_month = "1달"
-    one_year = "1년"
-    all_time = "전체"
+    one_week = "1week"
+    one_month = "1month"
+    one_year = "1year"
+    all_time = "all"
 
 """
 Brand
@@ -64,7 +84,7 @@ class Brand(BaseModel):
     comment: Optional[str] = None
     bookmark_count: Optional[int] = 0
     main_image_url: str
-
+    
     class Config:
         allow_population_by_field_name = True
 
@@ -75,36 +95,40 @@ class Brand_Update(BaseModel):
     comment: Optional[str] = None
     bookmark_count: Optional[int] = None
     main_image_url: Optional[str] = None
-
-
+    
+    
 class Shop(BaseModel):
     id: str = Field(alias="_id")
-    shop_kr: str
-    shop: str
-    comment: Optional[str] = None
+    shop_kr: Optional[str] = ""
+    shop: Optional[str] = ""
+    comment: Optional[str] = ""
     bookmark_count: Optional[int] = 0
-    link: str
-    sld: str #(?)
-
+    link: Optional[str] = ""
+    sld: Optional[str] = ""
+    brand_list: Optional[List[str]] = []
+    
     class Config:
-        allow_population_by_field_name = True
-
+        allow_population_by_field_name = True  
+        
 class Price(BaseModel):
-    id: str = None
     date: datetime
     price: int
-    product_id :str = None
-    shop_sld :str
-    name : str #(?)
 
+class Product_Price(BaseModel):
+    product_id: str
+    color : str
+    brand_id : str
+    shop_sld : str
+    prices : List[Price]
+    
 class bookmark(BaseModel):
     id: str = None
     userId:str
-    productId: str = None
-    createdAt: datetime
-    updatedAt: datetime
+    product_id: str
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
     __v : Optional[int] = 0
-
+    
 # Object Type to STR변환
 def sanitize_data(data):
     sanitized_data = []
@@ -118,9 +142,9 @@ def sanitize_data(data):
                     sanitized_item[key] = None
                 else:
                     sanitized_item[key] = value
-            elif isinstance(value, dict):
+            elif isinstance(value, dict): 
                 sanitized_item[key] = sanitize_data([value])[0]
-            elif isinstance(value, list):
+            elif isinstance(value, list): 
                 sanitized_item[key] = [
                     str(v) if isinstance(v, ObjectId)
                     else sanitize_data([v])[0] if isinstance(v, dict)

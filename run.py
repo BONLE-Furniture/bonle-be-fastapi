@@ -4,8 +4,7 @@ from bson import ObjectId
 from database import db
 from datetime import datetime, timedelta
 from models import *
-from crawling import inart_crawling
-from googletrans import Translator
+
 
 app = FastAPI()
 

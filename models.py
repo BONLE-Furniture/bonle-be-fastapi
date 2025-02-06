@@ -9,12 +9,6 @@ from enum import Enum
 """
 Product
 """
-# Size 모델 (size 정보)
-class Product_Size(BaseModel):
-    width: Optional[float] = None
-    height: Optional[float] = None
-    depth: Optional[float] = None
-    length: Optional[float] = None
 
 # Cheapest 모델 (가격 이력)
 class Product_Cheapest(BaseModel):
@@ -22,52 +16,61 @@ class Product_Cheapest(BaseModel):
     price: int
     shop_id: str
 
+# Size 모델 (size 정보)
+class Product_Size(BaseModel):
+    width: Optional[float] = None
+    height: Optional[float] = None
+    depth: Optional[float] = None
+    length: Optional[float] = None
+
 # ShopUrl 모델 (상점 URL)
 class Product_ShopUrl(BaseModel):
-    url: HttpUrl
     shop_id: str
-
-# Product 모델 (main 모델)
-class Product(BaseModel):
-    id: str = None # MongoDB의 ObjectId는 자동으로 처리
-    name_kr: str
-    name: str
-    type: Optional[str] = None
-    brand: str
-    designer: List[str]
-    color: str
-    size: Product_Size
-    description: str
-    material: str
-    filter: dict  # 색상과 재질 필터
-    category: str
-    sales_links: List[HttpUrl]  # 판매 링크
-    bookmark_counts: int
-    shop_urls: List[Product_ShopUrl]  # 각 상점 URL 정보
-    main_image_url: str  # 이미지 URL
-    cheapest: List[Product_Cheapest]  # 가격 이력 리스트
-    brand_kr: str
+    url: HttpUrl
+    priceCC: bool = False
 
 # Product update용 모델
-class Create_Product(BaseModel):
-    name_kr: Optional[str] =""
-    name: Optional[str] =""
-    type: Optional[str] = None
-    brand: Optional[str] =""
+class Product(BaseModel):
+    name_kr: str
+    name: str
+    subname: str
+    subname_kr: str
+    brand: str
     designer: Optional[List[str]] = []
-    color: Optional[str] =""
-    size: Optional[Product_Size] = Product_Size()
+    color: str
+    size: Product_Size
     description: Optional[str] =""
     material: Optional[str] =""
-    filter: Optional[list] = []   # 색상과 재질 필터
+    filter: Optional[object]  # 색상과 재질 필터
     category: Optional[str] =""
-    sales_links: List[HttpUrl]  # 판매 링크
     bookmark_counts: Optional[int] = 0
     shop_urls: List[Product_ShopUrl]  # 각 상점 URL 정보
     main_image_url: Optional[str] = ""  # 이미지 URL
     cheapest: Optional[List[Product_Cheapest]] = []# 가격 이력 리스트
-    brand_kr: Optional[str] =""
+    brand_kr: str
+    upload : bool = False
 
+# Product update용 모델
+class ProductUpdate(BaseModel):
+    name_kr: Optional[str] = None
+    name: Optional[str] = None
+    subname: Optional[str] = None
+    subname_kr: Optional[str] = None
+    brand: Optional[str] = None
+    designer: Optional[List[str]] = None
+    color: Optional[str] = None
+    size: Optional[Product_Size] = None
+    description: Optional[str] = None
+    material: Optional[str] = None
+    filter: Optional[object] = None # 색상과 재질 필터
+    category: Optional[str] = None
+    bookmark_counts: Optional[int] = None
+    shop_urls: List[Product_ShopUrl] = None # 각 상점 URL 정보
+    main_image_url: Optional[str] = None  # 이미지 URL
+    cheapest: Optional[List[Product_Cheapest]] = None# 가격 이력 리스트
+    brand_kr: Optional[str] = None
+    upload : Optional[bool] = None
+    
 class Product_Period(str, Enum):
     one_week = "1week"
     one_month = "1month"
@@ -86,29 +89,59 @@ class Brand(BaseModel):
     main_image_url: str
     
     class Config:
-        allow_population_by_field_name = True
+        allow_population_by_field_name = True 
 
 # Brand 생성 모델
-class Brand_Update(BaseModel):
+class BrandUpdate(BaseModel):
     brand_kr: Optional[str] = None
     brand: Optional[str] = None
     comment: Optional[str] = None
     bookmark_count: Optional[int] = None
     main_image_url: Optional[str] = None
     
-    
 class Shop(BaseModel):
     id: str = Field(alias="_id")
-    shop_kr: Optional[str] = ""
-    shop: Optional[str] = ""
+    shop_kr: str
+    shop: str
     comment: Optional[str] = ""
     bookmark_count: Optional[int] = 0
-    link: Optional[str] = ""
-    sld: Optional[str] = ""
+    link: str
+    sld: str
     brand_list: Optional[List[str]] = []
     
     class Config:
         allow_population_by_field_name = True  
+        
+class ShopUpdate(BaseModel):
+    shop_kr: Optional[str] = None
+    shop: Optional[str] = None
+    comment: Optional[str] = None
+    bookmark_count: Optional[int] = None
+    link: Optional[str] = None
+    sld: Optional[str] = None
+    brand_list: Optional[List[str]] = []
+    
+    class Config:
+        allow_population_by_field_name = True  
+        
+class Designer(BaseModel):
+    id: str = Field(alias="_id")
+    designer_kr: str = ""
+    designer: str = ""
+    comment: Optional[str] = ""
+    bookmark_count: Optional[int] = 0
+    
+    class Config:
+        allow_population_by_field_name = True              
+
+class DesignerUpdate(BaseModel):
+    designer_kr: Optional[str] = None
+    designer: Optional[str] = None
+    comment: Optional[str] = None
+    bookmark_count: Optional[int] = None
+    
+    class Config:
+        allow_population_by_field_name = True    
         
 class Price(BaseModel):
     date: datetime

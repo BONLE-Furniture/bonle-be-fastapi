@@ -11,6 +11,7 @@ from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient
 
 from models import *
+from price_crwaling import get_all_info
 from storage import upload_image_to_blob, delete_blob_by_url
 
 app = FastAPI()
@@ -288,6 +289,16 @@ async def get_price(product_object_id: str):
         ]
     return filtered_items
 
+# url별 price 조회 API
+@app.post("/price/{url}", tags=["price CRUD"])
+async def fetch_info(request: URLRequest):
+    try:
+        info = get_all_info(request.url)
+        if not info:
+            raise HTTPException(status_code=404, detail="Unable to fetch information from the URL")
+        return info
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 """
 C[R]UD API

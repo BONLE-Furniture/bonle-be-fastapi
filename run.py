@@ -1,5 +1,6 @@
 # from logging import Logger
 import os
+import asyncio
 from dotenv import load_dotenv
 from math import ceil
 from fastapi import FastAPI, HTTPException
@@ -11,7 +12,7 @@ from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient
 
 from models import *
-from price_crwaling import get_all_info
+from price_crwaling import *
 from storage import upload_image_to_blob, delete_blob_by_url
 
 app = FastAPI()
@@ -299,6 +300,48 @@ async def fetch_info(request: URLRequest):
         return info
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/update_prices/", tags=["price CRUD"])
+async def update_prices(product_id: str):
+
+    # 제품 정보 가져오기
+    product_doc = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
+    if not product_doc:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    shops_urls = product_doc.get("shop_urls", [])
+    if not shops_urls:
+        raise HTTPException(status_code=400, detail="No shops_url found for this product")
+
+    for dict in shops_urls:
+        url = dict["url"]
+        info = get_all_info(url)
+        if not info:
+            raise HTTPException(status_code=404, detail="Unable to fetch information from the URL")
+
+        shop_sld = info["site"]
+        price = info["price"]
+
+        current_date = datetime.utcnow().date().isoformat()
+
+        existing_shop = await db["bonre_prices"].find_one({"shop_sld": shop_sld})
+        existing_id = await db["bonre_prices"].find_one({"product_id": product_id})
+
+        if existing_shop and existing_id:
+            await db["bonre_prices"].update_one(
+                {"shop_sld": shop_sld},
+                {"$push": {"prices": {"date": current_date, "price": price}}}
+            )
+        else:
+            new_doc = {
+                "product_id": product_id,
+                "shop_sld": shop_sld,
+                "prices": [{"date": current_date, "price": price}]
+            }
+            await db["bonre_prices"].insert_one(new_doc)
+    return {"message": "Prices updated successfully"}
+
 
 """
 C[R]UD API

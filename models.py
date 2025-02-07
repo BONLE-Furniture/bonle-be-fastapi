@@ -206,3 +206,6 @@ def sanitize_data(data):
                 sanitized_item[key] = value
         sanitized_data.append(sanitized_item)
     return sanitized_data
+
+class URLRequest(BaseModel):
+    url: str

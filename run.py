@@ -3,7 +3,7 @@ import os
 import asyncio
 from dotenv import load_dotenv
 from math import ceil
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, FastAPI, File, Form, HTTPException, UploadFile
 from bson import ObjectId
 from database import db
 from datetime import datetime, timedelta
@@ -13,10 +13,9 @@ from azure.storage.blob import BlobServiceClient
 
 from models import *
 from price_crwaling import *
-from storage import upload_image_to_blob, delete_blob_by_url
+from storage import upload_image_to_blob, upload_imgFile_to_blob, delete_blob_by_url
 
 app = FastAPI()
-
 """
 FAST API 연결, MongoDB 연결 테스트
 """
@@ -353,7 +352,7 @@ C[R]UD API
 #############
 
 @app.post("/product/create-product", tags=["product CRUD"])
-async def create_product(product: Product, img_path: str = None):
+async def create_product(product: Product):
     """
     product 생성 API
 
@@ -370,9 +369,11 @@ async def create_product(product: Product, img_path: str = None):
 
     선택 (type str & int)
 
-    designer, description, material, filter, category, bookmark_counts, main_image_url
+    designer, description, material, filter, category, bookmark_counts
 
-    주의
+    ## 주의
+
+    ### main_image_url : json과 다른 방식으로 upload를 해야해서, 임의로 이미지 업로드 API를 분리했음. /product/upload-image/{product_id}로 업로드, 업데이트 수행
 
     cheapest: List[Product_Cheapest
 
@@ -385,21 +386,60 @@ async def create_product(product: Product, img_path: str = None):
 
     product_item = product.dict(by_alias=True)
     # img을 파일로 받아서 azure blob에 저장 -> 저장된 url 반환
-    if img_path:
-        img_os = os.path.basename(img_path)
-        name, ext = os.path.splitext(img_os)
-        img_name = f"product/{product_item['brand']}/{name}_{product_item['subname']}{ext}"
-        img_url = upload_image_to_blob(blob_service_client, img_storage_name, img_path, img_name)
-
-        # 반환된 url을 DB의 main_image_url에 저장
-        product_item["main_image_url"] = img_url
     try:
         await db["bonre_products"].insert_one(product_item)
         return {"message": "Product created successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@app.post("/product/upload-image/{product_id}", tags=["product CRUD"])
+async def upload_product_image(
+    product_id: str,
+    image: UploadFile = File(...),
+    auto_set_name: bool = Form(True)
+):
+    """
+    auto_set_name : True일 경우 로직에 의해 이름이 자동 처리되어 storage 저장됌. False일 경우 파일명 그대로 storage에 저장.
+    
+    ## 주의
 
+    ### main_image_url : json과 다른 방식으로 upload를 해야해서, 임의로 이미지 업로드 API를 분리했음. /product/upload-image/{product_id}로 업로드, 업데이트 수행
+    """
+    try:
+        product_item = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
+        if not product_item:
+            raise HTTPException(status_code=404, detail="Product not found")
+
+        azureStorage_url = os.getenv("account_url")
+        img_storage_name = os.getenv("img_blob_name")
+        credential = DefaultAzureCredential()
+        blob_service_client = BlobServiceClient(azureStorage_url, credential=credential)
+
+        img_content = await image.read()
+        original_filename = image.filename
+        
+        if auto_set_name:
+            name, ext = os.path.splitext(original_filename)
+            img_name = f"product/{product_item['brand']}/{name}_{product_item['subname']}{ext}"
+        else:
+            img_name = f"product/{product_item['brand']}/{original_filename}"
+
+        img_url = upload_imgFile_to_blob(blob_service_client, img_storage_name, img_content, img_name)
+
+        # 기존 이미지 삭제
+        if product_item.get("main_image_url"):
+            delete_blob_by_url(blob_service_client, img_storage_name, product_item["main_image_url"])
+
+        # 데이터베이스 업데이트
+        await db["bonre_products"].update_one(
+            {"_id": ObjectId(product_id)},
+            {"$set": {"main_image_url": img_url}}
+        )
+
+        return {"message": "Image uploaded successfully", "image_url": img_url}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error uploading image: {str(e)}")
+    
 # 북마크 수 업데이트 API
 @app.post("/product/{product_id}/bookmark", tags=["product CRUD"])
 async def add_bookmark(product_id: str):
@@ -434,18 +474,16 @@ async def add_bookmark(product_id: str):
     return {"product_id": product_id, "bookmark_counts": current_count + 1}
 
 
+
 @app.patch("/product/update-product/{product_id}", tags=["product CRUD"])
-async def update_product(product_id: str, productUpdate: ProductUpdate, img_path: str = None,
-                         auto_set_name: bool = True):
+async def update_product(product_id: str, productUpdate: ProductUpdate):
     """
     input : product_id{object_id}, 수정할 필드 정보 key : value 형식으로 request body에 입력
 
     ex)
     -d '{"name_kr": "string", "name": "string"}
 
-    auto_set_name : True일 경우 로직에 의해 이름이 자동 처리되어 storage 저장됌. False일 경우 파일명 그대로 storage에 저장.
-
-    # 사진은 하나만 저장. 기존 사진은 삭제됨.
+    # 사진 x. 사진은 /product/upload-image/{product_id}에서 처리 
     """
 
     try:
@@ -455,24 +493,6 @@ async def update_product(product_id: str, productUpdate: ProductUpdate, img_path
 
     try:
         update_data = {k: v for k, v in productUpdate.dict(exclude_unset=True).items() if v is not None}
-        if img_path:
-            azureStorage_url = os.getenv("account_url")
-            img_storage_name = os.getenv("img_blob_name")
-            credential = DefaultAzureCredential()
-            blob_service_client = BlobServiceClient(azureStorage_url, credential=credential)
-            img_os = os.path.basename(img_path)
-            if auto_set_name:
-                name, ext = os.path.splitext(img_os)
-                img_name = f"product/{product_item['brand']}/{name}_{product_item['subname']}{ext}"
-                img_url = upload_image_to_blob(blob_service_client, img_storage_name, img_path, img_name)
-            else:
-                img_name = f"product/{product_item['brand']}/{img_os}"
-                img_url = upload_image_to_blob(blob_service_client, img_storage_name, img_path, img_name)
-
-            # 기존 이미지 삭제
-            if product_item.get("main_image_url"):
-                delete_blob_by_url(blob_service_client, img_storage_name, product_item["main_image_url"])
-            update_data["main_image_url"] = img_url
         await db["bonre_products"].update_one(
             {"_id": ObjectId(product_id)},
             {"$set": update_data}
@@ -482,9 +502,22 @@ async def update_product(product_id: str, productUpdate: ProductUpdate, img_path
         return {"message": "No fields to update"}
 
 
+
 # product 삭제 API
 @app.delete("/product/delete-product/{product_id}", tags=["product CRUD"])
 async def delete_product(product_id: str):
+    product_item = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
+    # 기존 이미지 삭제
+    if product_item and product_item.get("main_image_url"):
+        try:
+            azureStorage_url = os.getenv("account_url")
+            img_storage_name = os.getenv("img_blob_name")
+            credential = DefaultAzureCredential()
+            blob_service_client = BlobServiceClient(azureStorage_url, credential=credential)
+        
+            delete_blob_by_url(blob_service_client, img_storage_name, product_item["main_image_url"])
+        except Exception as e:
+            return {"message": f"Error deleting image: {str(e)}"}
     result = await db["bonre_products"].delete_one({"_id": ObjectId(product_id)})
     if result.deleted_count == 1:
         return {"message": "Product deleted successfully"}

@@ -34,6 +34,11 @@ def upload_image_to_blob(blob_service_client: BlobServiceClient, container_name:
     print(f"이미지 '{blob_name}'가 '{container_name}' 컨테이너에 업로드되었습니다.")
     return blob_client.url
 
+def upload_imgFile_to_blob(blob_service_client: BlobServiceClient, container_name, file_data, blob_name):
+    blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+    blob_client.upload_blob(file_data, overwrite=True)
+    return blob_client.url
+
 
 def upload_image_to_blob_with_url(blob_service_client: BlobServiceClient, container_name: str, image_url: str,
                                   blob_name: str):

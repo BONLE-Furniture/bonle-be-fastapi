@@ -48,7 +48,7 @@ class Product(BaseModel):
     category: Optional[str] = ""
     bookmark_counts: Optional[int] = 0
     shop_urls: List[Product_ShopUrl]  # 각 상점 URL 정보
-    main_image_url: Optional[str] = ""  # 이미지 URL
+    main_image_url: Optional[str] = None  # 이미지 URL
     cheapest: Optional[List[Product_Cheapest]] = []  # 가격 이력 리스트
     brand_kr: str
     upload: bool = False
@@ -99,9 +99,7 @@ class Brand(BaseModel):
     class Config:
         allow_population_by_field_name = True
 
-    # Brand 생성 모델
-
-
+# Brand 생성 모델
 class BrandUpdate(BaseModel):
     brand_kr: Optional[str] = None
     brand: Optional[str] = None
@@ -165,8 +163,6 @@ class Price(BaseModel):
 
 class Product_Price(BaseModel):
     product_id: str
-    color: str
-    brand_id: str
     shop_sld: str
     prices: List[Price]
 

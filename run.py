@@ -164,6 +164,8 @@ async def get_products_list_in_page(page: int = 1, limit: int = 2):
             {
                 "name_kr": item["name_kr"],
                 "name": item["name"],
+                "subname": item["subname"],
+                "subname_kr": item["subname_kr"],
                 "brand": item["brand_kr"],
                 "main_image_url": item["main_image_url"],
                 "bookmark_counts": item["bookmark_counts"],

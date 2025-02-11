@@ -326,12 +326,10 @@ async def update_prices(product_id: str):
 
         current_date = datetime.utcnow().date().isoformat()
 
-        existing_shop = await db["bonre_prices"].find_one({"shop_sld": shop_sld})
-        existing_id = await db["bonre_prices"].find_one({"product_id": product_id})
-
-        if existing_shop and existing_id:
+        existing_price_doc = await db["bonre_prices"].find_one({"product_id": product_id, "shop_sld": shop_sld})
+        if existing_price_doc:
             await db["bonre_prices"].update_one(
-                {"shop_sld": shop_sld},
+                {"product_id": product_id, "shop_sld": shop_sld},
                 {"$push": {"prices": {"date": current_date, "price": price}}}
             )
         else:

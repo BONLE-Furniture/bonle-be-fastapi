@@ -162,6 +162,7 @@ async def get_products_list_in_page(page: int = 1, limit: int = 2):
     if sanitized_items:
         filtered_items = [
             {
+                "_id": str(item["_id"]),  # ObjectId -> str 변환
                 "name_kr": item["name_kr"],
                 "name": item["name"],
                 "subname": item["subname"],

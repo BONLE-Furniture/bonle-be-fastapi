@@ -1,9 +1,11 @@
 import os
 from urllib.parse import urlparse
 from dotenv import load_dotenv
-from azure.identity import DefaultAzureCredential
-from azure.storage.blob import BlobServiceClient
 import requests
+
+from azure.identity import DefaultAzureCredential
+from azure.storage.blob import BlobServiceClient, ContentSettings
+import mimetypes
 
 load_dotenv()
 
@@ -24,6 +26,18 @@ if blob_service_client:
 # except Exception as e:
 #     print(f"연결 중 오류 발생: {str(e)}")
 
+def get_content_type(filename):
+    mime_type, _ = mimetypes.guess_type(filename)
+    if mime_type:
+        return mime_type
+    # 파일 확장자별로 MIME 타입 지정
+    ext = filename.lower().split('.')[-1]
+    if ext in ['jpg', 'jpeg']:
+        return 'image/jpeg'
+    elif ext == 'png':
+        return 'image/png'
+    else:
+        return 'application/octet-stream'  # 기본값
 
 # image_path : 이미지 경로 , blob_name : blob에 저장될 이름
 def upload_image_to_blob(blob_service_client: BlobServiceClient, container_name: str, image_path: str, blob_name: str):
@@ -36,7 +50,11 @@ def upload_image_to_blob(blob_service_client: BlobServiceClient, container_name:
 
 def upload_imgFile_to_blob(blob_service_client: BlobServiceClient, container_name, file_data, blob_name):
     blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-    blob_client.upload_blob(file_data, overwrite=True)
+    
+    # MIME 타입 설정 (예: image/png)
+    content_type = get_content_type(blob_name)
+    content_settings = ContentSettings(content_type=content_type)
+    blob_client.upload_blob(file_data, overwrite=True,content_settings=content_settings)
     return blob_client.url
 
 

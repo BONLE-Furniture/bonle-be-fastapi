@@ -52,8 +52,9 @@ async def get_all_products():
 async def get_product(product_id: str):
     product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
     if product:
-        product["_id"] = str(product["_id"])
-        return product
+        # product["_id"] = str(product["_id"])
+        sanitized_data = sanitize_data([product])[0]
+        return sanitized_data
     raise HTTPException(status_code=404, detail="항목을 찾을 수 없습니다.")
 
 
@@ -70,7 +71,7 @@ async def get_shop_urls(product_id: str):
 
     # 반환할 데이터 정리
     result_data = [{"shop_id": shop["shop_id"], "url": shop["url"]} for shop in shop_urls]
-
+    
     return result_data
 
 

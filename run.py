@@ -171,6 +171,7 @@ async def get_products_list_in_page(page: int = 1, limit: int = 2):
                 "brand": item["brand_kr"],
                 "main_image_url": item["main_image_url"],
                 "bookmark_counts": item["bookmark_counts"],
+                "cheapest": item["cheapest"][-1]["price"] if item.get("cheapest") and len(item["cheapest"]) > 0 else None
             }
             for item in sanitized_items
         ]
@@ -230,7 +231,7 @@ async def get_products_info_by_brand_id(brand_id: str):
 
     output : product list of brand_id {_id, name_kr, name, brand, main_image_url, cheapest}
     """
-    items = await db["bonre_products"].find({"brand": brand_id}).to_list(1000)
+    items = await db["bonre_products"].find({"brand": brand_id,"upload": True}).to_list(1000)
     if items:
         filtered_items = [
             {
@@ -250,7 +251,7 @@ async def get_products_info_by_brand_id(brand_id: str):
 
 # 특정 shop & product의 날짜별 price 조회 API
 @app.get("/price/{product_id}/{shop_sld}/", tags=["price CRUD"])
-async def get_price(product_id: str, shop_sld: str):
+async def get_price_specific_shop_wholeday(product_id: str, shop_sld: str):
     """
     특정 shop & product의 날짜별 price 조회 API
 
@@ -271,38 +272,30 @@ async def get_price(product_id: str, shop_sld: str):
     return filtered_items
 
 
-# 특정 shop & product의 날짜별 price 조회 API
-@app.get("/price/{product_object_id}/", tags=["price CRUD"])
-async def get_price(product_object_id: str):
+# 특정 product의 모든 shop price 출력 (오늘)
+@app.get("/price/{product_id}/", tags=["price CRUD"])
+async def get_prices_per_shops_today(product_id: str):
     """
-    특정 shop & product의 날짜별 price 조회 API
+    특정 product의 모든 shop price 출력 (오늘 날짜만)
 
     input : product_id{object_id}
 
     output : prices [{date, price}...]
     """
-    item = await db["bonre_prices"].find_one({"product_id": product_object_id})
-    prices = item["prices"]
-    if prices:
+    items = await db["bonre_prices"].find({"product_id": product_id}).to_list(1000)
+    if items:
         filtered_items = [
             {
-                "date": item["date"],
-                "price": item["price"],
+                "_id": str(item["_id"]),
+                "product_id": item["product_id"],
+                "shop_sld": item["shop_sld"],
+                "price": item["prices"][-1]["price"] if item.get("prices") and len(item["prices"]) > 0 else None
             }
-            for item in prices
+            for item in items
         ]
+    ########### 지금은 [-1] 마지막 인덱스로 처리하지만, 후에는 날짜별로 처리해야함
+    #"price": item["prices"][-1]["price"] if item.get("prices") and len(item["prices"]) > 0 and item["prices"][-1]["date"] == datetime.utcnow().date().isoformat() else None
     return filtered_items
-
-# url별 price 조회 API
-@app.post("/price/{url}", tags=["price CRUD"])
-async def fetch_info(request: URLRequest):
-    try:
-        info = get_all_info(request.url)
-        if not info:
-            raise HTTPException(status_code=404, detail="Unable to fetch information from the URL")
-        return info
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/update_prices/", tags=["price CRUD"])
@@ -317,16 +310,24 @@ async def update_prices(product_id: str):
     if not shops_urls:
         raise HTTPException(status_code=400, detail="No shops_url found for this product")
 
+    current_date = datetime.now().isoformat()
+    price_records = []
+
     for dict in shops_urls:
         url = dict["url"]
+        shop_id = dict["shop_id"]
         info = get_all_info(url)
+
         if not info:
-            raise HTTPException(status_code=404, detail="Unable to fetch information from the URL")
+            continue
 
         shop_sld = info["site"]
         price = info["price"]
 
-        current_date = datetime.utcnow().date().isoformat()
+        if price is None:
+            continue
+
+        price_records.append((shop_id, price))
 
         existing_price_doc = await db["bonre_prices"].find_one({"product_id": product_id, "shop_sld": shop_sld})
         if existing_price_doc:
@@ -341,6 +342,17 @@ async def update_prices(product_id: str):
                 "prices": [{"date": current_date, "price": price}]
             }
             await db["bonre_prices"].insert_one(new_doc)
+
+    # 최저가 업데이트
+    if price_records:
+        cheapest_shop = min(price_records, key=lambda x: x[1])
+        cheapest_price = cheapest_shop[1]
+        cheapest_shop_id = cheapest_shop[0]
+
+        await db["bonre_products"].update_one(
+            {"_id": ObjectId(product_id)},
+            {"$push": {"cheapest": {"date": current_date, "price": cheapest_price, "shop_id": cheapest_shop_id}}}
+        )
     return {"message": "Prices updated successfully"}
 
 
@@ -711,3 +723,14 @@ async def delete_designer(designer_id: str):
     if result.deleted_count == 1:
         return {"message": "Designer deleted successfully"}
     raise HTTPException(status_code=404, detail="Designer not found")
+
+# url별 price 조회 API
+# @app.post("/price/{url}", tags=["price CRUD"])
+# async def fetch_info(request: URLRequest):
+#     try:
+#         info = get_all_info(request.url)
+#         if not info:
+#             raise HTTPException(status_code=404, detail="Unable to fetch information from the URL")
+#         return info
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))

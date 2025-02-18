@@ -310,16 +310,24 @@ async def update_prices(product_id: str):
     if not shops_urls:
         raise HTTPException(status_code=400, detail="No shops_url found for this product")
 
+    current_date = datetime.now().isoformat()
+    price_records = []
+
     for dict in shops_urls:
         url = dict["url"]
+        shop_id = dict["shop_id"]
         info = get_all_info(url)
+
         if not info:
-            raise HTTPException(status_code=404, detail="Unable to fetch information from the URL")
+            continue
 
         shop_sld = info["site"]
         price = info["price"]
 
-        current_date = datetime.utcnow().date().isoformat()
+        if price is None:
+            continue
+
+        price_records.append((shop_id, price))
 
         existing_price_doc = await db["bonre_prices"].find_one({"product_id": product_id, "shop_sld": shop_sld})
         if existing_price_doc:
@@ -334,6 +342,17 @@ async def update_prices(product_id: str):
                 "prices": [{"date": current_date, "price": price}]
             }
             await db["bonre_prices"].insert_one(new_doc)
+
+    # 최저가 업데이트
+    if price_records:
+        cheapest_shop = min(price_records, key=lambda x: x[1])
+        cheapest_price = cheapest_shop[1]
+        cheapest_shop_id = cheapest_shop[0]
+
+        await db["bonre_products"].update_one(
+            {"_id": ObjectId(product_id)},
+            {"$push": {"cheapest": {"date": current_date, "price": cheapest_price, "shop_id": cheapest_shop_id}}}
+        )
     return {"message": "Prices updated successfully"}
 
 

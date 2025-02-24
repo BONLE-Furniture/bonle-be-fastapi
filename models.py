@@ -29,16 +29,17 @@ class Product_Size(BaseModel):
 class Product_ShopUrl(BaseModel):
     shop_id: str
     url: HttpUrl
-    priceCC: bool = False
+    priceCC: bool = True
 
 
-# Product update용 모델
+# Product upload용 모델
 class Product(BaseModel):
     name_kr: str
     name: str
-    subname: str
-    subname_kr: str
+    subname: Optional[str] = ""
+    subname_kr: Optional[str] = ""
     brand: str
+    brand_kr: str
     designer: Optional[List[str]] = []
     color: str
     size: Product_Size
@@ -47,10 +48,9 @@ class Product(BaseModel):
     filter: Optional[object]  # 색상과 재질 필터
     category: Optional[str] = ""
     bookmark_counts: Optional[int] = 0
-    shop_urls: List[Product_ShopUrl]  # 각 상점 URL 정보
-    main_image_url: Optional[str] = None  # 이미지 URL
+    shop_urls: Optional[List[Product_ShopUrl]] = List[Product_ShopUrl]  # 각 상점 URL 정보
+    main_image_url: Optional[str] = ""  # 이미지 URL
     cheapest: Optional[List[Product_Cheapest]] = []  # 가격 이력 리스트
-    brand_kr: str
     upload: bool = False
 
 

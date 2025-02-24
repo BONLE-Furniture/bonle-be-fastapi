@@ -1,6 +1,8 @@
 # from logging import Logger
 import os
 import asyncio
+from xmlrpc.client import DateTime
+
 from dotenv import load_dotenv
 from math import ceil
 from fastapi import APIRouter, FastAPI, File, Form, HTTPException, UploadFile
@@ -76,7 +78,6 @@ async def get_shop_urls(product_id: str):
 
 
 # 제품 내 가장 최근 최저가 정보 조회 API
-#  TODO 현재 날짜 최저가 조회로 변경 해야함
 @app.get("/product/{product_id}/cheapest", tags=["product CRUD"])
 async def get_cheapest(product_id: str):
     product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
@@ -129,7 +130,15 @@ async def get_cheapest_prices(product_id: str, period: Product_Period):
     # 기간 내 데이터 필터링
     filtered_data = []
     for entry in cheapest:
-        entry_date = entry["date"]  # 이미 datetime 객체임
+        # 날짜 데이터 datetime으로 맞춰주기
+        try:
+            if not isinstance(entry["date"], datetime):
+                entry_date = datetime.fromisoformat(entry["date"])
+            else:
+                entry_date = entry["date"]
+        except (ValueError, TypeError):
+            continue
+
         if start_date is None or entry_date >= start_date:
             filtered_data.append({"date": entry_date.date().isoformat(), "price": entry["price"]})
 

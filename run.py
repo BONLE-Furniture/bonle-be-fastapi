@@ -76,7 +76,6 @@ async def get_shop_urls(product_id: str):
 
 
 # 제품 내 가장 최근 최저가 정보 조회 API
-#  TODO 현재 날짜 최저가 조회로 변경 해야함
 @app.get("/product/{product_id}/cheapest", tags=["product CRUD"])
 async def get_cheapest(product_id: str):
     product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})

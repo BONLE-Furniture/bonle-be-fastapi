@@ -1,6 +1,8 @@
 # from logging import Logger
 import os
 import asyncio
+from xmlrpc.client import DateTime
+
 from dotenv import load_dotenv
 from math import ceil
 from fastapi import APIRouter, FastAPI, File, Form, HTTPException, UploadFile
@@ -76,7 +78,6 @@ async def get_shop_urls(product_id: str):
 
 
 # 제품 내 가장 최근 최저가 정보 조회 API
-#  TODO 현재 날짜 최저가 조회로 변경 해야함
 @app.get("/product/{product_id}/cheapest", tags=["product CRUD"])
 async def get_cheapest(product_id: str):
     product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
@@ -129,7 +130,15 @@ async def get_cheapest_prices(product_id: str, period: Product_Period):
     # 기간 내 데이터 필터링
     filtered_data = []
     for entry in cheapest:
-        entry_date = entry["date"]  # 이미 datetime 객체임
+        # 날짜 데이터 datetime으로 맞춰주기
+        try:
+            if not isinstance(entry["date"], datetime):
+                entry_date = datetime.fromisoformat(entry["date"])
+            else:
+                entry_date = entry["date"]
+        except (ValueError, TypeError):
+            continue
+
         if start_date is None or entry_date >= start_date:
             filtered_data.append({"date": entry_date.date().isoformat(), "price": entry["price"]})
 
@@ -298,8 +307,8 @@ async def get_prices_per_shops_today(product_id: str):
     return filtered_items
 
 
-@app.post("/update_prices/", tags=["price CRUD"])
-async def update_prices(product_id: str):
+@app.post("/update_prices/one", tags=["price CRUD"])
+async def update_prices_with_id(product_id: str):
 
     # 제품 정보 가져오기
     product_doc = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
@@ -355,6 +364,68 @@ async def update_prices(product_id: str):
         )
     return {"message": "Prices updated successfully"}
 
+
+@app.post("/update_prices/all", tags=["price CRUD"])
+async def update_prices_all():
+    # 제품 정보 가져오기
+    product_cursor = db["bonre_products"].find({"upload": True})
+    products = await product_cursor.to_list(length=None)
+    if not products:
+        raise HTTPException(status_code=404, detail="No products found")
+
+    updated_count = 0
+    for product in products:
+        product_id = str(product["_id"])    
+        shops_urls = product.get("shop_urls", [])
+        if not shops_urls:
+            continue  # Skip this product and move to the next one
+
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        price_records = []
+        
+        for dict in shops_urls:
+            url = dict["url"]
+            shop_id = dict["shop_id"]
+            info = get_all_info(url)
+
+            if not info or info["price"] is None:
+                continue
+
+            shop_sld = info["site"]
+            price = info["price"]
+
+            price_records.append((shop_id, price))
+
+            existing_price_doc = await db["bonre_prices"].find_one({"product_id": product_id, "shop_sld": shop_sld})
+            if existing_price_doc:
+                existing_price_date = existing_price_doc["prices"][-1]["date"]
+                if existing_price_date != current_date:
+                    await db["bonre_prices"].update_one(
+                        {"product_id": product_id, "shop_sld": shop_sld},
+                        {"$push": {"prices": {"date": current_date, "price": price}}}
+                    )
+                    updated_count += 1
+            else:
+                new_doc = {
+                    "product_id": product_id,
+                    "shop_sld": shop_sld,
+                    "prices": [{"date": current_date, "price": price}]
+                }
+                await db["bonre_prices"].insert_one(new_doc)
+                updated_count += 1
+
+        # 최저가 업데이트
+        if price_records:
+            cheapest_shop = min(price_records, key=lambda x: x[1])
+            cheapest_price = cheapest_shop[1]
+            cheapest_shop_id = cheapest_shop[0]
+
+            await db["bonre_products"].update_one(
+                {"_id": ObjectId(product_id)},
+                {"$push": {"cheapest": {"date": current_date, "price": cheapest_price, "shop_id": cheapest_shop_id}}}
+            )
+
+    return {"message": f"Prices updated successfully for {updated_count} products"}
 
 """
 C[R]UD API

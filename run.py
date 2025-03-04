@@ -2,6 +2,8 @@
 import os
 import asyncio
 from xmlrpc.client import DateTime
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 from dotenv import load_dotenv
 from math import ceil
@@ -18,6 +20,7 @@ from price_crwaling import *
 from storage import upload_image_to_blob, upload_imgFile_to_blob, delete_blob_by_url
 
 app = FastAPI()
+scheduler = BackgroundScheduler(timezone="Asia/Seoul")
 """
 FAST API 연결, MongoDB 연결 테스트
 """
@@ -795,13 +798,32 @@ async def delete_designer(designer_id: str):
         return {"message": "Designer deleted successfully"}
     raise HTTPException(status_code=404, detail="Designer not found")
 
-# url별 price 조회 API
-# @app.post("/price/{url}", tags=["price CRUD"])
-# async def fetch_info(request: URLRequest):
-#     try:
-#         info = get_all_info(request.url)
-#         if not info:
-#             raise HTTPException(status_code=404, detail="Unable to fetch information from the URL")
-#         return info
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))
+"""
+스케줄링
+"""
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+def run_update_prices_all():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        result = loop.run_until_complete(update_prices_all())
+        logger.info(f"Scheduled task completed: {result}")
+    except Exception as e:
+        logger.error(f"Error in scheduled task: {e}")
+    finally:
+        loop.close()
+        
+# 스케줄링된 작업 정의
+@app.on_event("startup")
+def schedule_price_updates():
+    scheduler.add_job(run_update_prices_all, CronTrigger(hour=0, minute=41))
+    scheduler.start()
+    
+# 애플리케이션 종료 시 스케줄러 종료
+@app.on_event("shutdown")
+def shutdown_scheduler():
+    scheduler.shutdown()

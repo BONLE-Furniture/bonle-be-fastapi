@@ -319,7 +319,7 @@ async def update_prices_with_id(product_id: str):
     if not shops_urls:
         raise HTTPException(status_code=400, detail="No shops_url found for this product")
 
-    current_date = datetime.now().isoformat()
+    current_date = datetime.now().strftime("%Y-%m-%d")
     price_records = []
 
     for dict in shops_urls:

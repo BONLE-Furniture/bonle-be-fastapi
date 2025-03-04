@@ -378,14 +378,14 @@ async def update_prices_all():
 
     updated_count = 0
     for product in products:
-        product_id = str(product["_id"])    
+        product_id = str(product["_id"])
         shops_urls = product.get("shop_urls", [])
         if not shops_urls:
             continue  # Skip this product and move to the next one
 
         current_date = datetime.now().strftime("%Y-%m-%d")
         price_records = []
-        
+
         for dict in shops_urls:
             url = dict["url"]
             shop_id = dict["shop_id"]
@@ -820,7 +820,7 @@ def run_update_prices_all():
 # 스케줄링된 작업 정의
 @app.on_event("startup")
 def schedule_price_updates():
-    scheduler.add_job(run_update_prices_all, CronTrigger(hour=0, minute=41))
+    scheduler.add_job(run_update_prices_all, CronTrigger(hour=0, minute=1))
     scheduler.start()
     
 # 애플리케이션 종료 시 스케줄러 종료

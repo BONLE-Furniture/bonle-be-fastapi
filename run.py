@@ -164,7 +164,7 @@ async def get_cheapest_prices(product_id: str, period: Product_Period):
 # home 화면에 페이징 처리된 상품 리스트를 반환하는 API
 # test : /home/products/?page=3&limit=2
 @app.get("/home/products/", tags=["product CRUD"])
-async def get_products_list_in_page(page: int = 1, limit: int = 2):
+async def get_products_list_in_page(page: int = 1, limit: int = 20):
     skip = (page - 1) * limit
     total_count = await db["bonre_products"].count_documents({})
 

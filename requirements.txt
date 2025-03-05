@@ -2,7 +2,7 @@ annotated-types==0.7.0
 anyio==4.8.0
 appdirs==1.4.4
 appnope==0.1.4
-apscheduler==3.11.0
+APScheduler==3.11.0
 asttokens==3.0.0
 attrs==25.1.0
 azure-core==1.32.0

@@ -35,6 +35,35 @@ async def read_root():
 MVP
 """
 
+#############
+### Total ###
+#############
+
+@app.get("/product-all", tags=["Detail Page"])
+async def get_total(product_id: str, designer_id: str, brand_id: str, shop_id: str):
+    """
+    product_id, designer_id, brand_id, shop_id를 받아서 해당 정보를 반환하는 API
+
+    input : product_id{str}, designer_id{str}, brand_id{str}, shop_id{str}
+
+    output : product, designer, brand, shop info
+    """
+    try:
+        product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
+        if product:
+            product = sanitize_data([product])[0]
+        designer = await db["bonre_designers"].find_one({"_id": designer_id}) if designer_id else None
+        brand = await db["bonre_brands"].find_one({"_id": brand_id}) if brand_id else None
+        shop = await db["bonre_shops"].find_one({"_id": shop_id}) if shop_id else None
+
+    except Exception as e:
+        # 예외 발생 시 디버깅을 위해 로그를 남길 수 있음 (선택 사항)
+        print(f"Error occurred: {e}")
+        return {"product": None, "designer": None, "brand": None, "shop": None}
+
+    # 결과 반환 (데이터가 없으면 None이 포함됨)
+    return {"product": product, "designer": designer, "brand": brand, "shop": shop}
+
 
 #############
 ## product ##

@@ -55,6 +55,7 @@ async def get_total(product_id: str):
         designer = await db["bonre_designers"].find_one({"_id": product['designer'][0]}) if product['brand'] else None
         brand = await db["bonre_brands"].find_one({"_id": product['brand']}) if product['brand'] else None
         products = await db["bonre_products"].find({"brand": product['brand'],"upload": True}).to_list(1000)
+        prices = await db["bonre_prices"].find({"product_id": product_id}).to_list(1000)
         if products:
             filtered_products = [
                 {
@@ -68,14 +69,24 @@ async def get_total(product_id: str):
                 }
                 for item in products
             ]
+        if prices:
+            filtered_prices = [
+                {
+                    "_id": str(item["_id"]),
+                    "product_id": item["product_id"],
+                    "shop_sld": item["shop_sld"],
+                    "price": item["prices"][-1]["price"] if item.get("prices") and len(item["prices"]) > 0 else None
+                }
+                for item in prices
+            ]
 
     except Exception as e:
         # 예외 발생 시 디버깅을 위해 로그를 남길 수 있음 (선택 사항)
         print(f"Error occurred: {e}")
-        return {"product": None, "designer": None, "brand": None, "shop": None}
+        return {"product": None, "designer": None, "brand": None, "brand_products": None, "prices": None}
 
     # 결과 반환 (데이터가 없으면 None이 포함됨)
-    return {"product": product, "designer": designer, "brand": brand, "brand_products": filtered_products}
+    return {"product": product, "designer": designer, "brand": brand, "brand_products": filtered_products, "prices": filtered_prices}
 
 #############
 ## product ##

@@ -284,3 +284,5 @@ def get_all_info(url):
         "price": price,
         "name": name
     }
+
+

@@ -163,8 +163,8 @@ class Price(BaseModel):
 
 class Product_Price(BaseModel):
     product_id: str
-    brand_id: str
     shop_sld: str
+    shop_id: str
     prices: List[Price]
 
 

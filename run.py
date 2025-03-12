@@ -56,6 +56,7 @@ async def get_total(product_id: str):
         brand = await db["bonre_brands"].find_one({"_id": product['brand']}) if product['brand'] else None
         products = await db["bonre_products"].find({"brand": product['brand'],"upload": True}).to_list(1000)
         prices = await db["bonre_prices"].find({"product_id": product_id}).to_list(1000)
+        # product['shop_urls][:]의 
         if products:
             filtered_products = [
                 {
@@ -75,6 +76,7 @@ async def get_total(product_id: str):
                     "_id": str(item["_id"]),
                     "product_id": item["product_id"],
                     "shop_sld": item["shop_sld"],
+                    "shop_id": item["shop_id"],
                     "price": item["prices"][-1]["price"] if item.get("prices") and len(item["prices"]) > 0 else None
                 }
                 for item in prices
@@ -353,6 +355,7 @@ async def get_prices_per_shops_today(product_id: str):
                 "_id": str(item["_id"]),
                 "product_id": item["product_id"],
                 "shop_sld": item["shop_sld"],
+                "shop_id": item["shop_id"],
                 "price": item["prices"][-1]["price"] if item.get("prices") and len(item["prices"]) > 0 else None
             }
             for item in items
@@ -419,7 +422,7 @@ async def update_prices_with_id(product_id: str):
         )
     return {"message": "Prices updated successfully"}
 
-
+# 수정
 @app.post("/update_prices/all", tags=["price CRUD"])
 async def update_prices_all():
     # 제품 정보 가져오기
@@ -464,6 +467,7 @@ async def update_prices_all():
                 new_doc = {
                     "product_id": product_id,
                     "shop_sld": shop_sld,
+                    "shop_id": shop_id,
                     "prices": [{"date": current_date, "price": price}]
                 }
                 await db["bonre_prices"].insert_one(new_doc)
@@ -849,6 +853,7 @@ async def delete_designer(designer_id: str):
     if result.deleted_count == 1:
         return {"message": "Designer deleted successfully"}
     raise HTTPException(status_code=404, detail="Designer not found")
+
 
 """
 스케줄링

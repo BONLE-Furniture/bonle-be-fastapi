@@ -56,7 +56,7 @@ async def get_total(product_id: str):
         brand = await db["bonre_brands"].find_one({"_id": product['brand']}) if product['brand'] else None
         products = await db["bonre_products"].find({"brand": product['brand'],"upload": True}).to_list(1000)
         prices = await db["bonre_prices"].find({"product_id": product_id}).to_list(1000)
-        # product['shop_urls][:]의 
+
         if products:
             filtered_products = [
                 {

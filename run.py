@@ -878,7 +878,7 @@ def run_update_prices_all():
 # 스케줄링된 작업 정의
 @app.on_event("startup")
 def schedule_price_updates():
-    scheduler.add_job(run_update_prices_all, CronTrigger(hour=0, minute=1))
+    scheduler.add_job(run_update_prices_all, CronTrigger(hour=12, minute=0))
     scheduler.start()
     
 # 애플리케이션 종료 시 스케줄러 종료

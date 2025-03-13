@@ -48,46 +48,47 @@ async def get_total(product_id: str):
 
     output : product, designer, brand, shop info
     """
-    try:
-        product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
-        if product:
-            product = sanitize_data([product])[0]
-        designer = await db["bonre_designers"].find_one({"_id": product['designer'][0]}) if product['brand'] else None
-        brand = await db["bonre_brands"].find_one({"_id": product['brand']}) if product['brand'] else None
-        products = await db["bonre_products"].find({"brand": product['brand'],"upload": True}).to_list(1000)
-        prices = await db["bonre_prices"].find({"product_id": product_id}).to_list(1000)
+    product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
+    if product:
+        product = sanitize_data([product])[0]
+    designer = await db["bonre_designers"].find_one({"_id": product['designer'][0]}) if product['designer'] else None
+    if not designer:
+        designer = None
+    brand = await db["bonre_brands"].find_one({"_id": product['brand']}) if product['brand'] else None
+    if not brand:
+        brand = None
+    products = await db["bonre_products"].find({"brand": product['brand'],"upload": True}).to_list(1000) if product['brand'] else None
+    prices = await db["bonre_prices"].find({"product_id": product_id}).to_list(1000) if product['brand'] else None
+    if products:
+        filtered_products = [
+            {
+                "_id": str(item["_id"]),
+                "name_kr": item["name_kr"],
+                "name": item["name"],
+                "brand": item["brand"],
+                "main_image_url": item["main_image_url"],
+                "cheapest": str(
+                    item["cheapest"][-1]["price"] if item.get("cheapest") and len(item["cheapest"]) > 0 else None)
+            }
+            for item in products
+        ]
+    else:
+        products = None
+        
+    if prices:
+        filtered_prices = [
+            {
+                "_id": str(item["_id"]),
+                "product_id": item["product_id"],
+                "shop_sld": item["shop_sld"],
+                "shop_id": item["shop_id"],
+                "price": item["prices"][-1]["price"] if item.get("prices") and len(item["prices"]) > 0 else None
+            }
+            for item in prices
+        ]   
+    else:
+        prices = None
 
-        if products:
-            filtered_products = [
-                {
-                    "_id": str(item["_id"]),
-                    "name_kr": item["name_kr"],
-                    "name": item["name"],
-                    "brand": item["brand"],
-                    "main_image_url": item["main_image_url"],
-                    "cheapest": str(
-                        item["cheapest"][-1]["price"] if item.get("cheapest") and len(item["cheapest"]) > 0 else None)
-                }
-                for item in products
-            ]
-        if prices:
-            filtered_prices = [
-                {
-                    "_id": str(item["_id"]),
-                    "product_id": item["product_id"],
-                    "shop_sld": item["shop_sld"],
-                    "shop_id": item["shop_id"],
-                    "price": item["prices"][-1]["price"] if item.get("prices") and len(item["prices"]) > 0 else None
-                }
-                for item in prices
-            ]
-
-    except Exception as e:
-        # 예외 발생 시 디버깅을 위해 로그를 남길 수 있음 (선택 사항)
-        print(f"Error occurred: {e}")
-        return {"product": None, "designer": None, "brand": None, "brand_products": None, "prices": None}
-
-    # 결과 반환 (데이터가 없으면 None이 포함됨)
     return {"product": product, "designer": designer, "brand": brand, "brand_products": filtered_products, "prices": filtered_prices}
 
 #############
@@ -523,7 +524,7 @@ async def create_product(product: Product):
 
     upload : bool = False # true일 때, 홈 화면에 출력
     """
-    azureStorage_url = os.getenv("account_url")
+    azureStorage_url = os.getenv("azure_storage_url")
     img_storage_name = os.getenv("img_blob_name")
     credential = DefaultAzureCredential()
     blob_service_client = BlobServiceClient(azureStorage_url, credential=credential)
@@ -554,7 +555,7 @@ async def upload_product_image(
         if not product_item:
             raise HTTPException(status_code=404, detail="Product not found")
 
-        azureStorage_url = os.getenv("account_url")
+        azureStorage_url = os.getenv("azure_storage_url")
         img_storage_name = os.getenv("img_blob_name")
         credential = DefaultAzureCredential()
         blob_service_client = BlobServiceClient(azureStorage_url, credential=credential)
@@ -570,9 +571,9 @@ async def upload_product_image(
 
         img_url = upload_imgFile_to_blob(blob_service_client, img_storage_name, img_content, img_name)
 
-        # 기존 이미지 삭제
-        if product_item.get("main_image_url"):
-            delete_blob_by_url(blob_service_client, img_storage_name, product_item["main_image_url"])
+        # # 기존 이미지 삭제
+        # if product_item.get("main_image_url"):
+        #     delete_blob_by_url(blob_service_client, img_storage_name, product_item["main_image_url"])
 
         # 데이터베이스 업데이트
         await db["bonre_products"].update_one(
@@ -654,7 +655,7 @@ async def delete_product(product_id: str):
     # 기존 이미지 삭제
     if product_item and product_item.get("main_image_url"):
         try:
-            azureStorage_url = os.getenv("account_url")
+            azureStorage_url = os.getenv("azure_storage_url")
             img_storage_name = os.getenv("img_blob_name")
             credential = DefaultAzureCredential()
             blob_service_client = BlobServiceClient(azureStorage_url, credential=credential)

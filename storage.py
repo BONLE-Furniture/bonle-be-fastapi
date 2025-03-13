@@ -9,7 +9,7 @@ import mimetypes
 
 load_dotenv()
 
-azureStorage_url = os.getenv("account_url")
+azureStorage_url = os.getenv("azure_storage_url")
 credential = DefaultAzureCredential()
 
 blob_service_client = BlobServiceClient(azureStorage_url, credential=credential)
@@ -54,7 +54,11 @@ def upload_imgFile_to_blob(blob_service_client: BlobServiceClient, container_nam
     # MIME 타입 설정 (예: image/png)
     content_type = get_content_type(blob_name)
     content_settings = ContentSettings(content_type=content_type)
-    blob_client.upload_blob(file_data, overwrite=True,content_settings=content_settings)
+    try:
+        blob_client.upload_blob(file_data, overwrite=True,content_settings=content_settings)
+    except Exception as e:
+        print(f"Blob 업로드 중 오류 발생: {str(e)}")
+        return None
     return blob_client.url
 
 

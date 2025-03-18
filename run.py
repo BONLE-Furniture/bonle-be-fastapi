@@ -19,8 +19,10 @@ from models import *
 from price_crwaling import *
 from storage import upload_image_to_blob, upload_imgFile_to_blob, delete_blob_by_url
 
+from pytz import timezone
+
 app = FastAPI()
-scheduler = BackgroundScheduler(timezone="Asia/Seoul")
+scheduler = BackgroundScheduler(timezone=timezone('Asia/Seoul'))
 """
 FAST API 연결, MongoDB 연결 테스트
 """
@@ -861,27 +863,47 @@ async def delete_designer(designer_id: str):
 """
 import logging
 
-logging.basicConfig(level=logging.INFO)
+# 로깅 설정을 더 자세하게 수정
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 def run_update_prices_all():
+    logger.info("Starting scheduled price update task")
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     try:
         result = loop.run_until_complete(update_prices_all())
         logger.info(f"Scheduled task completed: {result}")
     except Exception as e:
-        logger.error(f"Error in scheduled task: {e}")
+        logger.error(f"Error in scheduled task: {e}", exc_info=True)
     finally:
         loop.close()
         
 # 스케줄링된 작업 정의
 @app.on_event("startup")
 def schedule_price_updates():
-    scheduler.add_job(run_update_prices_all, CronTrigger(hour=12, minute=0))
-    scheduler.start()
+    try:
+        logger.info("Initializing scheduler...")
+        scheduler.add_job(
+            run_update_prices_all, 
+            CronTrigger(hour=17, minute=20),
+            id='price_update_job',
+            name='Update all prices'
+        )
+        scheduler.start()
+        logger.info("Scheduler started successfully")
+        logger.info(f"Next run time: {scheduler.get_job('price_update_job').next_run_time}")
+    except Exception as e:
+        logger.error(f"Failed to initialize scheduler: {e}", exc_info=True)
     
 # 애플리케이션 종료 시 스케줄러 종료
 @app.on_event("shutdown")
 def shutdown_scheduler():
-    scheduler.shutdown()
+    try:
+        scheduler.shutdown()
+        logger.info("Scheduler shut down successfully")
+    except Exception as e:
+        logger.error(f"Error shutting down scheduler: {e}", exc_info=True)

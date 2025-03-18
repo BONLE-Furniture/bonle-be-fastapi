@@ -20,9 +20,11 @@ from price_crwaling import *
 from storage import upload_image_to_blob, upload_imgFile_to_blob, delete_blob_by_url
 
 from pytz import timezone
+import pytz
 
 app = FastAPI()
-scheduler = BackgroundScheduler(timezone=timezone('Asia/Seoul'))
+kst = timezone('Asia/Seoul')
+scheduler = BackgroundScheduler(timezone=kst)
 """
 FAST API 연결, MongoDB 연결 테스트
 """
@@ -872,6 +874,8 @@ logger = logging.getLogger(__name__)
 
 def run_update_prices_all():
     logger.info("Starting scheduled price update task")
+    current_time = datetime.now(kst)
+    logger.info(f"Current time in KST: {current_time}")
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     try:
@@ -887,15 +891,20 @@ def run_update_prices_all():
 def schedule_price_updates():
     try:
         logger.info("Initializing scheduler...")
+        current_time = datetime.now(kst)
+        logger.info(f"Current time in KST: {current_time}")
+        
         scheduler.add_job(
             run_update_prices_all, 
-            CronTrigger(hour=17, minute=20),
+            CronTrigger(hour=0, minute=0, timezone=kst),
             id='price_update_job',
             name='Update all prices'
         )
         scheduler.start()
         logger.info("Scheduler started successfully")
-        logger.info(f"Next run time: {scheduler.get_job('price_update_job').next_run_time}")
+        next_run = scheduler.get_job('price_update_job').next_run_time
+        logger.info(f"Next run time (KST): {next_run}")
+        logger.info(f"Next run time (UTC): {next_run.astimezone(pytz.UTC)}")
     except Exception as e:
         logger.error(f"Failed to initialize scheduler: {e}", exc_info=True)
     

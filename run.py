@@ -17,7 +17,7 @@ from azure.storage.blob import BlobServiceClient
 
 from models import *
 from price_crwaling import *
-from storage import upload_image_to_blob, upload_imgFile_to_blob, delete_blob_by_url
+from storage import upload_imgFile_to_blob, delete_blob_by_url
 
 from pytz import timezone
 import pytz
@@ -528,10 +528,6 @@ async def create_product(product: Product):
 
     upload : bool = False # true일 때, 홈 화면에 출력
     """
-    azureStorage_url = os.getenv("azure_storage_url")
-    img_storage_name = os.getenv("img_blob_name")
-    credential = DefaultAzureCredential()
-    blob_service_client = BlobServiceClient(azureStorage_url, credential=credential)
 
     product_item = product.dict(by_alias=True)
     # img을 파일로 받아서 azure blob에 저장 -> 저장된 url 반환
@@ -559,11 +555,7 @@ async def upload_product_image(
         if not product_item:
             raise HTTPException(status_code=404, detail="Product not found")
 
-        azureStorage_url = os.getenv("azure_storage_url")
         img_storage_name = os.getenv("img_blob_name")
-        credential = DefaultAzureCredential()
-        blob_service_client = BlobServiceClient(azureStorage_url, credential=credential)
-
         img_content = await image.read()
         original_filename = image.filename
         
@@ -573,12 +565,12 @@ async def upload_product_image(
         else:
             img_name = f"product/{product_item['brand']}/{original_filename}"
 
-        img_url = upload_imgFile_to_blob(blob_service_client, img_storage_name, img_content, img_name)
+        img_url = upload_imgFile_to_blob(img_storage_name, img_content, img_name)
 
-        # # 기존 이미지 삭제
-        # if product_item.get("main_image_url"):
-        #     delete_blob_by_url(blob_service_client, img_storage_name, product_item["main_image_url"])
-
+        # 기존 이미지 삭제
+        if product_item.get("main_image_url"):
+            delete_blob_by_url(img_storage_name, product_item["main_image_url"])
+            
         # 데이터베이스 업데이트
         await db["bonre_products"].update_one(
             {"_id": ObjectId(product_id)},
@@ -659,12 +651,8 @@ async def delete_product(product_id: str):
     # 기존 이미지 삭제
     if product_item and product_item.get("main_image_url"):
         try:
-            azureStorage_url = os.getenv("azure_storage_url")
             img_storage_name = os.getenv("img_blob_name")
-            credential = DefaultAzureCredential()
-            blob_service_client = BlobServiceClient(azureStorage_url, credential=credential)
-        
-            delete_blob_by_url(blob_service_client, img_storage_name, product_item["main_image_url"])
+            delete_blob_by_url(img_storage_name, product_item["main_image_url"])
         except Exception as e:
             return {"message": f"Error deleting image: {str(e)}"}
     result = await db["bonre_products"].delete_one({"_id": ObjectId(product_id)})

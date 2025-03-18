@@ -9,22 +9,13 @@ import mimetypes
 
 load_dotenv()
 
-azureStorage_url = os.getenv("azure_storage_url")
-credential = DefaultAzureCredential()
-
-blob_service_client = BlobServiceClient(azureStorage_url, credential=credential)
-
-if blob_service_client:
-    print("BlobServiceClient created successfully.")
-
-
-# try:
-#     containers = blob_service_client.list_containers()
-#     for container in containers:
-#         print(container.name)
-#     print("Azure Storage에 성공적으로 연결되었습니다.")
-# except Exception as e:
-#     print(f"연결 중 오류 발생: {str(e)}")
+def get_blob_service_client():
+    azureStorage_url = os.getenv("azure_storage_url")
+    if not azureStorage_url or not isinstance(azureStorage_url, str):
+        raise ValueError("azure_storage_url 환경 변수가 설정되지 않았거나 유효하지 않습니다.")
+    
+    credential = DefaultAzureCredential()
+    return BlobServiceClient(azureStorage_url, credential=credential)
 
 def get_content_type(filename):
     mime_type, _ = mimetypes.guess_type(filename)
@@ -40,7 +31,8 @@ def get_content_type(filename):
         return 'application/octet-stream'  # 기본값
 
 # image_path : 이미지 경로 , blob_name : blob에 저장될 이름
-def upload_image_to_blob(blob_service_client: BlobServiceClient, container_name: str, image_path: str, blob_name: str):
+def upload_image_to_blob(container_name: str, image_path: str, blob_name: str):
+    blob_service_client = get_blob_service_client()
     container_client = blob_service_client.get_container_client(container=container_name)
     with open(file=image_path, mode="rb") as image_file:
         blob_client = container_client.upload_blob(name=blob_name, data=image_file, overwrite=True)
@@ -48,7 +40,8 @@ def upload_image_to_blob(blob_service_client: BlobServiceClient, container_name:
     print(f"이미지 '{blob_name}'가 '{container_name}' 컨테이너에 업로드되었습니다.")
     return blob_client.url
 
-def upload_imgFile_to_blob(blob_service_client: BlobServiceClient, container_name, file_data, blob_name):
+def upload_imgFile_to_blob(container_name, file_data, blob_name):
+    blob_service_client = get_blob_service_client()
     blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
     
     # MIME 타입 설정 (예: image/png)
@@ -61,9 +54,8 @@ def upload_imgFile_to_blob(blob_service_client: BlobServiceClient, container_nam
         return None
     return blob_client.url
 
-
-def upload_image_to_blob_with_url(blob_service_client: BlobServiceClient, container_name: str, image_url: str,
-                                  blob_name: str):
+def upload_image_to_blob_with_url(container_name: str, image_url: str, blob_name: str):
+    blob_service_client = get_blob_service_client()
     container_client = blob_service_client.get_container_client(container=container_name)
     image_file = requests.get(image_url).content
     blob_client = container_client.upload_blob(name=blob_name, data=image_file, overwrite=True)
@@ -71,8 +63,8 @@ def upload_image_to_blob_with_url(blob_service_client: BlobServiceClient, contai
     print(f"이미지 '{blob_name}'가 '{container_name}' 컨테이너에 업로드되었습니다.")
     return blob_client.url
 
-
-def delete_blob_by_url(blob_service_client: BlobServiceClient, container_name: str, blob_url):
+def delete_blob_by_url(container_name: str, blob_url):
+    blob_service_client = get_blob_service_client()
     container_client = blob_service_client.get_container_client(container=container_name)
 
     parsed_url = urlparse(blob_url)
@@ -87,5 +79,3 @@ def delete_blob_by_url(blob_service_client: BlobServiceClient, container_name: s
     except Exception as e:
         print(f"Blob 삭제 중 오류 발생: {str(e)}")
         return False
-
-# delete_blob_by_url(blob_service_client, 'img','https://bonlestorage.blob.core.windows.net/img/product/brand_hd/bu.jpg')

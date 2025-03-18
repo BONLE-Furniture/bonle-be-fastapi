@@ -24,7 +24,7 @@ import pytz
 
 app = FastAPI()
 kst = timezone('Asia/Seoul')
-scheduler = BackgroundScheduler(timezone=kst)
+scheduler = BackgroundScheduler(timezone=pytz.UTC)
 """
 FAST API 연결, MongoDB 연결 테스트
 """
@@ -896,7 +896,7 @@ def schedule_price_updates():
         # 새로운 작업 추가
         scheduler.add_job(
             run_update_prices_all, 
-            CronTrigger(hour=17, minute=10, timezone=kst),
+            CronTrigger(hour=15, minute=30, timezone=pytz.UTC),
             id='price_update_job',
             name='Update all prices',
             replace_existing=True

@@ -867,15 +867,20 @@ import logging
 
 # 로깅 설정을 더 자세하게 수정
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,  # 기본 로깅 레벨을 INFO로 변경
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
+
+# pymongo의 로깅 레벨을 INFO로 설정
+logging.getLogger('pymongo').setLevel(logging.INFO)
+
 logger = logging.getLogger(__name__)
 
 def run_update_prices_all():
     logger.info("Starting scheduled price update task")
     current_time = datetime.now(kst)
     logger.info(f"Current time in KST: {current_time}")
+    logger.info(f"Current time in UTC: {current_time.astimezone(pytz.UTC)}")
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     try:
@@ -893,18 +898,52 @@ def schedule_price_updates():
         logger.info("Initializing scheduler...")
         current_time = datetime.now(kst)
         logger.info(f"Current time in KST: {current_time}")
+        logger.info(f"Current time in UTC: {current_time.astimezone(pytz.UTC)}")
         
+        # 기존 작업이 있다면 제거
+        if scheduler.get_job('price_update_job'):
+            scheduler.remove_job('price_update_job')
+            logger.info("Removed existing price update job")
+        
+        # 새로운 작업 추가
         scheduler.add_job(
             run_update_prices_all, 
-            CronTrigger(hour=0, minute=0, timezone=kst),
+            CronTrigger(hour=17, minute=10, timezone=kst),
             id='price_update_job',
-            name='Update all prices'
+            name='Update all prices',
+            replace_existing=True
         )
+        
         scheduler.start()
         logger.info("Scheduler started successfully")
+        
+        # 스케줄러 상태 확인
+        jobs = scheduler.get_jobs()
+        logger.info(f"Total jobs in scheduler: {len(jobs)}")
+        for job in jobs:
+            logger.info(f"Job ID: {job.id}, Name: {job.name}, Next Run: {job.next_run_time}")
+            
         next_run = scheduler.get_job('price_update_job').next_run_time
         logger.info(f"Next run time (KST): {next_run}")
         logger.info(f"Next run time (UTC): {next_run.astimezone(pytz.UTC)}")
+        
+        # 스케줄러 상태 확인을 위한 엔드포인트 추가
+        @app.get("/scheduler/status")
+        async def get_scheduler_status():
+            jobs = scheduler.get_jobs()
+            return {
+                "scheduler_running": scheduler.running,
+                "total_jobs": len(jobs),
+                "jobs": [
+                    {
+                        "id": job.id,
+                        "name": job.name,
+                        "next_run": job.next_run_time.isoformat() if job.next_run_time else None
+                    }
+                    for job in jobs
+                ]
+            }
+            
     except Exception as e:
         logger.error(f"Failed to initialize scheduler: {e}", exc_info=True)
     

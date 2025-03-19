@@ -869,13 +869,18 @@ def run_update_prices_all():
     current_time = datetime.now(kst)
     logger.info(f"Current time in KST: {current_time}")
     logger.info(f"Current time in UTC: {current_time.astimezone(pytz.UTC)}")
+    
+    async def run_async():
+        try:
+            result = await update_prices_all()
+            logger.info(f"Scheduled task completed: {result}")
+        except Exception as e:
+            logger.error(f"Error in scheduled task: {e}", exc_info=True)
+    
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     try:
-        result = loop.run_until_complete(update_prices_all())
-        logger.info(f"Scheduled task completed: {result}")
-    except Exception as e:
-        logger.error(f"Error in scheduled task: {e}", exc_info=True)
+        loop.run_until_complete(run_async())
     finally:
         loop.close()
         
@@ -896,7 +901,7 @@ def schedule_price_updates():
         # 새로운 작업 추가
         scheduler.add_job(
             run_update_prices_all, 
-            CronTrigger(hour=15, minute=30, timezone=pytz.UTC),
+            CronTrigger(hour=16, minute=40, timezone=pytz.UTC),
             id='price_update_job',
             name='Update all prices',
             replace_existing=True

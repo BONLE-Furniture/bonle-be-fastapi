@@ -443,7 +443,8 @@ async def update_prices_all():
         if not shops_urls:
             continue  # Skip this product and move to the next one
 
-        current_date = datetime.now().strftime("%Y-%m-%d")
+        # UTC 시간을 KST로 변환
+        current_date = datetime.now(kst).strftime("%Y-%m-%d")
         price_records = []
 
         for dict in shops_urls:
@@ -901,7 +902,7 @@ def schedule_price_updates():
         # 새로운 작업 추가
         scheduler.add_job(
             run_update_prices_all, 
-            CronTrigger(hour=16, minute=40, timezone=pytz.UTC),
+            CronTrigger(hour=15, minute=20, timezone=pytz.UTC),
             id='price_update_job',
             name='Update all prices',
             replace_existing=True

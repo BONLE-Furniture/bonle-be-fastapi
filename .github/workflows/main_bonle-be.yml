@@ -72,6 +72,13 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BE }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_BE }}
 
+      - name: Set Redis environment variables
+        run: |
+          az webapp config appsettings set \
+            --name bonle-be \
+            --resource-group bonle \
+            --settings REDIS_HOST=${{ secrets.REDIS_HOST }} REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} REDIS_PORT=${{ secrets.REDIS_PORT }}
+
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp

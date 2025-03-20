@@ -88,6 +88,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 python-multipart==0.0.20
 pyzmq==26.2.1
+redis==5.2.1
 regex==2024.11.6
 requests==2.32.3
 selenium==4.28.1

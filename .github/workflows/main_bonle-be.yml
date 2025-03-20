@@ -77,8 +77,9 @@ jobs:
           az webapp config appsettings set \
             --name bonle-be \
             --resource-group bonle \
-            --settings REDIS_HOST=${{ secrets.REDIS_HOST }} REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} REDIS_PORT=${{ secrets.REDIS_PORT }}
-
+            --settings REDIS_HOST=${{ secrets.REDIS_HOST }} REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} REDIS_PORT=${{ secrets.REDIS_PORT }} \
+            WEBSITES_PORT=8000 PORT=8000
+            
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp

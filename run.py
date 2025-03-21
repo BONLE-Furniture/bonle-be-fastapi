@@ -2,7 +2,7 @@
 import os
 import asyncio
 from xmlrpc.client import DateTime
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 from dotenv import load_dotenv
@@ -25,7 +25,7 @@ import pytz
 app = FastAPI()
 kst = timezone('Asia/Seoul')
 utc = timezone('UTC')
-scheduler = BackgroundScheduler(timezone=utc)
+scheduler = AsyncIOScheduler(timezone=utc)
 """
 FAST API 연결, MongoDB 연결 테스트
 """
@@ -868,24 +868,17 @@ logging.getLogger('pymongo').setLevel(logging.INFO)
 
 logger = logging.getLogger(__name__)
 
-def run_update_prices_all():
+async def run_update_prices_all():
     logger.info("Starting scheduled price update task")
     current_time_utc = datetime.now(utc)
     logger.info(f"Current time in UTC: {current_time_utc}")
     
-    async def run_async():
-        try:
-            result = await update_prices_all()
-            logger.info(f"Scheduled task completed: {result}")
-        except Exception as e:
-            logger.error(f"Error in scheduled task: {e}", exc_info=True)
-    
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
     try:
-        loop.run_until_complete(run_async())
-    finally:
-        loop.close()
+        result = await update_prices_all()
+        logger.info(f"Scheduled task completed: {result}")
+    except Exception as e:
+        logger.error(f"Error in scheduled task: {e}", exc_info=True)
+
         
 # 스케줄링된 작업 정의
 @app.on_event("startup")
@@ -902,7 +895,7 @@ def schedule_price_updates():
         # 새로운 작업 추가
         scheduler.add_job(
             run_update_prices_all, 
-            CronTrigger(hour=2, minute=50, timezone=utc),
+            CronTrigger(hour=4, minute=10, timezone=utc),
             id='price_update_job',
             name='Update all prices',
             replace_existing=True

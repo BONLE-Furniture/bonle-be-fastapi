@@ -26,7 +26,8 @@ import pytz
 
 app = FastAPI()
 kst = timezone('Asia/Seoul')
-scheduler = BackgroundScheduler(timezone=pytz.UTC)
+utc = timezone('UTC')
+scheduler = BackgroundScheduler(timezone=utc)
 """
 FAST API 연결, MongoDB 연결 테스트
 """
@@ -550,8 +551,10 @@ async def create_product(product: Product):
     product_item = product.dict(by_alias=True)
     # img을 파일로 받아서 azure blob에 저장 -> 저장된 url 반환
     try:
-        await db["bonre_products"].insert_one(product_item)
-        return {"message": "Product created successfully"}
+        result = await db["bonre_products"].insert_one(product_item)
+        return {"message": "Product created successfully",
+            "product_id": str(result.inserted_id)
+            }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -884,9 +887,8 @@ logger = logging.getLogger(__name__)
 
 def run_update_prices_all():
     logger.info("Starting scheduled price update task")
-    current_time = datetime.now(kst)
-    logger.info(f"Current time in KST: {current_time}")
-    logger.info(f"Current time in UTC: {current_time.astimezone(pytz.UTC)}")
+    current_time_utc = datetime.now(utc)
+    logger.info(f"Current time in UTC: {current_time_utc}")
     
     async def run_async():
         try:
@@ -907,9 +909,7 @@ def run_update_prices_all():
 def schedule_price_updates():
     try:
         logger.info("Initializing scheduler...")
-        current_time = datetime.now(kst)
-        logger.info(f"Current time in KST: {current_time}")
-        logger.info(f"Current time in UTC: {current_time.astimezone(pytz.UTC)}")
+        logger.info(f"Current time in UTC: {datetime.now(timezone('UTC'))}")
         
         # 기존 작업이 있다면 제거
         if scheduler.get_job('price_update_job'):
@@ -919,7 +919,7 @@ def schedule_price_updates():
         # 새로운 작업 추가
         scheduler.add_job(
             run_update_prices_all, 
-            CronTrigger(hour=15, minute=20, timezone=pytz.UTC),
+            CronTrigger(hour=2, minute=50, timezone=utc),
             id='price_update_job',
             name='Update all prices',
             replace_existing=True
@@ -935,7 +935,6 @@ def schedule_price_updates():
             logger.info(f"Job ID: {job.id}, Name: {job.name}, Next Run: {job.next_run_time}")
             
         next_run = scheduler.get_job('price_update_job').next_run_time
-        logger.info(f"Next run time (KST): {next_run}")
         logger.info(f"Next run time (UTC): {next_run.astimezone(pytz.UTC)}")
         
         # 스케줄러 상태 확인을 위한 엔드포인트 추가

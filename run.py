@@ -1,5 +1,5 @@
 # from logging import Logger
-import json
+# import json
 import os
 import asyncio
 from xmlrpc.client import DateTime
@@ -19,7 +19,7 @@ from azure.storage.blob import BlobServiceClient
 from models import *
 from price_crwaling import *
 from storage import upload_imgFile_to_blob, delete_blob_by_url
-from redis_connection import redis_client
+# from redis_connection import redis_client
 
 from pytz import timezone
 import pytz
@@ -55,11 +55,12 @@ async def get_total(product_id: str):
 
     output : product, designer, brand, shop info
     """
-    cached_data = redis_client.get(f"product_{product_id}")
-
-    if cached_data:
-        cached_data = json.loads(cached_data)
-        return {"cached": True, "data": cached_data}
+## redis 주석처리
+    # cached_data = redis_client.get(f"product_{product_id}")
+    #
+    # if cached_data:
+    #     cached_data = json.loads(cached_data)
+    #     return {"cached": True, "data": cached_data}
 
 
     product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
@@ -103,13 +104,14 @@ async def get_total(product_id: str):
     else:
         prices = None
 
-    redis_client.setex(f"product_{product_id}", 3600, json.dumps({
-        "product": product,
-        "designer": designer,
-        "brand": brand,
-        "brand_products": filtered_products,
-        "prices": filtered_prices
-    }))
+## redis 주석처리
+    # redis_client.setex(f"product_{product_id}", 3600, json.dumps({
+    #     "product": product,
+    #     "designer": designer,
+    #     "brand": brand,
+    #     "brand_products": filtered_products,
+    #     "prices": filtered_prices
+    # }))
 
     return {"product": product, "designer": designer, "brand": brand, "brand_products": filtered_products, "prices": filtered_prices}
 

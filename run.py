@@ -914,7 +914,7 @@ def schedule_price_updates():
         # 새로운 작업 추가
         scheduler.add_job(
             run_update_prices_all, 
-            CronTrigger(hour=4, minute=10, timezone=utc),
+            CronTrigger(hour=9, minute=10, timezone=utc),
             id='price_update_job',
             name='Update all prices',
             replace_existing=True

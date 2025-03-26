@@ -82,7 +82,43 @@ class Product_Period(str, Enum):
     one_year = "1year"
     all_time = "all"
 
+"""
+filter & category
+"""
 
+class Filter(BaseModel):
+    id: str = Field(alias="_id")
+    type: str
+    filters :List[str]
+    name: str
+    
+    class Config:
+        allow_population_by_field_name = True
+        
+class FilterUpdate(BaseModel):
+    type: Optional[str] = None
+    filters: Optional[List[str]] = None
+    name: Optional[str] = None
+    
+    class Config:
+        allow_population_by_field_name = True
+        
+class Category(BaseModel):
+    id: str = Field(alias="_id")
+    name: str
+    required_filters: List[str]
+    optional_filters: Optional[List[str]] = []
+    
+    class Config:
+        allow_population_by_field_name = True
+        
+class CategoryUpdate(BaseModel):
+    name: Optional[str] = None
+    required_filters: Optional[List[str]] = None
+    optional_filters: Optional[List[str]] = None
+    
+    class Config:
+        allow_population_by_field_name = True
 """
 Brand
 """

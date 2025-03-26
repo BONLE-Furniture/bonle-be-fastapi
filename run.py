@@ -247,7 +247,7 @@ async def get_products_list_in_page(page: int = 1, limit: int = 20):
     skip = (page - 1) * limit
     total_count = await db["bonre_products"].count_documents({})
 
-    cursor = db["bonre_products"].find({"upload": True}).skip(skip).limit(limit)
+    cursor = db["bonre_products"].find({"upload": True}).sort({"name":1,"subname":1}).skip(skip).limit(limit)
     items = await cursor.to_list(length=limit)
 
     sanitized_items = sanitize_data(items)
@@ -275,6 +275,167 @@ async def get_products_list_in_page(page: int = 1, limit: int = 20):
         "limit": limit,
         "total_pages": ceil(total_count / limit)
     }
+
+@app.post("/product/create-product", tags=["product CRUD"])
+async def create_product(product: Product):
+    """
+    product 생성 API
+
+    input : 
+
+    필수 (type str & int)
+    name_kr, name, subname, subname_kr, brand ,color, brand_kr 
+
+    주의 
+
+    size: Product_Size {width,height,depth,length}
+
+    shop_urls: List[Product_ShopUrl]  {shop_id, url, priceCC(price crawling care)} # 만약 priceCC가 True이면 크롤링 과정에서 추가 처리 필요. 
+
+    선택 (type str & int)
+
+    designer, description, material, filter, category, bookmark_counts
+
+    ## 주의
+
+    ### main_image_url : json과 다른 방식으로 upload를 해야해서, 임의로 이미지 업로드 API를 분리했음. /product/upload-image/{product_id}로 업로드, 업데이트 수행
+
+    cheapest: List[Product_Cheapest
+
+    upload : bool = False # true일 때, 홈 화면에 출력
+    """
+
+    product_item = product.dict(by_alias=True)
+    # img을 파일로 받아서 azure blob에 저장 -> 저장된 url 반환
+    try:
+        result = await db["bonre_products"].insert_one(product_item)
+        return {"message": "Product created successfully",
+            "product_id": str(result.inserted_id)
+            }
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@app.post("/product/upload-image/{product_id}", tags=["product CRUD"])
+async def upload_product_image(
+    product_id: str,
+    image: UploadFile = File(...),
+    auto_set_name: bool = Form(True)
+):
+    """
+    auto_set_name : True일 경우 로직에 의해 이름이 자동 처리되어 storage 저장됌. False일 경우 파일명 그대로 storage에 저장.
+    
+    ## 주의
+
+    ### main_image_url : json과 다른 방식으로 upload를 해야해서, 임의로 이미지 업로드 API를 분리했음. /product/upload-image/{product_id}로 업로드, 업데이트 수행
+    """
+    try:
+        product_item = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
+        if not product_item:
+            raise HTTPException(status_code=404, detail="Product not found")
+
+        img_storage_name = os.getenv("img_blob_name")
+        img_content = await image.read()
+        original_filename = image.filename
+        
+        if auto_set_name:
+            name, ext = os.path.splitext(original_filename)
+            img_name = f"product/{product_item['brand']}/{name}_{product_item['subname']}{ext}"
+        else:
+            img_name = f"product/{product_item['brand']}/{original_filename}"
+
+        img_url = upload_imgFile_to_blob(img_storage_name, img_content, img_name)
+
+        # 기존 이미지 삭제
+        if product_item.get("main_image_url"):
+            delete_blob_by_url(img_storage_name, product_item["main_image_url"])
+            
+        # 데이터베이스 업데이트
+        await db["bonre_products"].update_one(
+            {"_id": ObjectId(product_id)},
+            {"$set": {"main_image_url": img_url}}
+        )
+
+        return {"message": "Image uploaded successfully", "image_url": img_url}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error uploading image: {str(e)}")
+    
+# 북마크 수 업데이트 API
+@app.post("/product/{product_id}/bookmark", tags=["product CRUD"])
+async def add_bookmark(product_id: str):
+    """
+    특정 상품의 bookmark_counts를 1 증가시키는 엔드포인트.
+
+    param product_id: 제품 ID
+    """
+    # ObjectId로 변환 가능한지 확인
+    try:
+        obj_id = ObjectId(product_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid product ID format")
+
+    # 해당 상품 조회
+    product = await db["bonre_products"].find_one({"_id": obj_id})
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    # 기존 북마크 카운트 가져오기 (기본값 0)
+    current_count = product.get("bookmark_counts", 0)
+
+    # bookmark_counts 필드를 +1 증가
+    result = await db["bonre_products"].update_one(
+        {"_id": obj_id},
+        {"$set": {"bookmark_counts": current_count + 1}}
+    )
+
+    if result.modified_count == 0:
+        raise HTTPException(status_code=500, detail="Failed to update bookmark count")
+
+    return {"product_id": product_id, "bookmark_counts": current_count + 1}
+
+
+@app.patch("/product/update-product/{product_id}", tags=["product CRUD"])
+async def update_product(product_id: str, productUpdate: ProductUpdate):
+    """
+    input : product_id{object_id}, 수정할 필드 정보 key : value 형식으로 request body에 입력
+
+    ex)
+    -d '{"name_kr": "string", "name": "string"}
+
+    # 사진 x. 사진은 /product/upload-image/{product_id}에서 처리 
+    """
+
+    try:
+        product_item = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
+    except Exception as e:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    try:
+        update_data = {k: v for k, v in productUpdate.dict(exclude_unset=True).items() if v is not None}
+        await db["bonre_products"].update_one(
+            {"_id": ObjectId(product_id)},
+            {"$set": update_data}
+        )
+        return {"message": f"Product updated successfully. {update_data}"}
+    except Exception as e:
+        return {"message": "No fields to update"}
+
+
+
+# product 삭제 API
+@app.delete("/product/delete-product/{product_id}", tags=["product CRUD"])
+async def delete_product(product_id: str):
+    product_item = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
+    # 기존 이미지 삭제
+    if product_item and product_item.get("main_image_url"):
+        try:
+            img_storage_name = os.getenv("img_blob_name")
+            delete_blob_by_url(img_storage_name, product_item["main_image_url"])
+        except Exception as e:
+            return {"message": f"Error deleting image: {str(e)}"}
+    result = await db["bonre_products"].delete_one({"_id": ObjectId(product_id)})
+    if result.deleted_count == 1:
+        return {"message": "Product deleted successfully"}
+    raise HTTPException(status_code=404, detail="Product not found")
 
 
 #############
@@ -339,6 +500,49 @@ async def get_products_info_by_brand_id(brand_id: str):
         return filtered_items
     raise HTTPException(status_code=404, detail="Items not found")
 
+# brand 생성 API
+@app.post("/brand/create-brand", tags=["brand CRUD"])
+async def create_brand(brand: Brand):
+    brand_dict = brand.dict(by_alias=True)
+    try:
+        await db["bonre_brands"].insert_one(brand_dict)
+        return brand_dict
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+# brand 수정 API
+@app.patch("/brand/update-brand/{brand_id}", tags=["brand CRUD"])
+async def update_brand(brand_id: str, brand: BrandUpdate):
+    brand_item = await db["bonre_brands"].find_one({"_id": brand_id})
+    if brand_item:
+        pass
+    else:
+        raise HTTPException(status_code=404, detail="Brand not found")
+
+    try:
+        update_data = {k: v for k, v in brand.dict(exclude_unset=True).items() if v is not None}
+        await db["bonre_brands"].update_one(
+            {"_id": brand_id},
+            {"$set": update_data}
+        )
+        return {"message": "Brand updated successfully"}
+    except Exception as e:
+        return {"message": "No fields to update"}
+
+
+# brand 삭제 API
+@app.delete("/brand/delete-brand/{brand_id}", tags=["brand CRUD"])
+async def delete_brand(brand_id: str):
+    result = await db["bonre_brands"].delete_one({"_id": brand_id})
+    if result.deleted_count == 1:
+        return {"message": "Brand deleted successfully"}
+    raise HTTPException(status_code=404, detail="Brand not found")
+
+
+############
+## price ###
+############
 
 # 특정 shop & product의 날짜별 price 조회 API
 @app.get("/price/{product_id}/{shop_sld}/", tags=["price CRUD"])
@@ -361,6 +565,7 @@ async def get_price_specific_shop_wholeday(product_id: str, shop_sld: str):
             for item in prices
         ]
     return filtered_items
+
 
 
 # 특정 product의 모든 shop price 출력 (오늘)
@@ -512,221 +717,6 @@ async def update_prices_all():
 
     return {"message": f"Prices updated successfully for {updated_count} products"}
 
-"""
-C[R]UD API
-"""
-
-
-#############
-## product ##
-#############
-
-@app.post("/product/create-product", tags=["product CRUD"])
-async def create_product(product: Product):
-    """
-    product 생성 API
-
-    input : 
-
-    필수 (type str & int)
-    name_kr, name, subname, subname_kr, brand ,color, brand_kr 
-
-    주의 
-
-    size: Product_Size {width,height,depth,length}
-
-    shop_urls: List[Product_ShopUrl]  {shop_id, url, priceCC(price crawling care)} # 만약 priceCC가 True이면 크롤링 과정에서 추가 처리 필요. 
-
-    선택 (type str & int)
-
-    designer, description, material, filter, category, bookmark_counts
-
-    ## 주의
-
-    ### main_image_url : json과 다른 방식으로 upload를 해야해서, 임의로 이미지 업로드 API를 분리했음. /product/upload-image/{product_id}로 업로드, 업데이트 수행
-
-    cheapest: List[Product_Cheapest
-
-    upload : bool = False # true일 때, 홈 화면에 출력
-    """
-
-    product_item = product.dict(by_alias=True)
-    # img을 파일로 받아서 azure blob에 저장 -> 저장된 url 반환
-    try:
-        result = await db["bonre_products"].insert_one(product_item)
-        return {"message": "Product created successfully",
-            "product_id": str(result.inserted_id)
-            }
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-@app.post("/product/upload-image/{product_id}", tags=["product CRUD"])
-async def upload_product_image(
-    product_id: str,
-    image: UploadFile = File(...),
-    auto_set_name: bool = Form(True)
-):
-    """
-    auto_set_name : True일 경우 로직에 의해 이름이 자동 처리되어 storage 저장됌. False일 경우 파일명 그대로 storage에 저장.
-    
-    ## 주의
-
-    ### main_image_url : json과 다른 방식으로 upload를 해야해서, 임의로 이미지 업로드 API를 분리했음. /product/upload-image/{product_id}로 업로드, 업데이트 수행
-    """
-    try:
-        product_item = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
-        if not product_item:
-            raise HTTPException(status_code=404, detail="Product not found")
-
-        img_storage_name = os.getenv("img_blob_name")
-        img_content = await image.read()
-        original_filename = image.filename
-        
-        if auto_set_name:
-            name, ext = os.path.splitext(original_filename)
-            img_name = f"product/{product_item['brand']}/{name}_{product_item['subname']}{ext}"
-        else:
-            img_name = f"product/{product_item['brand']}/{original_filename}"
-
-        img_url = upload_imgFile_to_blob(img_storage_name, img_content, img_name)
-
-        # 기존 이미지 삭제
-        if product_item.get("main_image_url"):
-            delete_blob_by_url(img_storage_name, product_item["main_image_url"])
-            
-        # 데이터베이스 업데이트
-        await db["bonre_products"].update_one(
-            {"_id": ObjectId(product_id)},
-            {"$set": {"main_image_url": img_url}}
-        )
-
-        return {"message": "Image uploaded successfully", "image_url": img_url}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error uploading image: {str(e)}")
-    
-# 북마크 수 업데이트 API
-@app.post("/product/{product_id}/bookmark", tags=["product CRUD"])
-async def add_bookmark(product_id: str):
-    """
-    특정 상품의 bookmark_counts를 1 증가시키는 엔드포인트.
-
-    param product_id: 제품 ID
-    """
-    # ObjectId로 변환 가능한지 확인
-    try:
-        obj_id = ObjectId(product_id)
-    except Exception:
-        raise HTTPException(status_code=400, detail="Invalid product ID format")
-
-    # 해당 상품 조회
-    product = await db["bonre_products"].find_one({"_id": obj_id})
-    if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
-
-    # 기존 북마크 카운트 가져오기 (기본값 0)
-    current_count = product.get("bookmark_counts", 0)
-
-    # bookmark_counts 필드를 +1 증가
-    result = await db["bonre_products"].update_one(
-        {"_id": obj_id},
-        {"$set": {"bookmark_counts": current_count + 1}}
-    )
-
-    if result.modified_count == 0:
-        raise HTTPException(status_code=500, detail="Failed to update bookmark count")
-
-    return {"product_id": product_id, "bookmark_counts": current_count + 1}
-
-
-
-@app.patch("/product/update-product/{product_id}", tags=["product CRUD"])
-async def update_product(product_id: str, productUpdate: ProductUpdate):
-    """
-    input : product_id{object_id}, 수정할 필드 정보 key : value 형식으로 request body에 입력
-
-    ex)
-    -d '{"name_kr": "string", "name": "string"}
-
-    # 사진 x. 사진은 /product/upload-image/{product_id}에서 처리 
-    """
-
-    try:
-        product_item = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
-    except Exception as e:
-        raise HTTPException(status_code=404, detail="Product not found")
-
-    try:
-        update_data = {k: v for k, v in productUpdate.dict(exclude_unset=True).items() if v is not None}
-        await db["bonre_products"].update_one(
-            {"_id": ObjectId(product_id)},
-            {"$set": update_data}
-        )
-        return {"message": f"Product updated successfully. {update_data}"}
-    except Exception as e:
-        return {"message": "No fields to update"}
-
-
-
-# product 삭제 API
-@app.delete("/product/delete-product/{product_id}", tags=["product CRUD"])
-async def delete_product(product_id: str):
-    product_item = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
-    # 기존 이미지 삭제
-    if product_item and product_item.get("main_image_url"):
-        try:
-            img_storage_name = os.getenv("img_blob_name")
-            delete_blob_by_url(img_storage_name, product_item["main_image_url"])
-        except Exception as e:
-            return {"message": f"Error deleting image: {str(e)}"}
-    result = await db["bonre_products"].delete_one({"_id": ObjectId(product_id)})
-    if result.deleted_count == 1:
-        return {"message": "Product deleted successfully"}
-    raise HTTPException(status_code=404, detail="Product not found")
-
-
-#############
-## brand ####
-#############
-
-# brand 생성 API
-@app.post("/brand/create-brand", tags=["brand CRUD"])
-async def create_brand(brand: Brand):
-    brand_dict = brand.dict(by_alias=True)
-    try:
-        await db["bonre_brands"].insert_one(brand_dict)
-        return brand_dict
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
-
-
-# brand 수정 API
-@app.patch("/brand/update-brand/{brand_id}", tags=["brand CRUD"])
-async def update_brand(brand_id: str, brand: BrandUpdate):
-    brand_item = await db["bonre_brands"].find_one({"_id": brand_id})
-    if brand_item:
-        pass
-    else:
-        raise HTTPException(status_code=404, detail="Brand not found")
-
-    try:
-        update_data = {k: v for k, v in brand.dict(exclude_unset=True).items() if v is not None}
-        await db["bonre_brands"].update_one(
-            {"_id": brand_id},
-            {"$set": update_data}
-        )
-        return {"message": "Brand updated successfully"}
-    except Exception as e:
-        return {"message": "No fields to update"}
-
-
-# brand 삭제 API
-@app.delete("/brand/delete-brand/{brand_id}", tags=["brand CRUD"])
-async def delete_brand(brand_id: str):
-    result = await db["bonre_brands"].delete_one({"_id": brand_id})
-    if result.deleted_count == 1:
-        return {"message": "Brand deleted successfully"}
-    raise HTTPException(status_code=404, detail="Brand not found")
-
 
 ##########
 ## shop ##
@@ -871,6 +861,165 @@ async def delete_designer(designer_id: str):
     raise HTTPException(status_code=404, detail="Designer not found")
 
 
+############
+## Filter ##
+############
+
+@app.get("/filter", tags=["filter CRUD"])
+async def get_all_filters():
+    """
+    bonre_filters 컬렉션에 있는 모든 필터 정보를 반환하는 API
+    """
+    collections = await db.list_collection_names()
+    if "bonre_filters" not in collections:
+        raise HTTPException(status_code=404, detail="Collection not found")
+    items = await db["bonre_filters"].find().to_list(1000)
+    return items
+
+@app.get("/filter/{filter_id}", tags=["filter CRUD"])
+async def get_filter_info_by_filter_id(filter_id: str):
+    """
+    filter_id를 받아서 해당 필터 정보를 반환하는 API
+
+    input : filter_id {str} ex) filter_hd
+
+    output : filter info {all fields}
+    """
+    item = await db["bonre_filters"].find_one({"_id": filter_id})
+    if item is not None:
+        return item
+    raise HTTPException(status_code=404, detail="Item not found")
+
+@app.post("/filter/create-filter", tags=["filter CRUD"])
+async def create_filter(filter: Filter):
+    filter_dict = filter.dict(by_alias=True)
+    try:
+        await db["bonre_filters"].insert_one(filter_dict)
+        return {"message":"success bonre_filter create", "filter" : filter_dict}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@app.patch("/filter/update-filter/{filter_id}", tags=["filter CRUD"])
+async def update_filter(filter_id: str, filterUpdate: FilterUpdate):
+    """
+    변경되는 필드만 업데이트
+    
+    * list 수정이라면, 기존 내용도 list에 포함하여 전송. not push but set
+    """
+    filter_item = await db["bonre_filters"].find_one({"_id": filter_id})
+    if filter_item:
+        pass
+    else:
+        raise HTTPException(status_code=404, detail="Filter not found")
+
+    try:
+        update_data = {k: v for k, v in filterUpdate.dict(exclude_unset=True).items() if v is not None}
+        
+        # id 필드는 업데이트하지 않음
+        if "_id" in update_data:
+            del update_data["_id"]
+        
+        if update_data:
+            await db["bonre_filters"].update_one(
+                {"_id": filter_id},
+                {"$set": update_data}
+            )
+            return {"message": "Filter updated successfully"}
+        else:
+            return {"message": "No fields to update"}
+    except Exception as e:
+        return {"message": "Error updating filter"}
+    
+@app.delete("/filter/delete-filter/{filter_id}", tags=["filter CRUD"])
+async def delete_filter(filter_id: str):
+    try:
+        result = await db["bonre_filters"].delete_one({"_id": filter_id})
+        if result.deleted_count == 1:
+            return {"message": "filter deleted successfully"}
+        raise HTTPException(status_code=404, detail="filter not found")    
+    except Exception as e:
+        return {"message": "Error deleting filter"}
+############
+# Category #
+############
+
+@app.get("/category", tags=["category CRUD"])
+async def get_all_categories():
+    """
+    bonre_categories 컬렉션에 있는 모든 필터 정보를 반환하는 API
+    """
+    collections = await db.list_collection_names()
+    if "bonre_categories" not in collections:
+        raise HTTPException(status_code=404, detail="Collection not found")
+    items = await db["bonre_categories"].find().to_list(1000)
+    return items
+
+@app.get("/category/{category_id}", tags=["category CRUD"])
+async def get_category_info_by_category_id(category_id: str):
+    """
+    category_id를 받아서 해당 카테고리 정보를 반환하는 API
+
+    input : category_id {str} ex) category_hd
+
+    output : category info {all fields}
+    """
+    item = await db["bonre_categories"].find_one({"_id": category_id})
+    if item is not None:
+        return item
+    raise HTTPException(status_code=404, detail="Item not found")
+
+@app.post("/category/create-category", tags=["category CRUD"])
+async def create_category(category: Category):
+    category_dict = category.dict(by_alias=True)
+    try:
+        await db["bonre_categories"].insert_one(category_dict)
+        return {"message":"success bonre_category create", "category" : category_dict}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@app.patch("/category/update-category/{category_id}", tags=["category CRUD"])
+async def update_category(category_id: str, category: CategoryUpdate):
+    """
+    변경되는 필드만 업데이트
+    
+    * list 수정이라면, 기존 내용도 list에 포함하여 전송. not push but set
+    """
+    category_item = await db["bonre_categories"].find_one({"_id": category_id})
+    if category_item:
+        pass
+    else:
+        raise HTTPException(status_code=404, detail="Category not found")
+    
+    try:
+        update_data = {k: v for k, v in category.dict(exclude_unset=True).items() if v is not None}
+        
+        # id 필드는 업데이트하지 않음
+        if "_id" in update_data:
+            del update_data["_id"]
+        
+        if update_data:
+            await db["bonre_categories"].update_one(
+                {"_id": category_id},
+                {"$set": update_data}
+            )
+            return {"message": "Category updated successfully"}
+        else:
+            return {"message": "No categories to update"}
+    except Exception as e:
+        return {"message": "Error updating filter"}
+            
+            
+@app.delete("/category/delete-category/{category_id}", tags=["category CRUD"])
+async def delete_category(category_id: str):
+    try:
+        result = await db["bonre_categories"].delete_one({"_id": category_id})
+        if result.deleted_count == 1:
+            return {"message": "Category deleted successfully"}
+        raise HTTPException(status_code=404, detail="Category not found")
+    except Exception as e:
+        # 예외 처리
+        return {"message": "Error deleting category"}
+
 """
 스케줄링
 """
@@ -914,7 +1063,7 @@ def schedule_price_updates():
         # 새로운 작업 추가
         scheduler.add_job(
             run_update_prices_all, 
-            CronTrigger(hour=9, minute=10, timezone=utc),
+            CronTrigger(hour=16, minute=00, timezone=utc),
             id='price_update_job',
             name='Update all prices',
             replace_existing=True

@@ -1054,20 +1054,18 @@ def schedule_price_updates():
     try:
         logger.info("Initializing scheduler...")
         logger.info(f"Current time in UTC: {datetime.now(timezone('UTC'))}")
-        
-        # 기존 작업이 있다면 제거
-        if scheduler.get_job('price_update_job'):
-            scheduler.remove_job('price_update_job')
-            logger.info("Removed existing price update job")
-        
-        # 새로운 작업 추가
-        scheduler.add_job(
-            run_update_prices_all, 
-            CronTrigger(hour=16, minute=00, timezone=utc),
-            id='price_update_job',
-            name='Update all prices',
-            replace_existing=True
-        )
+                
+        try:
+            scheduler.add_job(
+                run_update_prices_all, 
+                CronTrigger(hour=15, minute=30, timezone=utc),
+                id='price_update_job',
+                name='Update all prices',
+                replace_existing=True
+            )
+            logger.info("Added new job successfully")
+        except Exception as e:
+            logger.error(f"Failed to add new job: {e}", exc_info=True)
         
         scheduler.start()
         logger.info("Scheduler started successfully")

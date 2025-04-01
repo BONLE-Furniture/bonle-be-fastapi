@@ -1047,60 +1047,49 @@ async def run_update_prices_all():
     except Exception as e:
         logger.error(f"Error in scheduled task: {e}", exc_info=True)
 
-        
 # 스케줄링된 작업 정의
 @app.on_event("startup")
 def schedule_price_updates():
     try:
         logger.info("Initializing scheduler...")
         logger.info(f"Current time in UTC: {datetime.now(timezone('UTC'))}")
-        
-        # 기존 작업이 있다면 제거
-        if scheduler.get_job('price_update_job'):
-            scheduler.remove_job('price_update_job')
-            logger.info("Removed existing price update job")
-        
-        # 새로운 작업 추가
-        scheduler.add_job(
-            run_update_prices_all, 
-            CronTrigger(hour=16, minute=00, timezone=utc),
-            id='price_update_job',
-            name='Update all prices',
-            replace_existing=True
-        )
+                
+        try:
+            scheduler.add_job(
+                run_update_prices_all, 
+                CronTrigger(hour=15, minute=20, timezone=utc),
+                id='price_update_job',
+                name='Update all prices',
+                replace_existing=True
+            )
+            logger.info("Added new job successfully")
+        except Exception as e:
+            logger.error(f"Failed to add new job: {e}", exc_info=True)
         
         scheduler.start()
         logger.info("Scheduler started successfully")
-        
-        # 스케줄러 상태 확인
-        jobs = scheduler.get_jobs()
-        logger.info(f"Total jobs in scheduler: {len(jobs)}")
-        for job in jobs:
-            logger.info(f"Job ID: {job.id}, Name: {job.name}, Next Run: {job.next_run_time}")
-            
-        next_run = scheduler.get_job('price_update_job').next_run_time
-        logger.info(f"Next run time (UTC): {next_run.astimezone(pytz.UTC)}")
-        
-        # 스케줄러 상태 확인을 위한 엔드포인트 추가
-        @app.get("/scheduler/status")
-        async def get_scheduler_status():
-            jobs = scheduler.get_jobs()
-            return {
-                "scheduler_running": scheduler.running,
-                "total_jobs": len(jobs),
-                "jobs": [
-                    {
-                        "id": job.id,
-                        "name": job.name,
-                        "next_run": job.next_run_time.isoformat() if job.next_run_time else None
-                    }
-                    for job in jobs
-                ]
-            }
             
     except Exception as e:
         logger.error(f"Failed to initialize scheduler: {e}", exc_info=True)
-    
+        
+# 스케줄러 상태 확인을 위한 엔드포인트 추가
+@app.get("/scheduler/status", tags=["scheduler"])
+async def get_scheduler_status():
+    jobs = scheduler.get_jobs()
+    return {
+        "scheduler_running": scheduler.running,
+        "total_jobs": len(jobs),
+        "jobs": [
+            {
+                "id": job.id,
+                "name": job.name,
+                "next_run": job.next_run_time.isoformat() if job.next_run_time else None
+            }
+            for job in jobs
+        ]
+    }
+        
+
 # 애플리케이션 종료 시 스케줄러 종료
 @app.on_event("shutdown")
 def shutdown_scheduler():

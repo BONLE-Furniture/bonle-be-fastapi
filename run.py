@@ -1,33 +1,42 @@
 # from logging import Logger
 # import json
 import os
-import asyncio
-from xmlrpc.client import DateTime
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 from dotenv import load_dotenv
 from math import ceil
-from fastapi import APIRouter, FastAPI, File, Form, HTTPException, UploadFile
 from bson import ObjectId
 from database import db
 from datetime import datetime, timedelta
 
-from azure.identity import DefaultAzureCredential
-from azure.storage.blob import BlobServiceClient
-
 from models import *
 from price_crwaling import *
+from router.user.token import *
 from storage import upload_imgFile_to_blob, delete_blob_by_url
+from passlib.context import CryptContext
 # from redis_connection import redis_client
 
+from fastapi import APIRouter, Depends, FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from fastapi import Depends, HTTPException, status
+from jose import JWTError, jwt
+
 from pytz import timezone
-import pytz
 
 app = FastAPI()
 kst = timezone('Asia/Seoul')
 utc = timezone('UTC')
 scheduler = AsyncIOScheduler(timezone=utc)
+
+crypt = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
+
+def verify_password(plain_password, hashed_password):
+    return crypt.verify(plain_password, hashed_password)
+
+
+
 """
 FAST API 연결, MongoDB 연결 테스트
 """
@@ -43,10 +52,179 @@ MVP
 """
 
 #############
+### login ###
+#############
+
+@app.get("/user/{user_id}", tags=["user CRUD"])
+async def get_users(user_id):
+    try:
+        user = await db["bonre_users"].find_one({"_id": user_id})
+        if user:
+            return user
+    except Exception as e:
+        raise HTTPException(status_code=404, detail="User not found")
+
+@app.get("/user/check-user-id/{user_id}", tags=["user CRUD"])
+async def check_id(user_id: str):
+    user = await db["bonre_users"].find_one({"_id": user_id})
+    if user:
+        return {"exists": True}
+    return {"exists": False}
+    
+@app.get("/user/check-email/{email}", tags=["user CRUD"])
+async def check_email(email: str):
+    user = await db["bonre_users"].find_one({"email": email})
+    if user:
+        return {"exists": True}
+    return {"exists": False}
+
+@app.get("/user/check-phone/{phone}", tags=["user CRUD"])
+async def check_phone(phone: str):
+    user = await db["bonre_users"].find_one({"phone": phone})
+    if user:
+        return {"exists": True}
+    return {"exists": False}
+    
+@app.post("/user/create-user", tags=["user CRUD"])
+async def create_user(user: User, password_validation:str):
+    user_dict = user.dict(by_alias=True)
+
+    # 필수 항목 체크        
+    required_fields = ["_id", "email", "phone", "password"]
+    for field in required_fields:
+        if not user_dict.get(field):
+            raise HTTPException(status_code=422, detail=f"{field} is required.")
+
+    user_dict["password"] = crypt.hash(user_dict["password"])
+    if not verify_password(password_validation, user_dict["password"]):
+        raise HTTPException(status_code=404, detail="비밀번호가 일치하지 않습니다.")
+    
+    try:
+        await db["bonre_users"].insert_one(user_dict)
+        return {"message": "user created successfully", "user_id": str(user_dict["_id"])}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+
+@app.post("/user/login", tags=["user CRUD"])
+async def login_user(login_form: OAuth2PasswordRequestForm = Depends()):
+    # 사용자 조회
+    user = await db["bonre_users"].find_one({"_id": login_form.username})
+    
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        
+    # 비밀번호 검증
+    if not verify_password(login_form.password, user["password"]):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # 액세스 토큰 생성
+    access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_TIMES",3)))
+    access_token = create_access_token(
+        data={"sub": user["_id"]},  # 토큰에 저장할 사용자 식별 정보
+        expires_delta=access_token_expires
+    )
+    
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "user_id": user["_id"]
+    }
+
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    secret_key = os.getenv("SECRET_KEY")
+    algorithm = os.getenv("ALGORITHM")
+    credentials_exception = HTTPException(
+        status_code=401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=[algorithm])
+        username: str = payload.get("sub")
+        if username is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+        
+    user = await db["bonre_users"].find_one({"_id": username})
+    if user is None:
+        raise credentials_exception
+    return user
+
+
+@app.post("/user/update-password", tags=["user CRUD"])
+async def update_password(password: UserPasswordUpdate, current_user: dict = Depends(get_current_user)):
+    """
+    비밀번호 변경 API
+
+    input : current_password{str}, new_password{str}
+    """
+    user = await db["bonre_users"].find_one({"_id": current_user["_id"]})
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # 현재 비밀번호 검증
+    if not verify_password(password.current_password, user["password"]):
+        raise HTTPException(status_code=401, detail="Current password is incorrect")
+
+    # 새 비밀번호 해시 처리 후 업데이트
+    hashed_new_password = crypt.hash(password.new_password)
+    await db["bonre_users"].update_one({"_id": current_user["_id"]}, {"$set": {"password": hashed_new_password}})
+    return {"message": "Password updated successfully"}
+
+@app.delete("/user/delete-user", tags=["user CRUD"])
+async def delete_user(current_user: dict = Depends(get_current_user)):
+    """
+    사용자 삭제 API
+
+    input : 없음 (로그인된 사용자 정보로 삭제)
+    """
+    user = await db["bonre_users"].find_one({"_id": current_user["_id"]})
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # 사용자 삭제
+    await db["bonre_users"].delete_one({"_id": current_user["_id"]})
+    return {"message": "User deleted successfully"}
+
+class RoleChecker:
+    def __init__(self, allowed_roles: list):
+        self.allowed_roles = allowed_roles
+
+    def __call__(self, current_user: dict = Depends(get_current_user)):
+        if current_user["role"] not in self.allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="접근 권한이 없습니다.",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+allow_admin = RoleChecker(["admin"])
+
+@app.get("/users/token", tags=["user CRUD"])
+async def read_users_token(current_user: dict = Depends(get_current_user)):
+    """
+    token 존재한다면 사용자 정보를 출력함
+    """
+    return current_user
+
+#############
 ### Total ###
 #############
 
 @app.get("/product-all", tags=["Detail Page"])
+# @app.get("/product-all", tags=["Detail Page"], dependencies=[Depends(allow_admin)])
 async def get_total(product_id: str):
     """
     product_id, designer_id, brand_id, shop_id를 받아서 해당 정보를 반환하는 API
@@ -72,7 +250,7 @@ async def get_total(product_id: str):
     brand = await db["bonre_brands"].find_one({"_id": product['brand']}) if product['brand'] else None
     if not brand:
         brand = None
-    products = await db["bonre_products"].find({"brand": product['brand'],"upload": True}).to_list(1000) if product['brand'] else None
+    products = await db["bonre_products"].find({"brand": product['brand'],"upload": True}).sort({"name":1,"subname":1}).to_list(10) if product['brand'] else None
     prices = await db["bonre_prices"].find({"product_id": product_id}).to_list(1000) if product['brand'] else None
     if products:
         filtered_products = [
@@ -136,7 +314,6 @@ async def get_all_products():
 async def get_product(product_id: str):
     product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
     if product:
-        # product["_id"] = str(product["_id"])
         sanitized_data = sanitize_data([product])[0]
         return sanitized_data
     raise HTTPException(status_code=404, detail="항목을 찾을 수 없습니다.")
@@ -247,7 +424,7 @@ async def get_products_list_in_page(page: int = 1, limit: int = 20):
     skip = (page - 1) * limit
     total_count = await db["bonre_products"].count_documents({})
 
-    cursor = db["bonre_products"].find({"upload": True}).sort({"name":1,"subname":1}).skip(skip).limit(limit)
+    cursor = db["bonre_products"].find({"upload": True}).sort({"brand":1,"name":1,"subname":1}).skip(skip).limit(limit)
     items = await cursor.to_list(length=limit)
 
     sanitized_items = sanitize_data(items)
@@ -300,7 +477,7 @@ async def create_product(product: Product):
 
     ### main_image_url : json과 다른 방식으로 upload를 해야해서, 임의로 이미지 업로드 API를 분리했음. /product/upload-image/{product_id}로 업로드, 업데이트 수행
 
-    cheapest: List[Product_Cheapest
+    cheapest: List[Product_Cheapest]
 
     upload : bool = False # true일 때, 홈 화면에 출력
     """
@@ -483,7 +660,7 @@ async def get_products_info_by_brand_id(brand_id: str):
 
     output : product list of brand_id {_id, name_kr, name, brand, main_image_url, cheapest}
     """
-    items = await db["bonre_products"].find({"brand": brand_id,"upload": True}).to_list(1000)
+    items = await db["bonre_products"].find({"brand": brand_id,"upload": True}).sort({"name":1,"subname":1}).to_list(10)
     if items:
         filtered_items = [
             {

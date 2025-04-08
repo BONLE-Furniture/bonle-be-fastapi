@@ -1,9 +1,64 @@
 # models.py
-from pydantic import BaseModel, HttpUrl, Field
-from typing import List, Optional
+from pydantic import BaseModel, HttpUrl, Field, EmailStr, field_validator
+from typing import List, Optional, Literal
+from typing_extensions import Self
 from datetime import datetime
 from bson import ObjectId
 from enum import Enum
+
+from fastapi import HTTPException
+
+"""
+user
+"""
+
+class User(BaseModel):
+    id: str = Field(alias="_id") 
+    password: str = "password12"# 비밀번호 해시처리
+    name: str
+    email: EmailStr # 이메일 양식 확인
+    phone:str = "010-0000-0000"# 전화번호 양식 확인
+    role: Literal["member", "admin"] = "member" # member , admin
+    birthday: str = "2000-01-01"# 년-월-일
+
+    @field_validator("name", "password", "phone", "birthday")
+    @classmethod
+    def validate_required_fields(cls, v:str) -> str:
+        if not v or v.isspace():
+            raise HTTPException(status_code=422, detail="필수 항목을 입력해주세요.") 
+        return v
+    
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, v:str) -> str:
+        if len(v) < 8:
+            raise HTTPException(status_code=422, detail="비밀번호는 8자 이상 영문과 숫자를 포함하여 작성해주세요.")
+        if not any(char.isdigit() for char in v):
+            raise HTTPException(status_code=422, detail="비밀번호는 8자 이상 영문과 숫자를 포함하여 작성해주세요.")
+        if not any(char.isalpha() for char in v):
+            raise HTTPException(status_code=422, detail="비밀번호는 8자 이상 영문과 숫자를 포함하여 작성해주세요.")
+        return v
+        
+    @field_validator('phone')
+    @classmethod
+    def validate_phone(cls, v:str)-> str:
+        if '-' not in v or len(v) != 13:
+            raise HTTPException(status_code=422, detail="전화번호는 '-'를 포함하여 작성해주세요.")
+        return v
+    
+    @field_validator('birthday')
+    @classmethod
+    def validate_birthday(cls, v: str) -> str:
+        """생년월일 형식 검증 (YYYY-MM-DD)"""
+        try:
+            datetime.strptime(v, "%Y-%m-%d")  # 날짜 형식 확인
+        except ValueError:
+            raise HTTPException(status_code=422, detail="생년월일은 YYYY-MM-DD 형식이어야 합니다.")
+        return v
+
+class UserPasswordUpdate(BaseModel):
+    current_password: str
+    new_password: str
 
 """
 Product

@@ -120,5 +120,6 @@ wcwidth==0.2.13
 webdriver-manager==4.0.2
 websocket-client==1.8.0
 websockets==10.4
+wheel==0.45.1
 wsproto==1.2.0
 zipp==3.21.0

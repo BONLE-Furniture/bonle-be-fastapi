@@ -1,5 +1,5 @@
 import os
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 from dotenv import load_dotenv
 import requests
 
@@ -68,12 +68,13 @@ def delete_blob_by_url(container_name: str, blob_url):
     container_client = blob_service_client.get_container_client(container=container_name)
 
     parsed_url = urlparse(blob_url)
-    container_name = parsed_url.path.split('/')[1]
+    
+    # container_name = parsed_url.path.split('/')[1]
     blob_name = '/'.join(parsed_url.path.split('/')[2:])
-
+    print(blob_name)
     # BlobClient 생성
     try:
-        blob_client = container_client.delete_blob(blob_name, delete_snapshots="include")
+        container_client.delete_blob(blob_name, delete_snapshots="include")
         print(f"Blob '{blob_name}' 삭제 완료")
         return True
     except Exception as e:

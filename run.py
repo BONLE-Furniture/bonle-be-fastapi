@@ -19,13 +19,13 @@ from db.database import db
 from db.models import *
 from db.storage import upload_imgFile_to_blob, delete_blob_by_url
 
-from passlib.context import CryptContext
 # from redis_connection import redis_client
 
 from fastapi import APIRouter, Depends, FastAPI, File, Form, HTTPException, UploadFile, Query
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
+from passlib.context import CryptContext
 
 app = FastAPI()
 kst = timezone('Asia/Seoul')
@@ -132,7 +132,7 @@ async def login_user(login_form: OAuth2PasswordRequestForm = Depends()):
     # 액세스 토큰 생성
     access_token_expires = timedelta(minutes=int(os.getenv("ACCESS_TOKEN_EXPIRE_TIMES",3)))
     access_token = create_access_token(
-        data={"sub": user["_id"]},  # 토큰에 저장할 사용자 식별 정보
+        data={"sub": user["_id"],"role": user['role']},  # 토큰에 저장할 사용자 식별 정보
         expires_delta=access_token_expires
     )
     

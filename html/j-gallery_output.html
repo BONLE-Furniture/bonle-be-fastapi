@@ -1,0 +1,2312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ko" xml:lang="ko" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <script>
+   (function(i, s, o, g, r) {
+    var a = s.createElement(o);
+    var m = s.getElementsByTagName(o)[0];
+    a.async = true;
+    a.src = g;
+    a.onload = function() {
+        if (i[r].init) {
+            i[r].init('https://js-error-tracer-api.cafe24.com', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpbWlsa2Jvb2suY2FmZTI0LmNvbSIsImF1ZCI6ImpzLWVycm9yLXRyYWNlci1hcGkuY2FmZTI0LmNvbSIsIm1hbGxfaWQiOiJpbWlsa2Jvb2siLCJzaG9wX25vIjoxLCJwYXRoX3JvbGUiOiJQUk9EVUNUX1NFQVJDSCIsImxhbmd1YWdlX2NvZGUiOiJrb19LUiIsImNvdW50cnlfY29kZSI6IktSIiwiaXNfeXRzIjpmYWxzZSwiaXNfY29udGFpbmVyIjpmYWxzZSwid29ya3NwYWNlIjoicHJvZHVjdGlvbiJ9._m93RBQPXrLxQM3vdfqrC2CcqTls6GnqiKW-e97LBLU', {"errors":{"path":"\/api\/v1\/store","collectWindowErrors":true,"preventDuplicateReports":true,"storageKeyPrefix":"EC_JET.PRODUCT_SEARCH","samplingEnabled":true,"samplingRate":0.5},"vitals":{"path":"\/api\/v1\/vitals","samplingEnabled":true,"samplingRate":0.3},"resources":{"path":"\/api\/v1\/resources","samplingEnabled":true,"samplingRate":0.5,"durationThreshold":3000}});
+        }
+    };
+    m.parentNode.insertBefore(a, m);
+}(window, document, 'script', '//optimizer.poxo.com/jet/jet.js', 'EC_JET'));
+  </script>
+  <script type="text/javascript">
+   window.CAFE24 = window.CAFE24 || {};CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","path":{"origin":"\/product\/search.html","result":"\/product\/search.html","prefix":""},"shop_no":0,"skin_code":"default","support_language_list":{"ar":"ar_EG","ar-EG":"ar_EG","de":"de_DE","de-DE":"de_DE","en":"en_US","en-IN":"en_IN","en-PH":"en_PH","en-US":"en_US","es":"es_ES","es-ES":"es_ES","hi":"hi_IN","hi-IN":"hi_IN","id":"id_ID","id-ID":"id_ID","it":"it_IT","it-IT":"it_IT","ja":"ja_JP","ja-JP":"ja_JP","ko":"ko_KR","ko-KR":"ko_KR","ms":"ms_MY","ms-MY":"ms_MY","pt":"pt_PT","pt-PT":"pt_PT","ru":"ru_RU","ru-RU":"ru_RU","th":"th_TH","th-TH":"th_TH","tr":"tr_TR","tr-TR":"tr_TR","vi":"vi_VN","vi-VN":"vi_VN","zh":"zh_CN","zh-CN":"zh_CN","zh-HK":"zh_HK","zh-MO":"zh_MO","zh-SG":"zh_SG","zh-TW":"zh_TW"}};
+  </script>
+  <script type="text/javascript">
+   if (typeof EC_ROUTE === "undefined") {
+    /**
+     * 프론트용 라우트 플러그인
+     * @type {{bInit: boolean, init: EC_ROUTE.init}}
+     * CAFE24.ROUTE 참조
+     */
+    var EC_ROUTE = {
+        EC_DOMAIN_PATH_INFO: 'EC_DOMAIN_PATH_INFO',
+        bInit: false,
+        aFromList: [],
+        aToList: [],
+        aCleanFilter: null,
+        init: function () {
+            if (this.bInit || typeof CAFE24.ROUTE === 'undefined') {
+                return;
+            }
+            this.bInit = true;
+            this.aCleanFilter = [
+                /^shop[1-9][0-9]*$/,
+                /^(m|p)$/,
+                new RegExp('^(' + Object.keys(CAFE24.ROUTE.support_language_list).join('|')  + ')$'),
+                /^skin-(base|skin[1-9][0-9]*|mobile[0-9]*)$/,
+            ];
+        },
+        isNeedRoute: function ()
+        {
+            return CAFE24.ROUTE.is_need_route;
+        },
+        /**
+         *
+         * @param iShopNo
+         * @param bMobile
+         * @param sFrontLanguage
+         * @param sSkinCode
+         * @returns {*|string}
+         */
+        getUrlDomain: function (iShopNo, bMobile, sFrontLanguage, sSkinCode)
+        {
+            var oRouteConfig = {};
+            if (typeof iShopNo == 'undefined') {
+                oRouteConfig.shop_no = CAFE24.SDE_SHOP_NUM;
+            } else {
+                oRouteConfig.shop_no = iShopNo;
+            }
+            if (typeof bMobile == 'undefined') {
+                oRouteConfig.is_mobile = false;
+            } else {
+                oRouteConfig.is_mobile = bMobile;
+            }
+            if (typeof sFrontLanguage == 'undefined') {
+                oRouteConfig.language_code = '';
+            }else {
+                oRouteConfig.language_code = sFrontLanguage; // 내부에서 로직으로 동작할땐 언어_지역 형태의 로케일 형태를 따른다.
+            }
+            if (typeof sSkinCode == 'undefined') {
+                oRouteConfig.skin_code = '';
+            }else {
+                oRouteConfig.skin_code = sSkinCode;
+            }
+
+            var sDomain = '';
+            if (oRouteConfig.shop_no != CAFE24.SDE_SHOP_NUM) {
+                // 접근된 다른 멀티샵 도메인 정보는 primary domain 를 조회해야함으로 ajax 를 통해 정보를 얻는다.
+                sDomain = this._getUrlDomainMultishop(oRouteConfig);
+            } else {
+                // 샵이 동일할 경우에는 접근된 domain 에 path 정보만 정리하여 반환함.
+                sDomain = this._getUrlDomain(oRouteConfig);
+            }
+            return sDomain;
+        },
+        _getUrlDomainMultishop: function (oRouteConfig)
+        {
+            var sDomain = '';
+            EC$.ajax({
+                type: 'GET',
+                url: '/exec/front/Shop/Domain',
+                data: {
+                    '_shop_no' : oRouteConfig.shop_no,
+                    'is_mobile' : oRouteConfig.is_mobile,
+                    'language_code' : oRouteConfig.language_code,
+                    'skin_code' : oRouteConfig.skin_code,
+                },
+                async: false,
+                dataType: 'json',
+                cache: true,
+                success: function(oResult) {
+                    switch (oResult.code) {
+                        case '0000' :
+                            sDomain = oResult.data;
+                            break;
+                        default :
+                            break;
+                    }
+                    return false;
+                }
+            });
+            return sDomain;
+        },
+        _getUrlDomain: function (oRouteConfig)
+        {
+            oRouteConfig.domain = this._getCreateHost(oRouteConfig);
+            return location.protocol + '//' + oRouteConfig.domain + this._getCreateUri(oRouteConfig);
+        },
+        _getCreateHost : function (oRouteConfig)
+        {
+            var sHost = location.host;
+            var aHost = sHost.split('.');
+            if (this.isBaseDomain(sHost)) {
+                if (aHost.length > 3) {
+                    aHost[0] = '';
+                }
+            } else if (oRouteConfig.is_mobile) {
+                if (this.isMobileDomain()) {
+                    oRouteConfig.is_mobile = false;
+                }
+            }
+            return aHost.filter(Boolean).join('.');
+        },
+        _getCreateUri: function (oRouteInfo)
+        {
+            var aUrl = [];
+            if (this.isBaseDomain() && oRouteInfo.shop_no > 1) {
+                aUrl.push('shop' + oRouteInfo.shop_no);
+            }
+            if (oRouteInfo.is_mobile) {
+                aUrl.push('m');
+            }
+            if (oRouteInfo.language_code != 'ZZ' && oRouteInfo.language_code != '') {
+                var iIndex = Object.values(CAFE24.ROUTE.support_language_list).indexOf(oRouteInfo.language_code);
+                if (iIndex !== -1) {
+                    aUrl.push(Object.keys(CAFE24.ROUTE.support_language_list)[iIndex]);
+                }
+            }
+            if (this.isBaseDomain() && oRouteInfo.skin_code != 'default' && oRouteInfo.skin_code != '') {
+                aUrl.push('skin-' + oRouteInfo.skin_code);
+            }
+            var sUrl= '/';
+            if (aUrl.length > 0) {
+                sUrl= '/' + aUrl.join('/');
+                sUrl = this.rtrim(sUrl, '/');
+            }
+            return sUrl;
+        },
+        /**
+         * en, en-US => en_US
+         */
+        convertValidLanguageCode: function (sUrlLanguageCode)
+        {
+            if (typeof CAFE24.ROUTE.support_language_list[sUrlLanguageCode] != 'undefined') {
+                return CAFE24.ROUTE.support_language_list[sUrlLanguageCode];
+            }
+            return false;
+        },
+        isMobileDomain: function (sHost)
+        {
+            if (typeof sHost == 'undefined') {
+                sHost = location.host;
+            }
+            var aMatched = sHost.match(/^(m|mobile|skin\-mobile|skin\-mobile[0-9]+[\-]{2}shop[0-9]+|skin\-mobile[0-9]+|mobile[\-]{2}shop[0-9]+)\./i);
+            return aMatched != null;
+        },
+        isBaseDomain: function (sHost)
+        {
+            if (typeof sHost == 'undefined') {
+                sHost = location.host;
+            }
+            return sHost.indexOf(CAFE24.GLOBAL_INFO.getRootDomain()) !== -1;
+        },
+        removePrefixUrl: function (sUrl)
+        {
+            if (this.isNeedRoute()) {
+                sUrl = sUrl.replace(this.getPrefixUrl('/'), '/'); // 자동으로  prefix 붙은 영역을 제거해준다.
+            }
+            return sUrl;
+        },
+        getPrefixUrl: function (sUrl)
+        {
+            if (this.isNeedRoute() === false) {
+                return sUrl;
+            }
+            if (sUrl.indexOf('/') !== 0) {
+                return sUrl;
+            }
+            if (sUrl.match(/^\/{2,}/) !== null) {
+                return sUrl;
+            }
+
+            var iCachedPosition = this.aFromList.indexOf(sUrl);
+            if (iCachedPosition > -1) {
+                return this.aToList[iCachedPosition];
+            }
+
+            var bTailSlash = (sCleanUrl !== '/' && sUrl.substr(-1) === '/');
+            var sCleanUrl = this.getCleanUrl(sUrl);
+            var aPrefixPart = CAFE24.ROUTE.path.prefix.split('/');
+            var aUrlPart = sCleanUrl.split('/');
+            var bMatched = true;
+            var sReturnUrl = sCleanUrl;
+            if (aUrlPart.length < aPrefixPart.length) {
+                bMatched = false;
+            } else {
+                for (var i = 0; i < aPrefixPart.length ; i++) {
+                    if (aPrefixPart[i] != aUrlPart[i]) {
+                        bMatched = false;
+                        break;
+                    }
+                }
+            }
+            if (bMatched === false) {
+                if (sCleanUrl == '/') {
+                    sReturnUrl = CAFE24.ROUTE.path.prefix;
+                } else {
+                    sReturnUrl = CAFE24.ROUTE.path.prefix +  sCleanUrl;
+                }
+                sReturnUrl = bTailSlash ? sReturnUrl : this.rtrim(sReturnUrl, '/')
+                this.aFromList.push(sUrl);
+                this.aToList.push(sReturnUrl);
+            }
+            return sReturnUrl;
+        },
+        /**
+         * document.location.pathname 이 필요할 경우 사용한다.
+         * @returns {*}
+         */
+        getPathName: function()
+        {
+            if (typeof CAFE24.ROUTE.path.result == 'undefined') {
+                return document.location.pathname;
+            }
+            return CAFE24.ROUTE.path.result;
+        },
+        rtrim: function (str, chr)
+        {
+            var rgxtrim = (!chr) ? new RegExp('\\s+$') : new RegExp(chr+'+$');
+            return str.replace(rgxtrim, '');
+        },
+        getShopNo: function ()
+        {
+            return CAFE24.ROUTE.shop_no;
+        },
+        getSkinCode: function ()
+        {
+            return CAFE24.ROUTE.skin_code;
+        },
+        getLanguageCode: function ()
+        {
+            return CAFE24.ROUTE.language_code;
+        },
+        getMobile: function ()
+        {
+            return CAFE24.ROUTE.is_mobile;
+        },
+        getIsMobile: function ()
+        {
+            return CAFE24.ROUTE.is_mobile || CAFE24.ROUTE.skin_code.match(/^mobile[0-9]*$/);
+        },
+        getCleanUrl: function (sUrl)
+        {
+            if (sUrl === '/') {
+                return sUrl;
+            }
+
+            var aUrl = sUrl.split('/');
+            aUrl.shift();
+
+            if (aUrl.length < 1) {
+                return sUrl;
+            }
+
+            // 현재 4 depth 까지 미리보기 기능이 구현되어있음
+            var iPos = 0;
+            var bFind = false;
+            for (var i = 0; i < aUrl.length ; i++) {
+                bFind = false;
+                for (var iSub = iPos, iSubCount = this.aCleanFilter.length; iSub < iSubCount ; iSub++) {
+                    if (aUrl[i].match(this.aCleanFilter[iSub]) !== null) {
+                        bFind = true;
+                        iPos = iSub + 1;
+                        aUrl.splice(i, 1);
+                        i--; // aUrl 을 삭제해 주었으니 검색 조건을 -1 제거하여 초기화 한다. 다음 for i++ 로 증감 조회됨.
+                        break;
+                    }
+                }
+                if (bFind === false) {
+                    break;
+                }
+            }
+            return '/' + aUrl.join('/');
+        },
+        getIsEasyUrl : function ()
+        {
+            return !window.location.pathname.match(/^[\w\/\-\.]+(php|html|htm)$/i);
+        }
+    };
+    EC_ROUTE.init();
+}
+  </script>
+  <meta content="PRODUCT_SEARCH" name="path_role"/>
+  <meta content="에스더블유" name="author"/>
+  <meta content="가리모쿠 가구 공식 판매점 J갤러리, 가리모쿠, 가리모쿠60, KNS" name="description"/>
+  <meta content="가리모쿠 가구 공식 판매점 J갤러리, 제이갤러리, 가리모쿠, 가리모쿠60, KNS" name="keywords"/>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <!--PG크로스브라우징필수내용 시작-->
+  <meta content="no-cache" http-equiv="Cache-Control"/>
+  <meta content="0" http-equiv="Expires"/>
+  <meta content="no-cache" http-equiv="Pragma"/>
+  <!--PG크로스브라우징필수내용 끝-->
+  <!--해당 CSS는 쇼핑몰 전체 페이지에 영향을 줍니다. 삭제와 수정에 주의해주세요.-->
+  <!-- 스마트디자인에서는 JQuery 1.4.4 버전이 내장되어있습니다. 추가로 호출하면 충돌이 생길 수 있습니다. -->
+  <script src="/ec-js/common.js" type="text/javascript">
+  </script>
+  <!-- 해당 JS는 플래시를 사용하기 위한 스크립트입니다. -->
+  <script src="/web/upload/js/jquery-1.10.2.min.js" type="text/javascript">
+  </script>
+  <script src="/web/upload/addbase/swiper.js">
+  </script>
+  <link href="/web/upload/addbase/swiper.css" rel="stylesheet"/>
+  <script type="text/javascript">
+   jQuery(function($){
+
+	// Side Menu
+	var menu_v = $('div.menu_v');
+	var sItem = menu_v.find('>ul>li');
+	var ssItem = menu_v.find('>ul>li>ul>li');
+	var lastEvent = null;
+
+	sItem.find('>ul').css('display','none');
+	menu_v.find('>ul>li>ul>li[class=active]').parents('li').attr('class','active');
+	menu_v.find('>ul>li[class=active]').find('>ul').css('display','block');
+
+	function menu_vToggle(event){
+		var t = $(this);
+
+		if (this == lastEvent) return false;
+		lastEvent = this;
+		setTimeout(function(){ lastEvent=null }, 200);
+
+		if (t.next('ul').is(':hidden')) {
+			sItem.find('>ul').slideUp(100);
+			t.next('ul').slideDown(100);
+		} else if(!t.next('ul').length) {
+			sItem.find('>ul').slideUp(100);
+		} else {
+			t.next('ul').slideUp(100);
+		}
+
+		if (t.parent('li').hasClass('active')){
+			t.parent('li').removeClass('active');
+		} else {
+			sItem.removeClass('active');
+			t.parent('li').addClass('active');
+		}
+	}
+	sItem.find('>a').click(menu_vToggle).focus(menu_vToggle);
+
+	function subMenuActive(){
+		ssItem.removeClass('active');
+		$(this).parent(ssItem).addClass('active');
+	};
+	ssItem.find('>a').click(subMenuActive).focus(subMenuActive);
+
+	//icon
+	menu_v.find('>ul>li>ul').prev('a').append('<span class="i"></span>');
+});
+  </script>
+  <meta content="가리모쿠 가구 공식 판매점 J갤러리" name="Description"/>
+  <meta content="가리모쿠 가구 공식 판매점, J갤러리, 제이갤러리, 가리모쿠, 가리모쿠60, KNS" name="Keywords"/>
+  <meta content="가리모쿠 가구 공식 판매점 J갤러리" name="Subject"/>
+  <meta content="가리모쿠 가구 공식 판매점 J갤러리" name="Title"/>
+  <meta content="가리모쿠 가구 공식 판매점 J갤러리" name="Distribution"/>
+  <link href="https://j-gallery.co.kr/product/search.html" rel="canonical"/>
+  <link href="https://m.j-gallery.co.kr/product/search.html" rel="alternate"/>
+  <meta content="https://j-gallery.co.kr/product/search.html" property="og:url">
+   <meta content="제이갤러리" property="og:title">
+    <meta content="가리모쿠 가구 공식 판매점 J갤러리,제이갤러리, 가리모쿠, 가리모쿠60, KNS" property="og:description">
+     <meta content="J갤러리 :: 가리모쿠 가구 공식 판매점" property="og:site_name"/>
+     <meta content="website" property="og:type"/>
+     <link href="/web/upload/favicon_20190725090831.ico" rel="shortcut icon"/>
+     <script src="//wcs.naver.net/wcslog.js" type="text/javascript">
+     </script>
+     <script type="text/javascript">
+      window.CAFE24 = window.CAFE24 || {};
+CAFE24.MANIFEST_CACHE_REVISION = '2504081392';
+CAFE24.getDeprecatedNamespace = function(sDeprecatedNamespace, sSupersededNamespace) {
+var sNamespace = sSupersededNamespace 
+? sSupersededNamespace 
+: sDeprecatedNamespace.replace(/^EC_/, '');
+return CAFE24[sNamespace];
+}
+CAFE24.FRONT_LANGUAGE_CODE = "ko_KR";
+CAFE24.MOBILE = false;
+CAFE24.MOBILE_DEVICE = false;
+CAFE24.MOBILE_USE = true;
+var EC_MOBILE = CAFE24.MOBILE;
+var EC_MOBILE_DEVICE = CAFE24.MOBILE_DEVICE;
+var EC_MOBILE_USE = CAFE24.MOBILE_USE;
+CAFE24.SKIN_CODE = "skin9";
+CAFE24.FRONT_EXTERNAL_SCRIPT_VARIABLE_DATA = {"common_member_id_crypt":""};
+var EC_FRONT_EXTERNAL_SCRIPT_VARIABLE_DATA = CAFE24.getDeprecatedNamespace('EC_FRONT_EXTERNAL_SCRIPT_VARIABLE_DATA');
+CAFE24.SDE_SHOP_NUM = 1;CAFE24.SHOP = {getLanguage : function() { return "ko_KR"; },getCurrency : function() { return "KRW"; },getFlagCode : function() { return "KR"; },getTimezone: function() { return "Asia/Seoul" },getDateFormat: function() { return "Y-m-d" },isMultiShop : function() { return true; },isDefaultShop : function() { return true; },isDefaultLanguageShop : function(sLanguageCode) { return SHOP.isDefaultShop() && SHOP.isLanguageShop(sLanguageCode); },isKR : function() { return true; },isUS : function() { return false; },isJP : function() { return false; },isCN : function() { return false; },isTW : function() { return false; },isES : function() { return false; },isPT : function() { return false; },isVN : function() { return false; },isPH : function() { return false; },getCountryAndLangMap : function() { return {
+"KR": "ko_KR",
+"US": "en_US",
+"JP": "ja_JP",
+"CN": "zh_CN",
+"TW": "zh_TW",
+"VN": "vi_VN",
+"PH": "en_PH"
+}},isLanguageShop : function(sLanguageCode) { return sLanguageCode === "ko_KR"; },getDefaultShopNo : function() { return 1; },getProductVer : function() { return 2; },isSDE : function() { return true; },isMode : function() {return false; },getModeName : function() {return false; },isMobileAdmin : function() {return false; },isNewProMode : function() {return true; },isExperienceMall : function() { return false; },isDcollection : function() {return false; },isYoutubeShops : function() {return false; },getYtShopsShopNo : function() {return 0; },getAdminID : function() {return ''},getMallID : function() {return 'imilkbook'},getCurrencyFormat : function(sPriceTxt, bIsNumberFormat) { 
+sPriceTxt = String(sPriceTxt);
+var aCurrencySymbol = ["","\uc6d0",false];
+if (typeof CAFE24.SHOP_PRICE !== 'undefined' && isNaN(sPriceTxt.replace(/[,]/gi, '')) === false && bIsNumberFormat === true) {
+// bIsNumberFormat 사용하려면 Ui(':libUipackCurrency')->plugin('Currency') 화폐 라이브러리 추가 필요
+sPriceTxt = CAFE24.SHOP_PRICE.toShopPrice(sPriceTxt.replace(/[,]/gi, ''), true, CAFE24.SDE_SHOP_NUM);
+}
+try {
+var sPlusMinusSign = (sPriceTxt.toString()).substr(0, 1);
+if (sPlusMinusSign === '-' || sPlusMinusSign === '+') {
+sPriceTxt = (sPriceTxt.toString()).substr(1);
+return sPlusMinusSign + aCurrencySymbol[0] + sPriceTxt + aCurrencySymbol[1];
+} else {
+return aCurrencySymbol[0] + sPriceTxt + aCurrencySymbol[1];
+}
+} catch (e) {
+return aCurrencySymbol[0] + sPriceTxt + aCurrencySymbol[1];
+}
+}};CAFE24.CURRENCY_INFO = {getOriginReferenceCurrency : function() {return 'USD'},getCurrencyList : function(sCurrencyCode) { var aCurrencyList = {"JPY":{"currency_symbol":"&yen;","decimal_place":0,"round_method_type":"F"},"VND":{"currency_symbol":"&#8363;","decimal_place":0,"round_method_type":"F"},"PHP":{"currency_symbol":"&#8369;","decimal_place":2,"round_method_type":"R"},"USD":{"currency_symbol":"$","decimal_place":2,"round_method_type":"R"},"CNY":{"currency_symbol":"&yen;","decimal_place":2,"round_method_type":"R"},"TWD":{"currency_symbol":"NT$","decimal_place":0,"round_method_type":"F"},"EUR":{"currency_symbol":"\u20ac","decimal_place":2,"round_method_type":"R"},"BRL":{"currency_symbol":"R$","decimal_place":2,"round_method_type":"R"},"AUD":{"currency_symbol":"A$","decimal_place":2,"round_method_type":"R"},"BHD":{"currency_symbol":".&#1583;.&#1576;","decimal_place":3,"round_method_type":"R"},"BDT":{"currency_symbol":"&#2547;","decimal_place":2,"round_method_type":"R"},"GBP":{"currency_symbol":"&pound;","decimal_place":2,"round_method_type":"R"},"CAD":{"currency_symbol":"C$","decimal_place":2,"round_method_type":"R"},"CZK":{"currency_symbol":"K&#269;","decimal_place":2,"round_method_type":"R"},"DKK":{"currency_symbol":"kr","decimal_place":2,"round_method_type":"R"},"HKD":{"currency_symbol":"HK$","decimal_place":2,"round_method_type":"R"},"HUF":{"currency_symbol":"Ft","decimal_place":2,"round_method_type":"R"},"INR":{"currency_symbol":"&#8377;","decimal_place":2,"round_method_type":"R"},"IDR":{"currency_symbol":"Rp","decimal_place":0,"round_method_type":"F"},"ILS":{"currency_symbol":"&#8362;","decimal_place":2,"round_method_type":"R"},"JOD":{"currency_symbol":" &#1583;&#1610;&#1606;&#1575;&#1585;","decimal_place":3,"round_method_type":"R"},"KWD":{"currency_symbol":"&#1583;&#1610;&#1606;&#1575;&#1585;","decimal_place":3,"round_method_type":"R"},"MYR":{"currency_symbol":"RM","decimal_place":2,"round_method_type":"R"},"MXN":{"currency_symbol":"Mex$","decimal_place":2,"round_method_type":"R"},"NZD":{"currency_symbol":"NZ$","decimal_place":2,"round_method_type":"R"},"NOK":{"currency_symbol":"kr","decimal_place":2,"round_method_type":"R"},"PKR":{"currency_symbol":"&#8360;","decimal_place":2,"round_method_type":"R"},"PLN":{"currency_symbol":"z\u0142","decimal_place":2,"round_method_type":"R"},"RUB":{"currency_symbol":"\u0440\u0443\u0431","decimal_place":2,"round_method_type":"R"},"SAR":{"currency_symbol":"&#65020;","decimal_place":2,"round_method_type":"R"},"SGD":{"currency_symbol":"S$","decimal_place":2,"round_method_type":"R"},"ZAR":{"currency_symbol":"R","decimal_place":2,"round_method_type":"R"},"SEK":{"currency_symbol":"kr","decimal_place":2,"round_method_type":"R"},"CHF":{"currency_symbol":"Fr","decimal_place":2,"round_method_type":"R"},"THB":{"currency_symbol":"&#3647;","decimal_place":2,"round_method_type":"R"},"TRY":{"currency_symbol":"TL","decimal_place":2,"round_method_type":"R"},"AED":{"currency_symbol":"&#1601;&#1604;&#1587;","decimal_place":2,"round_method_type":"R"}}; return aCurrencyList[sCurrencyCode] },isUseReferenceCurrency : function() {return false }};CAFE24.COMMON_UTIL = {convertSslForString : function(sString) { return sString.replace(/http:/gi, '');},convertSslForHtml : function(sHtml) { return sHtml.replace(/((?:src|href)\s*=\s*['"])http:(\/\/(?:[a-z0-9\-_\.]+)\/)/ig, '$1$2');},getProtocol : function() { return 'https'; },moveSsl : function() { if (CAFE24.COMMON_UTIL.getProtocol() === 'http') { var oLocation = jQuery(window.location); var sUrl = 'https://' + oLocation.attr('host') + oLocation.attr('pathname') + oLocation.attr('search'); window.location.replace(sUrl); } },setEcCookie : function(sKey, sValue, iExpire) {var exdate = new Date();exdate.setDate(exdate.getDate() + iExpire);var setValue = escape(sValue) + "; domain=." + CAFE24.GLOBAL_INFO.getBaseDomain() + "; path=/;expires=" + exdate.toUTCString();document.cookie = sKey + "=" + setValue;}};CAFE24.SHOP_LIB_INFO = {getBankInfo : function() { 
+var oBankInfo = "";
+$.ajax({
+type: "GET",
+url: "/exec/front/Shop/Bankinfo",
+dataType: "json",
+async: false,
+success: function(oResponse) {
+oBankInfo = oResponse;
+}
+});
+return oBankInfo; }};            var EC_SDE_SHOP_NUM = CAFE24.SDE_SHOP_NUM;
+var SHOP = CAFE24.getDeprecatedNamespace('SHOP');
+var EC_COMMON_UTIL = CAFE24.getDeprecatedNamespace('EC_COMMON_UTIL');
+var EC_SHOP_LIB_INFO = CAFE24.getDeprecatedNamespace('EC_SHOP_LIB_INFO');
+var EC_CURRENCY_INFO = CAFE24.getDeprecatedNamespace('EC_CURRENCY_INFO');
+CAFE24.ROOT_DOMAIN = "cafe24.com";
+CAFE24.API_DOMAIN = "cafe24api.com";
+CAFE24.TRANSLATE_LOG_STATUS = "F";
+CAFE24.GLOBAL_INFO = (function() {
+var oData = {"base_domain":"imilkbook.cafe24.com","root_domain":"cafe24.com","api_domain":"cafe24api.com","is_global":false,"is_global_standard":false,"country_code":"KR","language_code":"ko_KR","admin_language_code":"ko_KR"};
+return {
+getBaseDomain: function() {
+return oData['base_domain'];
+},
+getRootDomain: function() {
+return oData['root_domain'];
+},
+getApiDomain: function() {
+return oData['api_domain'];
+},
+isGlobal: function() {
+return oData['is_global'];
+},
+isGlobalStandard: function() {
+return oData['is_global_standard'];
+},
+getCountryCode: function() {
+return oData['country_code'];
+},
+getLanguageCode: function() {
+return oData['language_code'];
+},
+getAdminLanguageCode: function() {
+return oData['admin_language_code'];
+}
+};
+})();
+var EC_ROOT_DOMAIN = CAFE24.ROOT_DOMAIN;
+var EC_API_DOMAIN = CAFE24.API_DOMAIN;
+var EC_TRANSLATE_LOG_STATUS = CAFE24.TRANSLATE_LOG_STATUS;
+var EC_GLOBAL_INFO = CAFE24.getDeprecatedNamespace('EC_GLOBAL_INFO');
+CAFE24.AVAILABLE_LANGUAGE = ["ko_KR","zh_CN","en_US","zh_TW","es_ES","pt_PT","vi_VN","ja_JP","en_PH"];
+CAFE24.AVAILABLE_LANGUAGE_CODES = {"ko_KR":"KOR","zh_CN":"CHN","en_US":"ENG","zh_TW":"TWN","es_ES":"ESP","pt_PT":"PRT","vi_VN":"VNM","ja_JP":"JPN","en_PH":"PHL"};
+var EC_AVAILABLE_LANGUAGE = CAFE24.AVAILABLE_LANGUAGE;
+var EC_AVAILABLE_LANGUAGE_CODES = CAFE24.AVAILABLE_LANGUAGE_CODES;
+CAFE24.GLOBAL_PRODUCT_LANGUAGE_CODES = {  
+sClearanceCategoryCode: '',
+sManualLink: '//support.cafe24.com/hc/ko/articles/7739013909529',
+sHsCodePopupLink: 'https://www.wcotradetools.org/en/harmonized-system',
+aCustomRegex: '"PHL" : "^[0-9]{8}[A-Z]?$"',
+sCountryCodeData: 'kor',
+sEnglishExampleURlForGlobal: '',
+aReverseAddressCountryCode: ["VNM","PHL"],
+aSizeGuideCountryAlign: '["US","UK","EU","KR","JP","CN"]',
+aIsSupportTran: ["ja_JP","zh_CN","zh_TW","en_US","vi_VN","en_PH","pt_PT","es_ES"]
+};
+var EC_GLOBAL_PRODUCT_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_PRODUCT_LANGUAGE_CODES');
+CAFE24.GLOBAL_ORDER_LANGUAGE_CODES = {
+aModifyOrderLanguage: {"KR":"ko_KR","JP":"ja_JP","CN":"zh_CN","TW":"zh_TW","VN":"vi_VN","PH":"en_PH"},
+aUseIdCardKeyCountry: ["CN","TW"],
+aLanguageWithCountryCode: {"zh_CN":["CN","CHN","HK","HNK"],"ja_JP":["JP","JPN"],"zh_TW":["TW","TWN"],"ko_KR":["KR","KOR"],"vi_VN":["VN","VNM"],"en_PH":["PH","PHL"]},
+aCheckDisplayRequiredIcon: ["ja_JP","zh_CN","zh_TW","en_US","vi_VN","en_PH"],
+aSetReceiverName: {"zh_CN":{"sCountry":"CN","bUseLastName":true},"zh_TW":{"sCountry":"TW","bUseLastName":false},"ja_JP":{"sCountry":"JP","bUseLastName":true}},
+aSetDeferPaymethodLanguage: {"ja_JP":"\uc77c\ubcf8","zh_CN":"\uc911\uad6d"},
+aUseDeferPaymethod: ["ja_JP","zh_CN"],
+aCheckShippingCompanyAndPaymethod: ["ja_JP","zh_CN"],
+aSetDeferPaymethodLanguageForShipping: {"ja_JP":"\u65e5\u672c","zh_CN":"\uc911\uad6d"},
+aCheckStoreByPaymethod: ["ja_JP","zh_CN"],
+aCheckIsEmailRequiredForJs: ["en_US","zh_CN","zh_TW","ja_JP","vi_VN","en_PH"],
+aSetIdCardKeyCountryLanguage: {"CN":"\uc911\uad6d\uc758","TW":"\ub300\ub9cc\uc758"},
+aReverseGlobalAddress: ["en_PH","vi_VN","PHL","VNM","VN","PH"],
+aNoCheckZipCode: ["KOR","JPN"],
+aNotPostCodeAPICountryList: ["en_US","es_ES","pt_PT","en_PH"],
+aEnableSearchExchangeAddr: ["KR","JP","CN","VN","TW","PH"],
+aDuplicatedBaseAddr: ["TW","JP"],
+aReverseAddressCountryCode: ["VN","PH"],
+aCheckZipCode: ["PHL","en_PH","PH"]
+};
+var EC_GLOBAL_ORDER_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_ORDER_LANGUAGE_CODES');
+CAFE24.GLOBAL_MEMBER_LANGUAGE_CODES = {  
+sAdminWebEditorLanguageCode: 'ko' ,
+oNotAvailDecimalPointLanguages: ["ko_KR","ja_JP","zh_TW","vi_VN"],
+oAddressCountryCode: {"KOR":"ko_KR","JPN":"ja_JP","CHN":"zh_CN","TWN":"zh_TW","VNM":"vi_VN","PHL":"en_PH"},
+};
+var EC_GLOBAL_MEMBER_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_MEMBER_LANGUAGE_CODES');
+CAFE24.GLOBAL_BOARD_LANGUAGE_CODES = {  
+bUseLegacyBoard: true
+};
+var EC_GLOBAL_BOARD_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_BOARD_LANGUAGE_CODES');
+CAFE24.GLOBAL_MALL_LANGUAGE_CODES = {
+oDesign: {
+oDesignAddReplaceInfo: {"group_id":"SKIN.ADD.ADMIN.DESIGNDETAIL","replacement":{"KR":"KOREAN","US":"ENGLISH","JP":"JAPANESE","CN":"SIMPLIFIED.CHINESE","TW":"TRADITIONAL.CHINESE","ES":"SPANISH","PT":"PORTUGUESE","PH":"ENGLISH"}},
+oDesignDetailLanguageCountryMap: {"KR":"ko_KR","JP":"ja_JP","CN":"zh_CN","TW":"zh_TW","US":"en_US","ES":"es_ES","PT":"pt_PT","PH":"en_PH"},
+oSmartDesignSwitchTipLink: {"edibot":{"img":"\/\/img.echosting.cafe24.com\/smartAdmin\/img\/design\/img_editor_dnd.png","link":"\/\/ecsupport.cafe24.com\/board\/free\/list.html?board_act=list&board_no=12&category_no=9&cate_no=9"},"smart":{"img":"\/\/img.echosting.cafe24.com\/smartAdmin\/img\/design\/ko_KR\/img_editor_smart.png","link":"\/\/sdsupport.cafe24.com"}},
+oSmartDesignDecoShopList: ["ko_KR","ja_JP","zh_CN","en_US","zh_TW","es_ES","pt_PT"],
+oSmartDesignDecoMultilingual: {"list":{"ko_KR":"KOREAN","en_US":"ENGLISH","ja_JP":"JAPANESE","zh_CN":"SIMPLIFIED.CHINESE","zh_TW":"TRADITIONAL.CHINESE","es_ES":"SPANISH","pt_PT":"PORTUGUESE","vi_VN":"VIETNAMESE"},"group_id":"EDITOR.LAYER.EDITING.DECO"},
+aSmartDesignModuleShopList: ["ko_KR","ja_JP","zh_CN","en_US","zh_TW","es_ES","pt_PT"]
+},
+oStore: {
+oMultiShopCurrencyInfo: {"en_US":{"currency":"USD"},"zh_CN":{"currency":"USD","sub_currency":"CNY"},"ja_JP":{"currency":"JPY"},"zh_TW":{"currency":"TWD"},"es_ES":{"currency":"EUR"},"pt_PT":{"currency":"EUR"},"ko_KR":{"currency":"KRW"},"vi_VN":{"currency":"VND"},"en_PH":{"currency":"PHP"}},
+oBrowserRedirectLanguage: {"ko":{"primary":"ko_KR","secondary":"en_US"},"en":{"detail":{"en-ph":{"primary":"en_PH","secondary":"en_US"},"en-us":{"primary":"en_US","secondary":"es_ES"},"default":{"primary":"en_US","secondary":"es_ES"}}},"ja":{"primary":"ja_JP","secondary":"en_US"},"zh":{"detail":{"zh-cn":{"primary":"zh_CN","secondary":"en_US"},"zh-tw":{"primary":"zh_TW","secondary":"zh_CN"},"default":{"primary":"en_US","secondary":"ko_KR"}}},"es":{"primary":"es_ES","secondary":"en_US"},"pt":{"primary":"pt_PT","secondary":"en_US"},"vi":{"primary":"vi_VN","secondary":"en_US"},"default":{"primary":"en_US","secondary":"ko_KR"}},
+aChangeableLanguages: ["en_US","ja_JP","ko_KR"],
+aNoZipCodeLanguage: ["ko_KR","ja_JP"]
+},
+oMobile: {
+sSmartWebAppFaqUrl: "https://support.cafe24.com/hc/ko/articles/8466586607641",
+sAmpFaqUrl: "https://ecsupport.cafe24.com/board/free/read.html?no=1864&board_no=5&category_no=13&cate_no=13&category_no=13&category_no=13",
+},
+oPromotion: {
+bQrCodeAvailable: true,
+bSnsMarketingAvailable: true
+},
+oShippingReverseAddressLanguage: ["vi_VN","en_PH"] ,
+oGlobalStandardSwitchHelpCodeLink: {"SH.DS":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/SH.DS.html"},"PR.DS":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/PR.DS.html"},"OR.SM.BO":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/OR.SM.BO.html"},"DE.DS":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/DE.DS.html"},"MB.DS":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/MB.DS.html"},"PM.DS":{"link":"\/\/serviceguide.cafe24shop.com\/en_PH\/PM.DS.html"}},
+getAdminMainLocaleLanguage: function(sSkinLocaleCode) {
+var oLocaleData = [];
+var locale = "";
+var shopLangName = "";
+if (sSkinLocaleCode == "US") {
+locale = "en_US";
+shopLangName = "ENGLISH";
+} else if (sSkinLocaleCode == "JP") {
+locale = "ja_JP";
+shopLangName = "JAPANESE";
+} else if (sSkinLocaleCode == "CN") {
+locale = "zh_CN";
+shopLangName = "SIMPLIFIED.CHINESE";
+} else if (sSkinLocaleCode == "TW") {
+locale = "zh_TW";
+shopLangName = "TRADITIONAL.CHINESE";
+} else if (sSkinLocaleCode == "ES") {
+locale = "es_ES";
+shopLangName = "SPANISH";
+} else if (sSkinLocaleCode == "PT") {
+locale = "pt_PT";
+shopLangName = "PORTUGUESE";
+} else if (sSkinLocaleCode == "VN") {
+locale = "vi_VN";
+shopLangName = "VIETNAMESE";
+} else if(sSkinLocaleCode == "PH") {
+locale = "en_PH";
+shopLangName = "ENGLISH.PH";
+}
+oLocaleData["locale"] = locale;
+oLocaleData["shopLangName"] = shopLangName;
+return oLocaleData;
+}
+};
+var EC_GLOBAL_MALL_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_MALL_LANGUAGE_CODES');
+CAFE24.GLOBAL_DATETIME_INFO = {
+oConstants: {"STANDARD_DATE_REGEX":"\/([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))\/","IN_ZONE":"inZone","OUT_ZONE":"outZone","IN_FORMAT":"inFormat","OUT_FORMAT":"outFormat","IN_DATE_FORMAT":"inDateFormat","IN_TIME_FORMAT":"inTimeFormat","OUT_DATE_FORMAT":"outDateFormat","OUT_TIME_FORMAT":"outTimeFormat","IN_FORMAT_DATE_ONLY":1,"IN_FORMAT_TIME_ONLY":2,"IN_FORMAT_ALL":3,"OUT_FORMAT_DATE_ONLY":1,"OUT_FORMAT_TIME_ONLY":2,"OUT_FORMAT_ALL":3,"DATE_ONLY":"YYYY-MM-DD","TIME_ONLY":"HH:mm:ss","FULL_TIME":"YYYY-MM-DD HH:mm:ss","ISO_8601":"YYYY-MM-DD[T]HH:mm:ssZ","YEAR_ONLY":"YYYY","MONTH_ONLY":"MM","DAY_ONLY":"DD","WEEK_ONLY":"e","TIME_H_I_ONLY":"HH:mm","TIME_HOUR_ONLY":"HH","TIME_MINUTE_ONLY":"mm","POSTGRE_FULL_TIME":"YYYY-MM-DD HH24:MI:SS","POSTGRE_TIME_ONLY":" HH24:MI:SS","MICRO_SECOND_ONLY":"u","SEOUL":"Asia\/Seoul","TOKYO":"Asia\/Tokyo","SHANGHAI":"Asia\/Shanghai","TAIPEI":"Asia\/Taipei","HANOI":"Asia\/Bangkok","LOS_ANGELES":"America\/Los_Angeles","LISBON":"Europe\/Lisbon","MADRID":"Europe\/Madrid","SINGAPORE":"Asia\/Singapore","UTC":"Etc\/UTC","MAX_DATETIME":"9999-12-31 23:59:59"},
+oOptions: {"inZone":"Asia\/Seoul","inFormat":"YYYY-MM-DD HH:mm:ss","inDateFormat":"YYYY-MM-DD","inTimeFormat":"HH:mm:ss","outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"},
+oPolicies: [],
+sOverrideTimezone: '',
+sMomentNamespace: 'EC_GLOBAL_MOMENT'
+};
+CAFE24.FRONT_JS_CONFIG_MANAGE = {"sSmartBannerScriptUrl":"https:\/\/app4you.cafe24.com\/SmartBanner\/tunnel\/scriptTags?vs=1563164396689206","sMallId":"imilkbook","sDefaultAppDomain":"https:\/\/app4you.cafe24.com","sWebLogOffFlag":"F"};
+var EC_FRONT_JS_CONFIG_MANAGE = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MANAGE');
+CAFE24.FRONT_JS_CONFIG_MEMBER = {"sAuthUrl":"https:\/\/ipin-ec.cafe24.com\/certify\/v1\/?action=auth"};
+var EC_FRONT_JS_CONFIG_MEMBER = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MEMBER');
+CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-08","locale":"ko"}};
+var EC_FRONT_JS_CONFIG_SHOP = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_SHOP');
+typeof window.CAFE24 === "undefined" && (window.CAFE24 = {});
+CAFE24.FRONTEND = {"FW_MANIFEST_CACHE_REVISION":2504081392,"IS_WEB_VIEW":"F"};
+CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","path":{"origin":"\/product\/search.html","result":"\/product\/search.html","prefix":""},"shop_no":0,"skin_code":"default","support_language_list":{"ar":"ar_EG","ar-EG":"ar_EG","de":"de_DE","de-DE":"de_DE","en":"en_US","en-IN":"en_IN","en-PH":"en_PH","en-US":"en_US","es":"es_ES","es-ES":"es_ES","hi":"hi_IN","hi-IN":"hi_IN","id":"id_ID","id-ID":"id_ID","it":"it_IT","it-IT":"it_IT","ja":"ja_JP","ja-JP":"ja_JP","ko":"ko_KR","ko-KR":"ko_KR","ms":"ms_MY","ms-MY":"ms_MY","pt":"pt_PT","pt-PT":"pt_PT","ru":"ru_RU","ru-RU":"ru_RU","th":"th_TH","th-TH":"th_TH","tr":"tr_TR","tr-TR":"tr_TR","vi":"vi_VN","vi-VN":"vi_VN","zh":"zh_CN","zh-CN":"zh_CN","zh-HK":"zh_HK","zh-MO":"zh_MO","zh-SG":"zh_SG","zh-TW":"zh_TW"}};
+     </script>
+     <link href="/ind-script/optimizer.php?filename=nY5BCgIxEATvYa--Y1T0BYIPUHzAZHbWhE0yYZKA_t7Vkx4WJNemq7rBSWTY7RWyyl0xgnKRpsRApcCkkiqQxChpWIIN_NNnMkVCq16SsfLoBFutvaMBn6x9aEUbuBOVbIJPbCymtLofvIWbz0gzXL59JwycRlQ4DMdhC1PAmj3NaxrMGa5O8q_k_Dm1dMZGtYMsjEruDb4A&amp;type=css&amp;k=dfc749202ee4f0e29186b4d8083aa2c4d8e6bdeb&amp;t=1726130154" rel="stylesheet" type="text/css"/>
+     <link href="/ind-script/optimizer_user.php?filename=tdQxDsMgDAXQPenac3juDbr3BMRxwApghKFSbl-aZujckgnZlp6lLwtwEggIx6qUFTiwXyeRFVKdPOPoSvCgM40zKdsIunK8AapCkLl6gpTbiwWUTEY3LpLDpY2v8BPszSa1wGSUcd-CEoLEnuKn0VMkHFpBQxHxhdMZ9JHyKbSxHE2hUxIx0x_s15UdG0JtAauT9HCcEkfbVUeJzwawxIR94Ravlbx1RbU01YuVZTnHjX3Z_X-4k5kpv-EX&amp;type=css&amp;k=bdd0831e5e5caaf265c63ad66d9371431c485382&amp;t=1686100077&amp;user=T" rel="stylesheet" type="text/css"/>
+     <title>
+      가리모쿠60 공식 판매점 :: 제이갤러리 - 제이갤러리
+     </title>
+    </meta>
+   </meta>
+  </meta>
+ </head>
+ <script type="text/javascript">
+  $(document).ready(function(){
+
+    $(".return-top").hide(); // 탑 버튼 숨김
+    $(function () {
+
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 100) { // 스크롤 내릴 표시
+                $('.return-top').fadeIn();
+            } else {
+                $('.return-top').fadeOut();
+            }
+        });
+
+        $('.return-top').click(function () {
+            $('body,html').animate({
+                scrollTop: 0
+            }, 800);  // 탑 이동 스크롤 속도
+            return false;
+        });
+    });
+
+});
+ </script>
+ <body>
+  <div class="xans-element- xans-layout xans-layout-logotop">
+  </div>
+  <a class="return-top" href="#">
+   <img src="/artfinger/img/top.jpg"/>
+  </a>
+  <div id="skipNavigation">
+   <p>
+    <a href="#category">
+     전체상품목록 바로가기
+    </a>
+   </p>
+   <p>
+    <a href="#contents">
+     본문 바로가기
+    </a>
+   </p>
+  </div>
+  <div id="wrap">
+   <div id="layout_effect">
+    <div id="content">
+     <div id="sidebar">
+      <h1 class="xans-element- xans-layout xans-layout-logotop">
+       <a href="/">
+        <img alt="제이갤러리 (J-gallery)" src="/artfinger/img/toplogo.png"/>
+       </a>
+      </h1>
+      <div class="category">
+       <div class="menu_v" id="menu_v">
+        <div class="xans-element- xans-layout xans-layout-statelogoff">
+         <a class="log" href="/member/login.html">
+          LOGIN
+         </a>
+         <a href="/member/join.html">
+          JOIN
+         </a>
+         <a href="/order/basket.html">
+          CART
+         </a>
+         <a href="/myshop/index.html">
+          MYPAGE
+         </a>
+        </div>
+        <form action="/product/search.html" enctype="multipart/form-data" id="searchBarForm" method="get" name="" target="_self">
+         <input id="banner_action" name="banner_action" type="hidden" value=""/>
+         <div class="xans-element- xans-layout xans-layout-searchheader">
+          <!--
+                $product_page=/product/detail.html
+                $category_page=/product/list.html
+            -->
+          <fieldset>
+           <legend>
+            검색
+           </legend>
+           <input class="inputTypeText" fw-filter="" fw-label="검색어" fw-msg="" id="keyword" name="keyword" onmousedown="SEARCH_BANNER.clickSearchForm(this)" placeholder="" type="text" value=""/>
+           <input alt="검색" onclick="SEARCH_BANNER.submitSearchBanner(this); return false;" onfocus="this.value=''" src="/artfinger/img/btn_search.png" type="image" value="검색"/>
+          </fieldset>
+         </div>
+        </form>
+       </div>
+       <div class="cate_neo">
+        <ul>
+         <li>
+          <a href="/board/free/list.html?board_no=1">
+           <img src="/artfinger/img/M_news.gif"/>
+          </a>
+         </li>
+         <li>
+          <a href="/shopinfo/about_05.html?cate_no=1001">
+           <img src="/artfinger/img/M_about.gif"/>
+          </a>
+          <ul>
+           <li>
+            <a href="/shopinfo/about_05.html?cate_no=1001">
+             Showroom
+            </a>
+           </li>
+           <li>
+            <a href="/shopinfo/about_01.html?cate_no=1002">
+             History
+            </a>
+           </li>
+           <li>
+            <a href="/shopinfo/about_02.html?cate_no=1003">
+             Concept
+            </a>
+           </li>
+           <li>
+            <a href="/shopinfo/about_03.html?cate_no=1004">
+             Material
+            </a>
+           </li>
+           <li>
+            <a href="/shopinfo/about_04.html?cate_no=1005">
+             Manufacturing
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li>
+          <a href="/shopinfo/brand.html">
+           <img src="/artfinger/img/M_brand.gif"/>
+          </a>
+          <ul>
+           <li>
+            <a href="/product/list.html?cate_no=61">
+             Karimoku60
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=62">
+             KNS (Karimoku New Standard)
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=180">
+             KARIMOKU CASE
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=64">
+             The First (Recliner)
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=177">
+             HARU
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=463">
+             domani
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=63">
+             Karimoku K
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=178">
+             Karimoku TSUKUE (Desk)
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=430">
+             DORA DORA
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=453">
+             Karimoku BED
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=183">
+             Karimoku Solid Board
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=163">
+             Karimoku Original Rug
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=114">
+             KARIMOKU CAT
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=337">
+             AGO LIGHTING
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=343">
+             HAY
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=387">
+             &amp;TRADITION
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=444">
+             Vitra
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=445">
+             Artek
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=531">
+             Mofurs
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li>
+          <a href="/shopinfo/designer.html">
+           <img src="/artfinger/img/M_designer.gif"/>
+          </a>
+          <ul>
+           <li>
+            <a href="/product/list.html?cate_no=85">
+             SCHOLTEN &amp; BAIJINGS
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=86">
+             BIG-GAME
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=87">
+             NATHALIE DU PASQUIER
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=88">
+             GECKELER MICHELS
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=89">
+             DAVID GLAETTLI
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=90">
+             LUCIEN GUMY
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=91">
+             CHRISTIAN HAAS
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=92">
+             KARIMOKU DESIGN TEAM
+            </a>
+           </li>
+           <li>
+            <a href="/product/list.html?cate_no=113">
+             MORITZ SCHLATTER
+            </a>
+           </li>
+          </ul>
+         </li>
+         <li>
+          <a href="/board/gallery/list.html?board_no=8">
+           <img src="/artfinger/img/M_photo.gif"/>
+          </a>
+         </li>
+        </ul>
+       </div>
+       <div class="cate_line">
+       </div>
+       <div class="cate_neo">
+        <ul class="xans-element- xans-layout xans-layout-category">
+         <li class="xans-record-">
+          <a href="/product/list.html?cate_no=495">
+           <img alt="New Arrivals" id="cate_img_495" rollover="//j-gallery.co.kr/web/upload/category/shop1_495_menu_over_434173.gif" src="//j-gallery.co.kr/web/upload/category/shop1_495_menu_473768.gif"/>
+          </a>
+         </li>
+         <li class="xans-record-">
+          <a href="/product/list.html?cate_no=25">
+           <img alt="Chair" id="cate_img_25" rollover="//j-gallery.co.kr/web/upload/category/7288c6e58ac32c21b63695de2b54a579.gif" src="//j-gallery.co.kr/web/upload/category/76549be1b379942d427a60ac40940f4b.gif"/>
+          </a>
+         </li>
+         <li class="xans-record-">
+          <a href="/product/list.html?cate_no=26">
+           <img alt="Table" id="cate_img_26" rollover="//j-gallery.co.kr/web/upload/category/ea519e17ad94cfa220e244050a7f1255.gif" src="//j-gallery.co.kr/web/upload/category/cf44e7847c1e16ff7aeb40ad6e6ecf1b.gif"/>
+          </a>
+         </li>
+         <li class="xans-record-">
+          <a href="/product/list.html?cate_no=27">
+           <img alt="Storage" id="cate_img_27" rollover="//j-gallery.co.kr/web/upload/category/fb378526a058f13984892b6a031f1651.gif" src="//j-gallery.co.kr/web/upload/category/02e8d5aeeac19b0aa3b9f8bc5879b2c3.gif"/>
+          </a>
+         </li>
+         <li class="xans-record-">
+          <a href="/product/list.html?cate_no=342">
+           <img alt="Outdoor" id="cate_img_342" rollover="//j-gallery.co.kr/web/upload/category/shop1_342_menu_over_265627.gif" src="//j-gallery.co.kr/web/upload/category/shop1_342_menu_262211.gif"/>
+          </a>
+         </li>
+         <li class="xans-record-">
+          <a href="/product/list.html?cate_no=73">
+           <img alt="Sleeping" id="cate_img_73" rollover="//j-gallery.co.kr/web/upload/category/b7646a4175c8dd4bc762e99ff20365f5.gif" src="//j-gallery.co.kr/web/upload/category/b03b53895cea169ae050fdf8c6c7857b.gif"/>
+          </a>
+         </li>
+         <li class="xans-record-">
+          <a href="/product/list.html?cate_no=184">
+           <img alt="Rug" id="cate_img_184" rollover="//j-gallery.co.kr/web/upload/category/shop1_184_menu_over_853065.gif" src="//j-gallery.co.kr/web/upload/category/shop1_184_menu_219081.gif"/>
+          </a>
+         </li>
+         <li class="xans-record-">
+          <a href="/product/list.html?cate_no=42">
+           <img alt="ACC" id="cate_img_42" rollover="//j-gallery.co.kr/web/upload/category/d43429fcc35b67896b8891534ebc42b2.gif" src="//j-gallery.co.kr/web/upload/category/d7c6a64f852bbeb9d4c3d8fc22b789b5.gif"/>
+          </a>
+         </li>
+         <li class="xans-record-">
+          <a href="/product/list.html?cate_no=81">
+           <img alt="Pet" id="cate_img_81" rollover="//j-gallery.co.kr/web/upload/category/shop1_81_menu_over_395045.png" src="//j-gallery.co.kr/web/upload/category/shop1_81_menu_350529.png"/>
+          </a>
+         </li>
+         <li class="xans-record-">
+          <a href="/product/list.html?cate_no=338">
+           <img alt="Lighting" id="cate_img_338" rollover="//j-gallery.co.kr/web/upload/category/shop1_338_menu_over_181559.gif" src="//j-gallery.co.kr/web/upload/category/shop1_338_menu_720350.gif"/>
+          </a>
+         </li>
+        </ul>
+       </div>
+       <div class="side_cs">
+        <ul>
+         <li>
+          <a href="/board/product/list.html?board_no=4">
+           Review
+          </a>
+         </li>
+         <li>
+          <a href="/board/product/list.html?board_no=6">
+           Q&amp;A
+          </a>
+         </li>
+        </ul>
+        <div class="insta">
+         <a href="https://www.instagram.com/jgallery_karimoku" target="_blank">
+          <img alt="" src="/artfinger/img/ico_insta.png"/>
+         </a>
+        </div>
+        <div class="insta">
+         <a href="https://pf.kakao.com/_xnZPVK" target="_blank">
+          <img alt="" src="/artfinger/img/kko.png"/>
+         </a>
+        </div>
+        <div class="insta">
+         <a href="https://pf.kakao.com/_CVxbDK" target="_blank">
+          <img alt="" src="/artfinger/img/kko_sr.png"/>
+         </a>
+        </div>
+        <div class="insta">
+         <a href="https://karimoku60.livingstyle.jp/simulator/" target="_blank">
+          <img alt="" src="/artfinger/img/3D.png"/>
+         </a>
+        </div>
+        <div class="insta">
+         <a href="https://www.j-gallery.co.kr/shopinfo/about_07.html?cate_no=1006" target="_blank">
+          <img alt="" src="/artfinger/img/youonejae_hotel_bn.png"/>
+         </a>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div id="container">
+    <div id="contents">
+     <div id="contents_">
+      <div class="path">
+       <span>
+        현재 위치
+       </span>
+       <ol>
+        <li>
+         <a href="/">
+          홈
+         </a>
+        </li>
+        <li title="현재 위치">
+         <strong>
+          상품검색
+         </strong>
+        </li>
+       </ol>
+      </div>
+      <div class="titleArea">
+       <h2>
+        상품검색
+       </h2>
+      </div>
+      <!-- 참고 : 뉴상품관리 전용 변수가 포함되어 있습니다. 뉴상품관리 이외의 곳에서 사용하면 일부 변수가 정상동작하지 않을 수 있습니다. -->
+      <form action="/product/search.html" enctype="multipart/form-data" id="searchForm" method="get" name="" target="_self">
+       <input id="view_type" name="view_type" type="hidden" value=""/>
+       <input id="supplier_code" name="supplier_code" type="hidden" value=""/>
+       <div class="xans-element- xans-search xans-search-form">
+        <div class="searchbox">
+         <fieldset>
+          <legend>
+           상품 검색
+          </legend>
+          <div class="item">
+           <strong>
+            상품분류
+           </strong>
+           <select fw-filter="" fw-label="" fw-msg="" id="category_no" name="category_no">
+            <option selected="selected" value="0">
+             상품분류 선택
+            </option>
+            <option value="495">
+             New Arrivals
+            </option>
+            <option value="25">
+             Chair
+            </option>
+            <option value="26">
+             Table
+            </option>
+            <option value="27">
+             Storage
+            </option>
+            <option value="342">
+             Outdoor
+            </option>
+            <option value="73">
+             Sleeping
+            </option>
+            <option value="184">
+             Rug
+            </option>
+            <option value="42">
+             ACC
+            </option>
+            <option value="81">
+             Pet
+            </option>
+            <option value="338">
+             Lighting
+            </option>
+           </select>
+          </div>
+          <div class="item">
+           <strong>
+            검색조건
+           </strong>
+           <select fw-filter="" fw-label="상품검색" fw-msg="" id="search_type" name="search_type">
+            <option value="product_name">
+             상품명
+            </option>
+            <option value="product_code">
+             상품코드
+            </option>
+            <option value="ma_product_code">
+             자체상품코드
+            </option>
+            <option value="manu_name">
+             제조사
+            </option>
+            <option value="prd_model">
+             모델명
+            </option>
+            <option value="prd_brand">
+             브랜드명
+            </option>
+            <option value="prd_trand">
+             트랜드명
+            </option>
+           </select>
+           <input class="inputTypeText" fw-filter="" fw-label="상품명/제조사" fw-msg="" id="keyword" name="keyword" placeholder="" size="15" type="text" value="바보"/>
+          </div>
+          <div class="popular" id="except_keyword_wrap_id" style="display:none">
+           <strong>
+            제외검색어
+           </strong>
+           <input class="inputTypeText" fw-filter="" fw-label="제외검색어" fw-msg="" id="exceptkeyword" name="exceptkeyword" placeholder="" size="15" type="text" value=""/>
+          </div>
+          <div class="xans-element- xans-search xans-search-hotkeyword popular">
+           <strong>
+            인기검색어
+           </strong>
+           <p>
+            <a class="xans-record-" href="/product/search.html?keyword=">
+            </a>
+           </p>
+          </div>
+          <div class="item">
+           <strong>
+            판매가격대
+           </strong>
+           <input class="input01" fw-filter="isNumber" fw-label="최소판매가격" fw-msg="" id="product_price1" name="product_price1" placeholder="" size="15" type="text" value=""/>
+           ~
+           <input class="input01" fw-filter="isNumber" fw-label="최대판매가격" fw-msg="" id="product_price2" name="product_price2" placeholder="" size="15" type="text" value=""/>
+          </div>
+          <div class="item">
+           <strong>
+            검색정렬기준
+           </strong>
+           <select fw-filter="" fw-label="검색정렬기준" fw-msg="" id="order_by" name="order_by">
+            <option selected="selected" value="">
+             ::: 기준선택 :::
+            </option>
+            <option value="recent">
+             신상품 순
+            </option>
+            <option value="name">
+             상품명순
+            </option>
+            <option value="priceasc">
+             낮은가격 순
+            </option>
+            <option value="price">
+             높은가격 순
+            </option>
+            <option value="manu_name">
+             제조사 순
+            </option>
+            <option value="review">
+             사용후기 순
+            </option>
+           </select>
+          </div>
+          <p class="button">
+           <input alt="검색" src="http://img.echosting.cafe24.com/skin/base_ko_KR/product/btn_search2.gif" type="image"/>
+          </p>
+         </fieldset>
+        </div>
+        <div class="searchResult">
+         <p class="record">
+          총
+          <strong>
+           0
+          </strong>
+          개 의 상품이 검색되었습니다.
+         </p>
+         <ul class="xans-element- xans-search xans-search-orderby listType">
+          <li class="btn_order xans-record-" rel="recent" style="">
+           신상품
+          </li>
+          <li class="btn_order xans-record-" rel="name" style="">
+           상품명
+          </li>
+          <li class="btn_order xans-record-" rel="priceasc" style="">
+           낮은가격
+          </li>
+          <li class="btn_order xans-record-" rel="price" style="">
+           높은가격
+          </li>
+          <li class="btn_order xans-record-" rel="manu_name" style="">
+           제조사
+          </li>
+          <li class="btn_order xans-record-" rel="review" style="">
+           사용후기
+          </li>
+         </ul>
+        </div>
+        <div class="noData">
+         <strong class="warning">
+          검색결과가 없습니다.
+         </strong>
+         <strong>
+          정확한 검색어 인지 확인하시고 다시 검색해 주세요.
+         </strong>
+         <ul>
+          <li>
+           검색어/제외검색어의 입력이 정확한지 확인해 보세요.
+          </li>
+          <li>
+           두 단어 이상의 검색어인 경우, 띄어쓰기를 확인해 보세요.
+          </li>
+          <li>
+           검색 옵션을 다시 확인해 보세요.
+          </li>
+         </ul>
+        </div>
+       </div>
+      </form>
+      <!-- //참고 -->
+     </div>
+    </div>
+    <hr class="layout"/>
+   </div>
+   <hr class="layout"/>
+  </div>
+  <hr class="layout"/>
+  <div class="clr">
+  </div>
+  <div id="footer">
+   <div class="footer_">
+    <div class="tail_wrap">
+     <div class="tail">
+      <ul class="tail_menu">
+       <li>
+        <a href="/shopinfo/company.html">
+         COMPANY
+        </a>
+       </li>
+       <li>
+        <a href="/member/agreement.html">
+         AGREEMENT
+        </a>
+       </li>
+       <li>
+        <a href="/shopinfo/guide.html">
+         GUIDE
+        </a>
+       </li>
+       <li>
+        <a href="/member/privacy.html">
+         PRIVACY POLICY
+        </a>
+       </li>
+      </ul>
+      <div class="xans-element- xans-layout xans-layout-footer">
+       COMPANY ㈜자바소프트 OWNER 박윤정   TEL 031-944-3987   FAX 031-955-1623
+       <br/>
+       E-MAIL
+       <a href="mailto:j--gallery@naver.com?subject=%EB%AC%B8%EC%9D%98">
+        j--gallery@naver.com
+       </a>
+       BUSINESSNUMBER 203-88-00645
+       <br/>
+       MAIL-ORDER LICENSE 제2016-경기파주-0432호
+       <a href="#none" onclick="window.open('http://www.ftc.go.kr/bizCommPop.do?wrkr_no=2038800645', 'bizCommPop', 'width=750, height=950;');return false;">
+        [사업자정보확인]
+       </a>
+       <br/>
+       ADDRESS 10881 경기도 파주시 회동길 121 (문발동 532-3) 101호/201호 제이갤러리
+       <br/>
+       <br/>
+       Copyright © J 갤러리 . All rights reserved.
+       <br/>
+      </div>
+      <div class="cs_wrap">
+       <div class="item">
+        <img src="/artfinger/img/2025ver_2.gif"/>
+       </div>
+       <div class="item">
+        <img src="/artfinger/img/bt_bank.png"/>
+       </div>
+      </div>
+     </div>
+    </div>
+    <script type="text/javascript">
+     $(document).ready(function(){
+	var doc_h = $(document).height() - 308 ;
+	$("#contents_").css({"min-height":doc_h});
+	//$("#contents").css({"min-height":doc_h});
+});
+    </script>
+   </div>
+  </div>
+  <!------------------------------------------------------------------------------┐
+
+아래 텍스들은 설명입니다. 아래텍스트를 편집하거나 지우지마세요.~~~			     
+아래설명대로 진행하여 로고와 메인이미지를 변경할수있습니다.
+
+
+-----이미지 변경 방법----------------------------------------------
+1. 상단에 이미지를 클릭 해주세요.
+2. 편집버튼을 클릭 해주세요.
+3. 속성탭을 클릭 해주세요.
+4. 준비해둔 이미지 파일선택 버튼을 클릭하여
+   준비해둔 이미지를 불러와주세요.
+
+아래 그림과 의 표기와 같은 순서입니다.
+
+  메인이미지1       메인이미지2      메인이미지3
+┌------------┐ ┌------------┐ ┌------------┐
+│ 			 │ │ 			│ │ 		   │
+└------------┘ └------------┘ └------------┘
+
+-----이미지에 링크 연결 방법----------------------------------------
+1. 상단에 이미지를 클릭 해주세요.
+2. 편집버튼을 클릭 해주세요.
+3. 속성탭을 클릭 해주세요.
+4. 링크에 클릭시 이동하고싶은 주소 를 붙여넣어주세요.
+   링크를 사용하고 싶지않다면 #기호를 기입해주세요.
+---------------------------------------------------------------------------->
+  <div class="main_control">
+   <div class="img_pb img_main" style="margin:30px; width:1000px; text-align:left; background-color:#eee; padding:10px 20px;">
+    <div style="text-align:left; font-size:12px;">
+     <div style="font-size:13px; font-weight:bold;">
+      2.메인이미지 관리
+     </div>
+     아래이미지들이 메인이미지입니다.
+     <br/>
+     변경원하는 이미지에 마우스 오버하여 편집버튼클릭후, 속성탭에서 이미지를 변경하거나 링크를 연결해주세요.
+     <br/>
+     링크를 연결하고 싶지않다면 링크기입란에 #(샵기호)를 기입해주세요.
+     <br/>
+     <br/>
+    </div>
+    <li style="border:1px solid #000; width:300px; display:inline-block; margin-right:10px; list-style:none;">
+     PC 메인1번이미지입니다.
+     <a class="main_01_01_lin" href="/product/list.html?cate_no=495">
+      <img alt="" class="main_01_01_im" src="/web/upload/category/editor/2023/06/07/1e23fe169318974a78f5f83ff831856a.jpg" style="width:300px;"/>
+     </a>
+    </li>
+    <li style="border:1px solid #000; width:300px; display:inline-block; margin-right:10px; list-style:none;">
+     PC 메인2번이미지입니다.
+     <a class="main_01_02_lin" href="/product/list.html?cate_no=495">
+      <img alt="" class="main_01_02_im" src="/web/upload/category/editor/2023/06/07/317bea14c91efdf074f41d2848112902.jpg" style="width:300px;"/>
+     </a>
+    </li>
+    <li style="border:1px solid #000; width:300px; display:inline-block; margin-right:10px; list-style:none;">
+     PC 메인3번이미지입니다.
+     <a class="main_01_03_lin" href="/product/list.html?cate_no=495">
+      <img alt="" class="main_01_03_im" src="/web/upload/category/editor/2023/06/07/a9e2114edeb3996db23c841af8dba533.jpg" style="width:300px;"/>
+     </a>
+    </li>
+    <li style="border:1px solid #000; width:300px; display:inline-block; margin-right:10px; list-style:none;">
+     PC 메인4번이미지입니다.
+     <a class="main_01_04_lin" href="/product/list.html?cate_no=495">
+      <img alt="" class="main_01_04_im" src="/web/upload/category/editor/2023/06/07/6e8cbc9aab2cb0bfc4005c5f6496085f.jpg" style="width:300px;"/>
+     </a>
+    </li>
+    <li style="border:1px solid #000; width:300px; display:inline-block; margin-right:10px; list-style:none;">
+     PC 메인5번이미지입니다.
+     <a class="main_01_05_lin" href="/product/list.html?cate_no=495">
+      <img alt="" class="main_01_05_im" src="/web/upload/category/editor/2023/06/07/42bf921e03e4a0c73ff833c38aca37ad.jpg" style="width:300px;"/>
+     </a>
+    </li>
+    <li style="border:1px solid #000; width:300px; display:inline-block; margin-right:10px; list-style:none;">
+     PC 메인6번이미지입니다.
+     <a class="main_01_06_lin" href="/product/list.html?cate_no=495">
+      <img alt="" class="main_01_06_im" src="/web/upload/category/editor/2023/06/07/33fcc4a1d01259756e94d271b34c1c50.jpg" style="width:300px;"/>
+     </a>
+    </li>
+    <li style="border:1px solid #000; width:300px; display:inline-block; margin-right:10px; list-style:none;">
+     PC 메인7번이미지입니다.
+     <a class="main_01_07_lin" href="/product/list.html?cate_no=495">
+      <img alt="" class="main_01_07_im" src="/web/upload/category/editor/2023/06/07/feb423f60fcbcf807d2870a6059a1bbb.jpg" style="width:300px;"/>
+     </a>
+    </li>
+    <li style="border:1px solid #000; width:300px; display:inline-block; margin-right:10px; list-style:none;">
+     PC 메인8번이미지입니다.
+     <a class="main_01_08_lin" href="/product/list.html?cate_no=495">
+      <img alt="" class="main_01_08_im" src="/web/upload/category/editor/2023/06/07/590e9d1264e5d60fc1110636d238294c.jpg" style="width:300px;"/>
+     </a>
+    </li>
+   </div>
+  </div>
+  <!-- 참고: 결제를 위한 필수 영역 -->
+  <div id="progressPaybar" style="display:none;">
+   <div class="layerProgress" id="progressPaybarBackground">
+   </div>
+   <div id="progressPaybarView">
+    <div class="box">
+     <p class="graph">
+      <span>
+       <img alt="현재 결제가 진행중입니다." src="http://img.echosting.cafe24.com/skin/base_ko_KR/layout/txt_progress.gif"/>
+      </span>
+      <span>
+       <img alt="" src="http://img.echosting.cafe24.com/skin/base/layout/img_loading.gif"/>
+      </span>
+     </p>
+     <p class="txt">
+      본 결제 창은 결제완료 후 자동으로 닫히며,결제 진행 중에 본 결제 창을 닫으시면
+      <br/>
+      주문이 되지 않으니 결제 완료 될 때 까지 닫지 마시기 바랍니다.
+     </p>
+    </div>
+   </div>
+  </div>
+  <!-- //참고 -->
+  <div class="xans-element- xans-layout xans-layout-multishopshipping">
+   <div class="dimmed">
+   </div>
+   <div class="worldshipLayer">
+    <h2>
+     WORLD SHIPPING
+    </h2>
+    <div class="content">
+     <p class="desc">
+      PLEASE SELECT THE DESTINATION COUNTRY AND LANGUAGE :
+     </p>
+     <div class="select">
+      <select class="xans-element- xans-layout xans-layout-multishopshippingcountrylist">
+       <option class="xans-record-" value="GH">
+        SHIPPING TO : 가나(GHANA)
+       </option>
+       <option class="xans-record-" value="GA">
+        SHIPPING TO : 가봉(GABON)
+       </option>
+       <option class="xans-record-" value="GY">
+        SHIPPING TO : 가이아나(GUYANA)
+       </option>
+       <option class="xans-record-" value="GM">
+        SHIPPING TO : 감비아(GAMBIA)
+       </option>
+       <option class="xans-record-" value="GT">
+        SHIPPING TO : 과테말라(GUATEMALA)
+       </option>
+       <option class="xans-record-" value="GD">
+        SHIPPING TO : 그레나다(GRENADA)
+       </option>
+       <option class="xans-record-" value="GE">
+        SHIPPING TO : 그루지야(GEORGIA)
+       </option>
+       <option class="xans-record-" value="GR">
+        SHIPPING TO : 그리스(GREECE)
+       </option>
+       <option class="xans-record-" value="GN">
+        SHIPPING TO : 기니(GUINEA)
+       </option>
+       <option class="xans-record-" value="GW">
+        SHIPPING TO : 기니비소(GUINEA-BISSAU)
+       </option>
+       <option class="xans-record-" value="NA">
+        SHIPPING TO : 나미비아(NAMIBIA)
+       </option>
+       <option class="xans-record-" value="NG">
+        SHIPPING TO : 나이지리아(NIGERIA)
+       </option>
+       <option class="xans-record-" value="ZA">
+        SHIPPING TO : 남아프리카공화국(SOUTH AFRICA)
+       </option>
+       <option class="xans-record-" value="AN">
+        SHIPPING TO : 네덜란드(네덜란드령앤틸리스)(NETHERLANDS(ANTILLES))
+       </option>
+       <option class="xans-record-" value="NL">
+        SHIPPING TO : 네덜란드(네델란드)(NETHERLANDS)
+       </option>
+       <option class="xans-record-" value="AW">
+        SHIPPING TO : 네덜란드(아루바섬)(ARUBA)
+       </option>
+       <option class="xans-record-" value="NP">
+        SHIPPING TO : 네팔(NEPAL)
+       </option>
+       <option class="xans-record-" value="NO">
+        SHIPPING TO : 노르웨이(NORWAY)
+       </option>
+       <option class="xans-record-" value="NZ">
+        SHIPPING TO : 뉴질란드(NEW ZEALAND)
+       </option>
+       <option class="xans-record-" value="NE">
+        SHIPPING TO : 니제르(NIGER)
+       </option>
+       <option class="xans-record-" value="NI">
+        SHIPPING TO : 니카라과(NICARAGUA)
+       </option>
+       <option class="xans-record-" selected="selected" value="KR">
+        SHIPPING TO : 대한민국(KOREA (REP OF,))
+       </option>
+       <option class="xans-record-" value="DK">
+        SHIPPING TO : 덴마크(DENMARK)
+       </option>
+       <option class="xans-record-" value="GL">
+        SHIPPING TO : 덴마크(그린란드)(GREENLAND)
+       </option>
+       <option class="xans-record-" value="FO">
+        SHIPPING TO : 덴마크(페로즈제도)(FAROE ISLANDS)
+       </option>
+       <option class="xans-record-" value="DO">
+        SHIPPING TO : 도미니카공화국(DOMINICAN REPUBLIC)
+       </option>
+       <option class="xans-record-" value="DM">
+        SHIPPING TO : 도미니카연방(DOMINICA)
+       </option>
+       <option class="xans-record-" value="DE">
+        SHIPPING TO : 독일(GERMANY)
+       </option>
+       <option class="xans-record-" value="TL">
+        SHIPPING TO : 동티모르(TIMOR-LESTE)
+       </option>
+       <option class="xans-record-" value="LA">
+        SHIPPING TO : 라오스(LAO PEOPLE'S DEM REP)
+       </option>
+       <option class="xans-record-" value="LR">
+        SHIPPING TO : 라이베리아(LIBERIA)
+       </option>
+       <option class="xans-record-" value="LV">
+        SHIPPING TO : 라트비아(LATVIA)
+       </option>
+       <option class="xans-record-" value="RU">
+        SHIPPING TO : 러시아(RUSSIAN FEDERATION)
+       </option>
+       <option class="xans-record-" value="LB">
+        SHIPPING TO : 레바논(LEBANON)
+       </option>
+       <option class="xans-record-" value="LS">
+        SHIPPING TO : 레소토(LESOTHO)
+       </option>
+       <option class="xans-record-" value="RO">
+        SHIPPING TO : 루마니아(ROMANIA)
+       </option>
+       <option class="xans-record-" value="LU">
+        SHIPPING TO : 룩셈부르크(LUXEMBOURG)
+       </option>
+       <option class="xans-record-" value="RW">
+        SHIPPING TO : 르완다(RWANDA)
+       </option>
+       <option class="xans-record-" value="LY">
+        SHIPPING TO : 리비아(LIBYAN ARAB JAMAHIRIYA)
+       </option>
+       <option class="xans-record-" value="LI">
+        SHIPPING TO : 리첸쉬테인(LIECHTENSTEIN)
+       </option>
+       <option class="xans-record-" value="LT">
+        SHIPPING TO : 리투아니아(LITHUANIA)
+       </option>
+       <option class="xans-record-" value="MG">
+        SHIPPING TO : 마다가스카르(MADAGASCAR)
+       </option>
+       <option class="xans-record-" value="MK">
+        SHIPPING TO : 마케도니아(MACEDONIA)
+       </option>
+       <option class="xans-record-" value="MW">
+        SHIPPING TO : 말라위(MALAWI)
+       </option>
+       <option class="xans-record-" value="MY">
+        SHIPPING TO : 말레이지아(MALAYSIA)
+       </option>
+       <option class="xans-record-" value="ML">
+        SHIPPING TO : 말리(MALI)
+       </option>
+       <option class="xans-record-" value="MX">
+        SHIPPING TO : 멕시코(MEXICO)
+       </option>
+       <option class="xans-record-" value="MC">
+        SHIPPING TO : 모나코(MONACO)
+       </option>
+       <option class="xans-record-" value="MA">
+        SHIPPING TO : 모로코(MOROCCO)
+       </option>
+       <option class="xans-record-" value="MU">
+        SHIPPING TO : 모리셔스(MAURITIUS)
+       </option>
+       <option class="xans-record-" value="MR">
+        SHIPPING TO : 모리타니(MAURITANIA)
+       </option>
+       <option class="xans-record-" value="MZ">
+        SHIPPING TO : 모잠비크(MOZAMBIQUE)
+       </option>
+       <option class="xans-record-" value="ME">
+        SHIPPING TO : 몬테네그로(MONTENEGRO)
+       </option>
+       <option class="xans-record-" value="MD">
+        SHIPPING TO : 몰도바(MOLDOVA, REPUBLIC OF)
+       </option>
+       <option class="xans-record-" value="MV">
+        SHIPPING TO : 몰디브(MALDIVES)
+       </option>
+       <option class="xans-record-" value="MT">
+        SHIPPING TO : 몰타(MALTA)
+       </option>
+       <option class="xans-record-" value="MN">
+        SHIPPING TO : 몽고(MONGOLIA)
+       </option>
+       <option class="xans-record-" value="US">
+        SHIPPING TO : 미국(U.S.A)
+       </option>
+       <option class="xans-record-" value="GU">
+        SHIPPING TO : 미국(괌)(GUAM)
+       </option>
+       <option class="xans-record-" value="MH">
+        SHIPPING TO : 미국(마아샬제도)(MARSHALL ISLANDS)
+       </option>
+       <option class="xans-record-" value="VI">
+        SHIPPING TO : 미국(버진제도)(VIRGIN ISLANDS U.S.)
+       </option>
+       <option class="xans-record-" value="WS">
+        SHIPPING TO : 미국(사모아, 구 서사모아)(SAMOA)
+       </option>
+       <option class="xans-record-" value="AS">
+        SHIPPING TO : 미국(사모아제도)(AMERICAN SAMOA)
+       </option>
+       <option class="xans-record-" value="MP">
+        SHIPPING TO : 미국(사이판)(NORTHERN MARIANA ISLANDS)
+       </option>
+       <option class="xans-record-" value="PW">
+        SHIPPING TO : 미국(팔라우섬)(PALAU)
+       </option>
+       <option class="xans-record-" value="PR">
+        SHIPPING TO : 미국(푸에르토리코섬)(PUERTO RICO)
+       </option>
+       <option class="xans-record-" value="MM">
+        SHIPPING TO : 미얀마(MYANMAR)
+       </option>
+       <option class="xans-record-" value="FM">
+        SHIPPING TO : 미크로네시아(마이크로네시아)(MICRONESIA)
+       </option>
+       <option class="xans-record-" value="VU">
+        SHIPPING TO : 바누아투(VANUATU)
+       </option>
+       <option class="xans-record-" value="BH">
+        SHIPPING TO : 바레인(BAHRAIN)
+       </option>
+       <option class="xans-record-" value="BB">
+        SHIPPING TO : 바베이도스(BARBADOS)
+       </option>
+       <option class="xans-record-" value="BS">
+        SHIPPING TO : 바하마(BAHAMAS)
+       </option>
+       <option class="xans-record-" value="BD">
+        SHIPPING TO : 방글라데시(BANGLADESH)
+       </option>
+       <option class="xans-record-" value="VE">
+        SHIPPING TO : 베네수엘라(VENEZUELA)
+       </option>
+       <option class="xans-record-" value="BJ">
+        SHIPPING TO : 베넹(BENIN)
+       </option>
+       <option class="xans-record-" value="VN">
+        SHIPPING TO : 베트남(VIET NAM)
+       </option>
+       <option class="xans-record-" value="BE">
+        SHIPPING TO : 벨기에(BELGIUM)
+       </option>
+       <option class="xans-record-" value="BY">
+        SHIPPING TO : 벨라루스(BELARUS)
+       </option>
+       <option class="xans-record-" value="BZ">
+        SHIPPING TO : 벨리세(BELIZE)
+       </option>
+       <option class="xans-record-" value="BA">
+        SHIPPING TO : 보스니아헤르체코비나(Bosnia and Herzegovina)
+       </option>
+       <option class="xans-record-" value="BW">
+        SHIPPING TO : 보츠와나(BOTSWANA)
+       </option>
+       <option class="xans-record-" value="BO">
+        SHIPPING TO : 볼리비아(BOLIVIA)
+       </option>
+       <option class="xans-record-" value="BF">
+        SHIPPING TO : 부르키나파소(BURKINA FASO)
+       </option>
+       <option class="xans-record-" value="BT">
+        SHIPPING TO : 부탄(BHUTAN)
+       </option>
+       <option class="xans-record-" value="BG">
+        SHIPPING TO : 불가리아(BULGARIA(REP))
+       </option>
+       <option class="xans-record-" value="BR">
+        SHIPPING TO : 브라질(BRAZIL)
+       </option>
+       <option class="xans-record-" value="BN">
+        SHIPPING TO : 브루네이(나이)(BRUNEI DARUSSALAM)
+       </option>
+       <option class="xans-record-" value="BI">
+        SHIPPING TO : 브룬디(BURUNDI)
+       </option>
+       <option class="xans-record-" value="SA">
+        SHIPPING TO : 사우디아라비아(SAUDI ARABIA)
+       </option>
+       <option class="xans-record-" value="CY">
+        SHIPPING TO : 사이프러스(CYPRUS)
+       </option>
+       <option class="xans-record-" value="SM">
+        SHIPPING TO : 산마리노(SAN MARINO)
+       </option>
+       <option class="xans-record-" value="SN">
+        SHIPPING TO : 세네갈(SENEGAL)
+       </option>
+       <option class="xans-record-" value="RS">
+        SHIPPING TO : 세르비아/코소보(SERBIA/KOSOVO)
+       </option>
+       <option class="xans-record-" value="SC">
+        SHIPPING TO : 세이셸(SEYCHELLES)
+       </option>
+       <option class="xans-record-" value="LC">
+        SHIPPING TO : 세인트 루시아(SAINT LUCIA)
+       </option>
+       <option class="xans-record-" value="VC">
+        SHIPPING TO : 세인트빈센트그레나딘(SAINT VINCENT AND THE GRENADINES)
+       </option>
+       <option class="xans-record-" value="KN">
+        SHIPPING TO : 세인트키츠네비스(SAINT KITTS AND NEVIS)
+       </option>
+       <option class="xans-record-" value="SB">
+        SHIPPING TO : 솔로몬아일란드(SOLOMON ISLANDS)
+       </option>
+       <option class="xans-record-" value="SR">
+        SHIPPING TO : 수리남(SURINAME)
+       </option>
+       <option class="xans-record-" value="LK">
+        SHIPPING TO : 스리랑카(SRI LANKA)
+       </option>
+       <option class="xans-record-" value="SZ">
+        SHIPPING TO : 스와질랜드(SWAZILAND)
+       </option>
+       <option class="xans-record-" value="SE">
+        SHIPPING TO : 스웨덴(SWEDEN)
+       </option>
+       <option class="xans-record-" value="CH">
+        SHIPPING TO : 스위스(SWITZERLAND)
+       </option>
+       <option class="xans-record-" value="ES">
+        SHIPPING TO : 스페인(에스파니아)(SPAIN)
+       </option>
+       <option class="xans-record-" value="SK">
+        SHIPPING TO : 슬로바키아(SLOVAKIA)
+       </option>
+       <option class="xans-record-" value="SI">
+        SHIPPING TO : 슬로베니아(SLOVENIA)
+       </option>
+       <option class="xans-record-" value="SL">
+        SHIPPING TO : 시에라리온(SIERRA LEONE)
+       </option>
+       <option class="xans-record-" value="SG">
+        SHIPPING TO : 싱가포르(SINGAPORE)
+       </option>
+       <option class="xans-record-" value="AE">
+        SHIPPING TO : 아랍에미레이트연합국(UNITED ARAB EMIRATES)
+       </option>
+       <option class="xans-record-" value="AM">
+        SHIPPING TO : 아르메니아(ARMENIA)
+       </option>
+       <option class="xans-record-" value="AR">
+        SHIPPING TO : 아르헨티나(ARGENTINA)
+       </option>
+       <option class="xans-record-" value="IS">
+        SHIPPING TO : 아이슬란드(ICELAND)
+       </option>
+       <option class="xans-record-" value="HT">
+        SHIPPING TO : 아이티(HAITI)
+       </option>
+       <option class="xans-record-" value="IE">
+        SHIPPING TO : 아일란드(에이레)(IRELAND)
+       </option>
+       <option class="xans-record-" value="AZ">
+        SHIPPING TO : 아제르바이잔(AZERBAIJAN)
+       </option>
+       <option class="xans-record-" value="AF">
+        SHIPPING TO : 아프가니스탄(AFGHANISTAN)
+       </option>
+       <option class="xans-record-" value="AD">
+        SHIPPING TO : 안도라(ANDORRA)
+       </option>
+       <option class="xans-record-" value="AL">
+        SHIPPING TO : 알바니아(ALBANIA)
+       </option>
+       <option class="xans-record-" value="DZ">
+        SHIPPING TO : 알제리(ALGERIA)
+       </option>
+       <option class="xans-record-" value="AO">
+        SHIPPING TO : 앙골라(ANGOLA)
+       </option>
+       <option class="xans-record-" value="AG">
+        SHIPPING TO : 앤티과바부다(ANTIGUA AND BARBUDA)
+       </option>
+       <option class="xans-record-" value="ER">
+        SHIPPING TO : 에리트리아(ERITREA)
+       </option>
+       <option class="xans-record-" value="EE">
+        SHIPPING TO : 에스토니아(ESTONIA)
+       </option>
+       <option class="xans-record-" value="EC">
+        SHIPPING TO : 에콰도르(ECUADOR)
+       </option>
+       <option class="xans-record-" value="SV">
+        SHIPPING TO : 엘살바도르(EL SALVADOR)
+       </option>
+       <option class="xans-record-" value="GB">
+        SHIPPING TO : 영국(UNITED KINGDOM)
+       </option>
+       <option class="xans-record-" value="MS">
+        SHIPPING TO : 영국(몽세라)(MONTSERRAT)
+       </option>
+       <option class="xans-record-" value="BM">
+        SHIPPING TO : 영국(버뮤다섬)(BERMUDA)
+       </option>
+       <option class="xans-record-" value="VG">
+        SHIPPING TO : 영국(버진제도)(VIRGIN ISLANDS BRITISH)
+       </option>
+       <option class="xans-record-" value="AI">
+        SHIPPING TO : 영국(안귈라섬)(ANGUILLA)
+       </option>
+       <option class="xans-record-" value="GI">
+        SHIPPING TO : 영국(지브롤터)(GIBRALTAR)
+       </option>
+       <option class="xans-record-" value="KY">
+        SHIPPING TO : 영국(케이만제도)(CAYMAN ISLANDS)
+       </option>
+       <option class="xans-record-" value="TC">
+        SHIPPING TO : 영국(터크스케이코스제도)(TURKS AND CAICOS ISLANDS)
+       </option>
+       <option class="xans-record-" value="YE">
+        SHIPPING TO : 예멘(YEMEN)
+       </option>
+       <option class="xans-record-" value="OM">
+        SHIPPING TO : 오만(OMAN)
+       </option>
+       <option class="xans-record-" value="NF">
+        SHIPPING TO : 오스트레일리아(노퍽섬)(NORFOLK ISLAND)
+       </option>
+       <option class="xans-record-" value="AU">
+        SHIPPING TO : 오스트레일리아(호주)(AUSTRALIA)
+       </option>
+       <option class="xans-record-" value="AT">
+        SHIPPING TO : 오스트리아(AUSTRIA)
+       </option>
+       <option class="xans-record-" value="HN">
+        SHIPPING TO : 온두라스(HONDURAS)
+       </option>
+       <option class="xans-record-" value="JO">
+        SHIPPING TO : 요르단(JORDAN)
+       </option>
+       <option class="xans-record-" value="UG">
+        SHIPPING TO : 우간다(UGANDA)
+       </option>
+       <option class="xans-record-" value="UY">
+        SHIPPING TO : 우루과이(URUGUAY)
+       </option>
+       <option class="xans-record-" value="UZ">
+        SHIPPING TO : 우즈베크(UZBEKISTAN)
+       </option>
+       <option class="xans-record-" value="UA">
+        SHIPPING TO : 우크라이나(UKRAINE)
+       </option>
+       <option class="xans-record-" value="ET">
+        SHIPPING TO : 이디오피아(ETHIOPIA)
+       </option>
+       <option class="xans-record-" value="IQ">
+        SHIPPING TO : 이라크(IRAQ)
+       </option>
+       <option class="xans-record-" value="IR">
+        SHIPPING TO : 이란(IRAN(ISLAMIC REP))
+       </option>
+       <option class="xans-record-" value="IL">
+        SHIPPING TO : 이스라엘(ISRAEL)
+       </option>
+       <option class="xans-record-" value="EG">
+        SHIPPING TO : 이집트(EGYPT)
+       </option>
+       <option class="xans-record-" value="IT">
+        SHIPPING TO : 이탈리아(이태리)(ITALY)
+       </option>
+       <option class="xans-record-" value="IN">
+        SHIPPING TO : 인도(INDIA)
+       </option>
+       <option class="xans-record-" value="ID">
+        SHIPPING TO : 인도네시아(INDONESIA)
+       </option>
+       <option class="xans-record-" value="JP">
+        SHIPPING TO : 일본(JAPAN)
+       </option>
+       <option class="xans-record-" value="JM">
+        SHIPPING TO : 자메이카(JAMAICA)
+       </option>
+       <option class="xans-record-" value="ZM">
+        SHIPPING TO : 잠비아(ZAMBIA)
+       </option>
+       <option class="xans-record-" value="CN">
+        SHIPPING TO : 중국(CHINA(PEOPLE'S REP))
+       </option>
+       <option class="xans-record-" value="MO">
+        SHIPPING TO : 중국(마카오)(MACAU)
+       </option>
+       <option class="xans-record-" value="HK">
+        SHIPPING TO : 중국(홍콩)(HONG KONG)
+       </option>
+       <option class="xans-record-" value="CF">
+        SHIPPING TO : 중앙 아프리카(CENTRAL AFRICAN REPUBLIC)
+       </option>
+       <option class="xans-record-" value="DJ">
+        SHIPPING TO : 지부티(DJIBOUTI)
+       </option>
+       <option class="xans-record-" value="ZW">
+        SHIPPING TO : 짐바브웨(ZIMBABWE)
+       </option>
+       <option class="xans-record-" value="TD">
+        SHIPPING TO : 차드(CHAD)
+       </option>
+       <option class="xans-record-" value="CZ">
+        SHIPPING TO : 체코(CZECH REP)
+       </option>
+       <option class="xans-record-" value="CL">
+        SHIPPING TO : 칠레(CHILE)
+       </option>
+       <option class="xans-record-" value="CM">
+        SHIPPING TO : 카메룬(CAMEROON)
+       </option>
+       <option class="xans-record-" value="CV">
+        SHIPPING TO : 카보베르데(CAPE VERDE)
+       </option>
+       <option class="xans-record-" value="KZ">
+        SHIPPING TO : 카자흐(KAZAKHSTAN)
+       </option>
+       <option class="xans-record-" value="QA">
+        SHIPPING TO : 카타르(QATAR)
+       </option>
+       <option class="xans-record-" value="KH">
+        SHIPPING TO : 캄보디아(CAMBODIA)
+       </option>
+       <option class="xans-record-" value="CA">
+        SHIPPING TO : 캐나다(CANADA)
+       </option>
+       <option class="xans-record-" value="KE">
+        SHIPPING TO : 케냐(KENYA)
+       </option>
+       <option class="xans-record-" value="CR">
+        SHIPPING TO : 코스타리카(COSTA RICA)
+       </option>
+       <option class="xans-record-" value="CI">
+        SHIPPING TO : 코트디봐르(COTE D IVOIRE)
+       </option>
+       <option class="xans-record-" value="CO">
+        SHIPPING TO : 콜롬비아(COLOMBIA)
+       </option>
+       <option class="xans-record-" value="CG">
+        SHIPPING TO : 콩고(CONGO)
+       </option>
+       <option class="xans-record-" value="CU">
+        SHIPPING TO : 쿠바(CUBA)
+       </option>
+       <option class="xans-record-" value="KW">
+        SHIPPING TO : 쿠웨이트(KUWAIT)
+       </option>
+       <option class="xans-record-" value="HR">
+        SHIPPING TO : 크로아티아(CROATIA)
+       </option>
+       <option class="xans-record-" value="KG">
+        SHIPPING TO : 키르키즈스탄(KYRGYZSTAN)
+       </option>
+       <option class="xans-record-" value="KI">
+        SHIPPING TO : 키리바티(KIRIBATI)
+       </option>
+       <option class="xans-record-" value="TH">
+        SHIPPING TO : 타이(태국)(THAILAND)
+       </option>
+       <option class="xans-record-" value="TW">
+        SHIPPING TO : 타이완(대만)(TAIWAN)
+       </option>
+       <option class="xans-record-" value="TJ">
+        SHIPPING TO : 타지키스탄(TAJIKISTAN)
+       </option>
+       <option class="xans-record-" value="TZ">
+        SHIPPING TO : 탄자니아(TANZANIA(UNITED REP))
+       </option>
+       <option class="xans-record-" value="TR">
+        SHIPPING TO : 터키(TURKEY)
+       </option>
+       <option class="xans-record-" value="TG">
+        SHIPPING TO : 토고(TOGO)
+       </option>
+       <option class="xans-record-" value="TO">
+        SHIPPING TO : 통가(TONGA)
+       </option>
+       <option class="xans-record-" value="TM">
+        SHIPPING TO : 투르크메니스탄(TURKMENISTAN)
+       </option>
+       <option class="xans-record-" value="TV">
+        SHIPPING TO : 투발루(TUVALU)
+       </option>
+       <option class="xans-record-" value="TN">
+        SHIPPING TO : 튀니지(TUNISIA)
+       </option>
+       <option class="xans-record-" value="TT">
+        SHIPPING TO : 트리니다드토바고(TRINIDAD AND TOBAGO)
+       </option>
+       <option class="xans-record-" value="PA">
+        SHIPPING TO : 파나마(PANAMA(REP))
+       </option>
+       <option class="xans-record-" value="PY">
+        SHIPPING TO : 파라과이(PARAGUAY)
+       </option>
+       <option class="xans-record-" value="PK">
+        SHIPPING TO : 파키스탄(PAKISTAN)
+       </option>
+       <option class="xans-record-" value="PG">
+        SHIPPING TO : 파푸아뉴기니(PAPUA NEW GUINEA)
+       </option>
+       <option class="xans-record-" value="PE">
+        SHIPPING TO : 페루(PERU)
+       </option>
+       <option class="xans-record-" value="PT">
+        SHIPPING TO : 포르투갈(PORTUGAL)
+       </option>
+       <option class="xans-record-" value="PL">
+        SHIPPING TO : 폴란드(POLAND(REP))
+       </option>
+       <option class="xans-record-" value="FR">
+        SHIPPING TO : 프랑스(FRANCE)
+       </option>
+       <option class="xans-record-" value="GP">
+        SHIPPING TO : 프랑스(과데루프섬)(GUADELOUPE)
+       </option>
+       <option class="xans-record-" value="GF">
+        SHIPPING TO : 프랑스(기아나)(FRENCH GUIANA)
+       </option>
+       <option class="xans-record-" value="NC">
+        SHIPPING TO : 프랑스(뉴칼레도니아섬)(NEW CALEDONIA)
+       </option>
+       <option class="xans-record-" value="RE">
+        SHIPPING TO : 프랑스(레위니옹섬)(REUNION)
+       </option>
+       <option class="xans-record-" value="MQ">
+        SHIPPING TO : 프랑스(마르티니크섬)(MARTINIQUE)
+       </option>
+       <option class="xans-record-" value="PF">
+        SHIPPING TO : 프랑스(폴리네시아)(FRENCH POLYNESIA)
+       </option>
+       <option class="xans-record-" value="FJ">
+        SHIPPING TO : 피지(FIJI)
+       </option>
+       <option class="xans-record-" value="FI">
+        SHIPPING TO : 필란드(FINLAND)
+       </option>
+       <option class="xans-record-" value="PH">
+        SHIPPING TO : 필리핀(PHILIPPINES)
+       </option>
+       <option class="xans-record-" value="HU">
+        SHIPPING TO : 헝가리(HUNGARY(REP))
+       </option>
+      </select>
+     </div>
+     <div class="select">
+      <select class="xans-element- xans-layout xans-layout-multishopshippinglanguagelist">
+       <option class="xans-record-" selected="selected" value="j-gallery.co.kr">
+        LANGUAGE : 한국어
+       </option>
+      </select>
+     </div>
+    </div>
+    <div class="btnArea">
+     <a href="#none">
+      <img alt="GO" src="//img.echosting.cafe24.com/skin/base_ko_KR/link/btn_go.gif"/>
+     </a>
+    </div>
+    <a class="btnClose" href="#none">
+     <img alt="close" height="16" src="//img.echosting.cafe24.com/skin/base_ko_KR/common/btn_close.png" width="16"/>
+    </a>
+   </div>
+  </div>
+  <span itemscope="" itemtype="https://schema.org/Organization">
+   <link href="https://j-gallery.co.kr" itemprop="url"/>
+  </span>
+  <script src="/app/Eclog/js/cid.generate.js?vs=7ba2d87f9441865f4431174f7d7687bd&amp;u=imilkbook.1" type="text/javascript">
+  </script>
+  <script>
+   (function (i, s, o, g) {
+            a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            a.setAttribute('crossorigin', 'anonymous');
+            m.parentNode.insertBefore(a, m);
+            a.onload = function() {
+                if (typeof window.initCaWebAnalytics === 'function') {
+                    window.initCaWebAnalytics({"mid":"imilkbook","stype":"e","domain":"","shop_no":1,"lang":"ko_KR","mobile_flag":"F","send_endpoint":"https://ca-log.cafe24data.com"});
+                }
+            };
+        })(window, document, 'script', '//optimizer.poxo.com/ca2/analytics.js');
+  </script>
+  <script>
+   try {
+                    // Account ID 적용
+                    if (!wcs_add) var wcs_add = {};
+                    wcs_add["wa"] = "s_4c891af934a5";
+            
+                    // 네이버 페이 White list가 있을 경우
+                    wcs.checkoutWhitelist = ["imilkbook.cafe24.com", "www.imilkbook.cafe24.com", "m.imilkbook.cafe24.com", "j-gallery.co.kr", "www.j-gallery.co.kr", "m.j-gallery.co.kr"];
+                
+                    // 레퍼러 
+                    wcs.setReferer("");
+
+                    // 유입 추적 함수 호출
+                    wcs.inflow("j-gallery.co.kr");
+
+                    // 로그수집
+                    wcs_do();
+                } catch (e) {};
+  </script>
+  <script charset="utf-8" src="/ind-script/i18n.php?lang=ko_KR&amp;domain=front&amp;v=2504081392" type="text/javascript">
+  </script>
+  <script src="/ind-script/optimizer.php?filename=zVjbbpxIEH23ec13YO9mV_saj-XdKLYychzluWgKaNPd1dsXj8nXb8FMsnESGGhsKRoJGKhzurrukDekMT__zeWVA407cm3u0FN0AvN7n8vzv0x271_lU3JRWhBtfv9vRNcdTr9nf2ZnC5H4GNAZUP5wIxNErcS1LNGppC1kKLLKJEMNCTKVkiIkUZxnr_mXtDg_DeS-s5t1VDP-iXdLCBgkC2iWMiFHcTNcfJKhuft8CQEyLc0CHiULRuEdXx9HeeukCdUMehKxV-uKnN6QCY6UQncct1XRv7H2wsmynqFPDFIdl6ocDZY68aQYQeYkkD1R0uBJAcbM0WtPIUhrMnOlH8FwNhoObeswzF9lwAXUVrFffg4Ca_MbKqTC_PYb_F6_CauM4DSVkW_5nbTLFqyiEb1Be7kyctro0SCeyzChBIdq_nGfPd9SKPjcKYJyEUjHAP267wuP7mHMOSNgS6qrpJodeiVWEFXoTeA1uHDxk6hbXiSLWg6gX6Nkl1xAjGeL-rVMCF6aei2LxgBlXw5Ho_FDQ_aJW68GZ72DFihv--NWPqKaqkUTNJshFz9OpuII9BKLWC9GeQQnmkVxHKCquh_7xVFjWxVryUXqAZRkG5P7YvSvNzK-AL-atveqKf2P9MxgOdTw5VZoUFl88X00YEq1uBQsWIBLm2Qfvxg_l8HwbGZSJID7Q0vHC-v_GiwJ-A3TmxJc_jr7IzvLK-6wVoo2kUSdn5lRZScy9cOQqf0Dbj1DF_pCuZjqFit0aARuouvP3dZJkVCseNKoyXXX0oeJ9g0G6qfte4eFonqZ-Q6a5p51ObXj-s7Ci8O_04onTQhrNXkumnmDaRM0-z3IINEfl964zgZ6h90iD4HvjNgfk3EadYEuGf7eleiECckEF-BbDOsZ7HRyzOLYHubUVJYNRe5ca_ZywzM01On7uERLXqav_0n6ZnGh-J5AUFxhAocCV8BvB3iLHbenciXLHQVQm1W7GfIjPSzRYCXXpsY1dCt0-NtBmR6Qb2IgLrpSDDTconbpucGvWXJLNtr0BI2e1UHHif4g1zjmhttpi4d6sS5CnlCtyr0h1v6R_dem7hmi9sB0B8Wz8LwNqNdv75Jf_aR6aypKDwIFUkOhcIVGFkLjSOHpkVl1hjrXo583RsA2oUvtu_wpz3NjHxBHgH6X8dw-6_ueoxjwSj6y5H8&amp;type=js&amp;k=474bd67ed5c26d84bdce3bd130a79dc488db9b82&amp;t=1741132783">
+  </script>
+  <script src="/ind-script/optimizer_user.php?filename=rc-xEcIwDIXhAUzLHKqZgwkcRRcrliwT2XDZnoSjoU3oXvXd-yGZEhCG7rQ4sLLkwSxD7YMwhtRUwEcKIzlPBTxzucHsoDZ2IZC4Wm-AsdFky3qZ_QqHyC80RGfc_c84zm0CmqqVU8Rv5KMz5vBkep1DI5eAVtpi8sd32qWxJ6v3xLVymTb7DQ&amp;type=js&amp;k=1696684af7a697407344804fa6b0f7822aaad3c6&amp;t=1686100311&amp;user=T">
+  </script>
+  <script type="text/javascript">
+   var sIsChannelUi = 'F';
+var sChRef = '';
+var sUseShoppingpayPg = 'F';
+var sOwnMallLanding = 'F';
+var sShoppingPayCookie = '';
+var sYtshopping = 'F';
+if (sIsChannelUi === 'T') {
+sessionStorage.setItem('ch_ref', sChRef);
+}
+CAFE24.getChRefData = function() {
+if (sIsChannelUi === 'T') {
+return sessionStorage.getItem('ch_ref');
+}
+}
+// 자사몰랜딩/유튜브랜딩 공용
+CAFE24.checkChannelUI = function() {
+if ((sIsChannelUi === 'T' && sessionStorage.getItem('ch_ref') || (sUseShoppingpayPg === 'T' && sOwnMallLanding === 'T')) || sYtshopping === 'T') {
+return true;
+} else {
+return false;
+}
+}
+// 자사몰랜딩 UI확인
+CAFE24.isOwnMallLandingUI = function() {
+return sUseShoppingpayPg === 'T' && sOwnMallLanding === 'T';
+}
+CAFE24.attachShoppingpayParam = function(sUrl) {
+if (sUrl) {
+var sChRef = CAFE24.getChRefData();
+if (sChRef) {
+var sSeparator = (sUrl.includes('?')) ? '&' : '?';
+sUrl += sSeparator + 'ch_ref=' + sChRef;
+} else if (sUseShoppingpayPg === 'T' && sOwnMallLanding === 'T') {
+var sSeparator = (sUrl.includes('?')) ? '&' : '?';
+sUrl += sSeparator + 'co_servicetype=shoppingpay';
+}
+}
+return sUrl;
+}
+CAFE24.attachChRef = function(sUrl) {
+if (sUrl) {
+var sChRef = CAFE24.getChRefData();
+if (sChRef) {
+var sSeparator = (sUrl.includes('?')) ? '&' : '?';
+sUrl += sSeparator + 'ch_ref=' + sChRef;
+}
+}
+return sUrl;
+}
+var sIsCheckout = 'F';
+var sCheckoutToken = '';
+if (sIsCheckout === 'T') {
+sessionStorage.setItem('checkoutToken', sCheckoutToken);
+} else {
+sessionStorage.removeItem('checkoutToken');
+}
+CAFE24.getCheckoutToken = function() {
+if (sIsCheckout === 'T') {
+return sessionStorage.getItem('checkoutToken');
+}
+}
+CAFE24.attachCheckoutParam = function(sUrl) {
+if (sUrl) {
+var sCheckoutToken = CAFE24.getCheckoutToken();
+if (sCheckoutToken) {
+var sSeparator = (sUrl.includes('?')) ? '&' : '?';
+sUrl += sSeparator + 'checkoutToken=' + sCheckoutToken;
+}
+}
+return sUrl;
+}
+CAFE24.MOBILE_WEB = false; var mobileWeb = CAFE24.MOBILE_WEB;
+try {
+var isUseLoginKeepingSubmit = false;
+// isSeqNoKeyExpiretime
+function isSeqNoKeyExpiretime(iExpiretime)
+{
+var sDate = new Date();
+var iNow = Math.floor(sDate.getTime() / 1000);
+// 유효시간 확인
+if (iExpiretime > iNow) {
+return false;
+}
+return true;
+}
+function isUseLoginKeeping()
+{
+// 디바이스 확인
+if (EC_MOBILE_DEVICE === false) {
+return;
+}
+// 로그인 여부
+var isLogin = document.cookie.match(/(?:^| |;)iscache=F/) ? true : false
+if (isLogin) {
+return;
+}
+var sLoginKeepingInfo = localStorage.getItem('use_login_keeping_info');
+var iSeqnoExpiretime;
+var iSeqNoKey;
+if (sLoginKeepingInfo == null) {
+iSeqnoExpiretime = localStorage.getItem('seq_no_key_expiretime');
+iSeqNoKey = localStorage.getItem('seq_no_key');
+// 유효시간, key 값 확인
+if (iSeqnoExpiretime === null || iSeqNoKey === null) {
+return;
+}
+} else {
+var oLoginKeepingInfo = JSON.parse(sLoginKeepingInfo);
+iSeqNoKey = oLoginKeepingInfo.seq_no_key;
+iSeqnoExpiretime = oLoginKeepingInfo.seq_no_key_expiretime;
+if (isNaN(iSeqNoKey) === true || isNaN(iSeqnoExpiretime) === true) {
+return;
+}
+}
+if (isSeqNoKeyExpiretime(iSeqnoExpiretime) === false) {
+return;
+}
+useLoginKeepingSubmit();
+}
+function findGetParamValue(paramKey)
+{
+var result = null,
+tmp = [];
+location.search.substr(1).split('&').forEach(function (item) {
+tmp = item.split('=');
+if (tmp[0] === paramKey) result = decodeURIComponent(tmp[1]);
+});
+return result;
+}
+function useLoginKeepingSubmit()
+{
+var iSeqnoExpiretime;
+var iSeqNoKey;
+var sUseLoginKeepingIp;
+var sLoginKeepingInfo = localStorage.getItem('use_login_keeping_info');
+if (sLoginKeepingInfo == null) {
+iSeqnoExpiretime = localStorage.getItem('seq_no_key_expiretime');
+iSeqNoKey = localStorage.getItem('seq_no_key');
+} else {
+var oLoginKeepingInfo = JSON.parse(sLoginKeepingInfo);
+iSeqNoKey = oLoginKeepingInfo.seq_no_key;
+iSeqnoExpiretime = oLoginKeepingInfo.seq_no_key_expiretime;
+sUseLoginKeepingIp = oLoginKeepingInfo.use_login_keeping_ip;
+}
+var oForm = document.createElement('form');
+oForm.method = 'post';
+oForm.action = '/exec/front/member/LoginKeeping';
+document.body.appendChild(oForm);
+var oSeqNoObj = document.createElement('input');
+oSeqNoObj.name = 'seq_no_key';
+oSeqNoObj.type = 'hidden';
+oSeqNoObj.value = iSeqNoKey;
+oForm.appendChild(oSeqNoObj);
+oSeqNoObj = document.createElement('input');
+oSeqNoObj.name = 'seq_no_key_expiretime';
+oSeqNoObj.type = 'hidden';
+oSeqNoObj.value = iSeqnoExpiretime;
+oForm.appendChild(oSeqNoObj);
+var returnUrl = findGetParamValue('returnUrl');
+if (returnUrl == '' || returnUrl == null) {
+returnUrl = location.pathname + location.search;
+}
+oSeqNoObj = document.createElement('input');
+oSeqNoObj.name = 'returnUrl';
+oSeqNoObj.type = 'hidden';
+oSeqNoObj.value = returnUrl;
+oForm.appendChild(oSeqNoObj);
+if (sUseLoginKeepingIp != undefined) {
+oSeqNoObj = document.createElement('input');
+oSeqNoObj.name = 'use_login_keeping_ip';
+oSeqNoObj.type = 'hidden';
+oSeqNoObj.value = sUseLoginKeepingIp;
+oForm.appendChild(oSeqNoObj);
+}
+oForm.submit();
+isUseLoginKeepingSubmit = true;
+}
+isUseLoginKeeping();
+} catch(e) {
+}
+var bUseElastic = false;
+var sSearchBannerUseFlag = 'F';
+var EC_SHOP_MULTISHOP_SHIPPING = {"bMultishopShipping":false,"bMultishopShippingCountrySelection":false,"bMultishopShippingLanguageSelection":false};
+var aLogData = {"log_server1":"eclog2-260.cafe24.com","log_server2":"elg-db-svcm-137.cafe24.com","mid":"imilkbook","stype":"e","domain":"","shop_no":1,"lang":"ko_KR","ver":2,"hash":"","ca":"cfa-js.cafe24.com\/cfa.js","etc":"","mobile_flag":"F"};
+var sMileageName = '적립금';
+var sMileageUnit = '[:PRICE:]원';
+var sDepositName = '예치금';
+var sDepositUnit = '원';
+CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"","tail":"\uc6d0"},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
+  </script>
+ </body>
+</html>

@@ -14,11 +14,12 @@ from datetime import datetime, timedelta
 from models import *
 from price_crwaling import *
 from router.user.token import *
+from search_result import run_search
 from storage import upload_imgFile_to_blob, delete_blob_by_url
 from passlib.context import CryptContext
 # from redis_connection import redis_client
 
-from fastapi import APIRouter, Depends, FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, FastAPI, File, Form, HTTPException, UploadFile, Query
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
@@ -1378,3 +1379,8 @@ def shutdown_scheduler():
         logger.info("Scheduler shut down successfully")
     except Exception as e:
         logger.error(f"Error shutting down scheduler: {e}", exc_info=True)
+
+@app.get("/admin-search")
+def search(keyword: str = Query("놀", description="검색어"), number: int = Query(2, description="사이트당 결과 수")):
+    result = run_search(keyword, number)
+    return {"results": result}

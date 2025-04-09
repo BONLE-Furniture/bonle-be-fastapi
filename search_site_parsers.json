@@ -1,0 +1,280 @@
+{
+    "8colors": {
+        "search_url": "https://8colors.co.kr/product/search.html?keyword=키워드",
+        "parser": "parse_8colors",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "루이스폴센",
+        "_comment": "⭕"
+    },
+    "Rooming": {
+        "search_url": "https://rooming.co.kr/product/search.html?keyword=키워드",
+        "parser": "parse_rooming",
+        "fetch_type": "dynamic",
+        "enabled": false,
+        "test_keyword": "루이스폴센",
+        "_comment": "⭕ 셀레니움 사용 (3초)"
+    },
+    "HPIX": {
+        "search_url": "https://hpix.co.kr/product/search.html?keyword=키워드",
+        "parser": "parse_hpix",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "놀",
+        "_comment": "⭕"
+    },
+    "ohou": {
+        "search_url": "https://ohou.se/search/index?query=키워드&search_affect_type=Typing",
+        "parser": "parse_ohou",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "아르떼미데",
+        "_comment": "🔺오늘의집, Selenum은 차단됨. 이미지 추출 불가"
+    },
+    "editori": {
+        "search_url": "https://editori.kr/goods/goods_search.php?keyword=키워드",
+        "parser": "parse_editori",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "string",
+        "_comment": "⭕, 브랜드 없음"
+    },
+    "jaimeblanc": {
+        "search_url": "https://jaimeblanc.com/product/search.html?keyword=키워드",
+        "parser": "parse_jaimeblanc",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "string",
+        "_comment": "⭕"
+    },
+    "s-houz": {
+        "search_url": "https://s-houz.com/product/search.html?keyword=키워드",
+        "parser": "parse_shouz",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "루이스폴센",
+        "_comment": "⭕"
+    },
+    "29cm": {
+        "search_url": "https://29cm.co.kr/search?keyword=키워드",
+        "parser": "parse_29cm",
+        "fetch_type": "static",
+        "enabled": false,
+        "_comment": ""
+    },
+    "dansk": {
+        "search_url": "https://dansk.co.kr/productSearch?productSearchKeyword=키워드",
+        "parser": "parse_dansk",
+        "fetch_type": "dynamic",
+        "enabled": false,
+        "test_keyword": "루이스폴센",
+        "_comment": "⭕ 셀레니움 사용 (3초)"
+    },
+    "benufe": {
+        "search_url": "https://benufe.com/product/search.html?keyword=키워드",
+        "parser": "parse_benufe",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "루이스폴센",
+        "_comment": "⭕"
+    },
+    "collectionb": {
+        "search_url": "https://www.collectionb.cc/goods/goods_search.php?keyword=키워드",
+        "parser": "parse_collectionb",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "루이스폴센",
+        "_comment": "⭕"
+    },
+    "innometsa": {
+        "search_url": "https://innometsa.com/product/search.html?keyword=키워드",
+        "parser": "parse_innometsa",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "루이스폴센",
+        "_comment": "⭕"
+    },
+    "bibliotheque": {
+        "search_url": "https://bibliotheque.co.kr/product/search.html?keyword=키워드",
+        "parser": "parse_bibliotheque",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "루이스폴센",
+        "_comment": "⭕"
+    },
+    "remod": {
+        "search_url": "https://remod.co.kr/product/search.html?keyword=키워드",
+        "parser": "parse_remod",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "테이블",
+        "_comment": "⭕"
+    },
+    "mmmg": {
+        "search_url": "https://mmmg.kr/product/search.html?keyword=키워드",
+        "parser": "parse_mmmg",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "테이블",
+        "_comment": "⭕"
+    },
+    "j-gallery": {
+        "search_url": "https://j-gallery.co.kr/product/search.html?keyword=키워드",
+        "parser": "parse_jgallery",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "가리모쿠",
+        "_comment": "⭕"
+    },
+    "wonderaum": {
+        "search_url": "https://wonderaum.com/product/search.html?keyword=키워드",
+        "parser": "parse_wonderaum",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "가리모쿠",
+        "_comment": "⭕"
+    },
+    "unwind": {
+        "search_url": "https://unwind.kr/product/search.html?keyword=키워드",
+        "parser": "parse_unwind",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "가리모쿠",
+        "_comment": "⭕"
+    },
+    "inscale": {
+        "search_url": "https://inscale.co.kr/product/search.html?keyword=키워드",
+        "parser": "parse_inscale",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "LC2",
+        "_comment": "⭕"
+    },
+    "gyb": {
+        "search_url": "https://gyb.co.kr/product/search.html?keyword=키워드",
+        "parser": "parse_gyb",
+        "fetch_type": "static",
+        "enabled": false,
+        "test_keyword": "",
+        "_comment": "❌ 리뉴얼중"
+    },
+    "conranshop": {
+        "search_url": "https://www.conranshop.kr/search/showSearch.lecs?searchWord=키워드",
+        "parser": "parse_conranshop",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword" : "아르떼미데",
+        "_comment": "⭕"
+    },
+    "vorblick": {
+        "search_url": "https://www.vorblick.co.kr/goods/goods_search.php?keyword=키워드",
+        "parser": "parse_vorblick",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "아르떼미데",
+        "_comment": "⭕"
+    },
+    "mignondejjoy": {
+        "search_url": "https://mignondejjoy.com/product/search.html?keyword=키워드",
+        "parser": "parse_mignondejjoy",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "무토",
+        "_comment": "⭕"
+    },
+    "gareem": {
+        "search_url": "https://gareem.com/product/search.html?keyword=키워드",
+        "parser": "parse_gareem",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "table",
+        "_comment": "⭕, 브랜드 없음"
+    },
+    "innovad": {
+        "search_url": "https://www.innovad.co.kr/bbs/sub.php?&s_mode=shop&s_page=search&search_text=키워드",
+        "parser": "parse_innovad",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "임스",
+        "_comment": "⭕"
+    },
+    "chairgallery": {
+        "search_url": "https://chairgallery.co.kr/search?keyword=키워드",
+        "parser": "parse_chairgallery",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "lamp",
+        "_comment": "⭕"
+    },
+    "nordicpark": {
+        "search_url": "https://www.nordicpark.co.kr/shop/shopbrand.html?search=키워드",
+        "parser": "parse_nordicpark",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "string",
+        "_comment": "⭕"
+    },
+    "innohome": {
+        "search_url": "https://innohome.kr/product/search.html?keyword=키워드",
+        "parser": "parse_innohome",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "table",
+        "_comment": "⭕"
+    },
+    "ilva": {
+        "search_url": "https://ilva.co.kr/product/search.html?keyword=키워드",
+        "parser": "parse_ilva",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "table",
+        "_comment": "⭕"
+    },
+    "kartellkorea": {
+        "search_url": "https://kartellkorea.co.kr/shop/search.php?q=키워드",
+        "parser": "parse_kartellkorea",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "chair",
+        "_comment": "⭕"
+    },
+    "stayh": {
+        "search_url": "https://stayh.co.kr/product/search.html?keyword=키워드",
+        "parser": "parse_stayh",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "무토",
+        "_comment": "⭕"
+    },
+    "segment": {
+        "search_url": "https://segment.kr/product/search.html?keyword=키워드",
+        "parser": "parse_segment",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "fatboy",
+        "_comment": "⭕"
+    },
+    "arkistore": {
+        "search_url": "https://arkistore.com/product/search.html?keyword=키워드",
+        "parser": "parse_arkistore",
+        "fetch_type": "static",
+        "enabled": true,
+        "test_keyword": "table",
+        "_comment": "⭕"
+    },
+    "tonstore": {
+        "search_url": "https://smartstore.naver.com/tonstore/search?q=키워드",
+        "parser": "parse_tonstore",
+        "fetch_type": "static",
+        "enabled": false,
+        "test_keyword": "암체어",
+        "_comment": "❌"
+    },
+    "kream": {
+        "search_url": "https://kream.co.kr/search?keyword=키워드&tab=products",
+        "parser": "parse_kream",
+        "fetch_type": "static",
+        "enabled": false,
+        "_comment": "❌"
+    }
+}

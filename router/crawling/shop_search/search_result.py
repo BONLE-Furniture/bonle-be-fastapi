@@ -7,7 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 import time
-import search_parsers
+import router.crawling.shop_search.search_parsers as search_parsers
 import urllib3
 import os
 

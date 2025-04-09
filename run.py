@@ -4,18 +4,21 @@ import os
 import asyncio
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
+from datetime import datetime, timedelta
+from pytz import timezone
 
 from dotenv import load_dotenv
 from math import ceil
 from bson import ObjectId
-from database import db
-from datetime import datetime, timedelta
 
-from models import *
-from price_crwaling import *
+from router.crawling.price.price_crawling import *
+from router.crawling.shop_search.search_result import run_search
 from router.user.token import *
-from search_result import run_search
-from storage import upload_imgFile_to_blob, delete_blob_by_url
+
+from db.database import db
+from db.models import *
+from db.storage import upload_imgFile_to_blob, delete_blob_by_url
+
 from passlib.context import CryptContext
 # from redis_connection import redis_client
 
@@ -23,8 +26,6 @@ from fastapi import APIRouter, Depends, FastAPI, File, Form, HTTPException, Uplo
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
-
-from pytz import timezone
 
 app = FastAPI()
 kst = timezone('Asia/Seoul')
@@ -522,11 +523,11 @@ async def upload_product_image(
         else:
             img_name = f"product/{product_item['brand']}/{original_filename}"
 
-        img_url = upload_imgFile_to_blob(img_storage_name, img_content, img_name)
-
         # 기존 이미지 삭제
         if product_item.get("main_image_url"):
             delete_blob_by_url(img_storage_name, product_item["main_image_url"])
+        
+        img_url = upload_imgFile_to_blob(img_storage_name, img_content, img_name)
             
         # 데이터베이스 업데이트
         await db["bonre_products"].update_one(
@@ -685,10 +686,53 @@ async def create_brand(brand: Brand):
     brand_dict = brand.dict(by_alias=True)
     try:
         await db["bonre_brands"].insert_one(brand_dict)
-        return brand_dict
+        return {"message": "create successfully", "shop_id": brand_dict.get("_id")}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
+@app.post("/brand/upload-image/{brand_id}", tags=["brand CRUD"])
+async def upload_brand_image(
+    brand_id: str,
+    image: UploadFile = File(...),
+    auto_set_name: bool = Form(False)
+):
+    """
+    auto_set_name : True일 경우 로직에 의해 이름이 자동 처리되어 storage 저장됌. False일 경우 파일명 그대로 storage에 저장.
+    
+    ## 주의
+
+    ### brand_image_url : json과 다른 방식으로 upload를 해야해서, 임의로 이미지 업로드 API를 분리했음. /brand logos/{shop_id}.ext로 업로드, 업데이트 수행
+    """
+    try:
+        brand_item = await db["bonre_brands"].find_one({"_id": brand_id})
+        if not brand_item:
+            raise HTTPException(status_code=404, detail="brand not found")
+
+        img_storage_name = os.getenv("img_blob_name")
+        img_content = await image.read()
+        original_filename = image.filename
+        
+        if auto_set_name:
+            _, ext = os.path.splitext(original_filename)
+            img_name = f"brand_logos/{brand_item['brand']}{ext}"
+        else:
+            img_name = f"brand_logos/{original_filename}"
+
+        # 기존 이미지 삭제
+        if brand_item.get("brand_image_url"):
+            delete_blob_by_url(img_storage_name, brand_item["brand_image_url"])
+
+        img_url = upload_imgFile_to_blob(img_storage_name, img_content, img_name)
+            
+        # 데이터베이스 업데이트
+        await db["bonre_brands"].update_one(
+            {"_id": brand_id},
+            {"$set": {"brand_image_url": img_url}}
+        )
+        return {"message": "Image uploaded successfully", "image_url": img_url}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error uploading image: {str(e)}")
 
 # brand 수정 API
 @app.patch("/brand/update-brand/{brand_id}", tags=["brand CRUD"])
@@ -713,11 +757,18 @@ async def update_brand(brand_id: str, brand: BrandUpdate):
 # brand 삭제 API
 @app.delete("/brand/delete-brand/{brand_id}", tags=["brand CRUD"])
 async def delete_brand(brand_id: str):
+    brand_item = await db["bonre_brands"].find_one({"_id": brand_id})
+    if brand_item and brand_item.get("brand_image_url"):
+        try:
+            img_storage_name = os.getenv("img_blob_name")
+            delete_blob_by_url(img_storage_name, brand_item["brand_image_url"])
+        except Exception as e:
+            return {"message": f"Error deleting image: {str(e)}"}
+        
     result = await db["bonre_brands"].delete_one({"_id": brand_id})
     if result.deleted_count == 1:
         return {"message": "Brand deleted successfully"}
     raise HTTPException(status_code=404, detail="Brand not found")
-
 
 ############
 ## price ###
@@ -935,10 +986,54 @@ async def create_shop(shop: Shop):
     shop_dict = shop.dict(by_alias=True)
     try:
         await db["bonre_shops"].insert_one(shop_dict)
-        return shop_dict
+        return {"message": "create successfully", "shop_id": shop_dict.get("_id")}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
+@app.post("/shop/upload-image/{shop_id}", tags=["shop CRUD"])
+async def upload_shop_image(
+    shop_id: str,
+    image: UploadFile = File(...),
+    auto_set_name: bool = Form(False)
+):
+    """
+    auto_set_name : True일 경우 로직에 의해 이름이 자동 처리되어 storage 저장됌. False일 경우 파일명 그대로 storage에 저장.
+    
+    ## 주의
+
+    ### shop_image_url : json과 다른 방식으로 upload를 해야해서, 임의로 이미지 업로드 API를 분리했음. /shop_logos/{shop_id}.ext로 업로드, 업데이트 수행
+    """
+    try:
+        shop_item = await db["bonre_shops"].find_one({"_id": shop_id})
+        if not shop_item:
+            raise HTTPException(status_code=404, detail="shop not found")
+
+        img_storage_name = os.getenv("img_blob_name")
+        img_content = await image.read()
+        original_filename = image.filename
+        
+        if auto_set_name:
+            _, ext = os.path.splitext(original_filename)
+            img_name = f"shop_logos/{shop_item['shop']}{ext}"
+        else:
+            img_name = f"shop_logos/{original_filename}"
+
+        # 기존 이미지 삭제
+        if shop_item.get("shop_image_url"):
+            delete_blob_by_url(img_storage_name, shop_item["shop_image_url"])
+
+        img_url = upload_imgFile_to_blob(img_storage_name, img_content, img_name)
+                    
+        # 데이터베이스 업데이트
+        await db["bonre_shops"].update_one(
+            {"_id": shop_id},
+            {"$set": {"shop_image_url": img_url}}
+        )
+
+        return {"message": "Image uploaded successfully", "image_url": img_url}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error uploading image: {str(e)}")
 
 # shop 수정 API
 @app.patch("/shop/update-shop/{shop_id}", tags=["shop CRUD"])
@@ -963,6 +1058,14 @@ async def update_shop(shop_id: str, shop: ShopUpdate):
 # shop 삭제 API
 @app.delete("/shop/delete-shop/{shop_id}", tags=["shop CRUD"])
 async def delete_shop(shop_id: str):
+    shop_item = await db["bonre_shops"].find_one({"_id": shop_id})
+    if shop_item and shop_item.get("shop_image_url"):
+        try:
+            img_storage_name = os.getenv("img_blob_name")
+            delete_blob_by_url(img_storage_name, shop_item["shop_image_url"])
+        except Exception as e:
+            return {"message": f"Error deleting image: {str(e)}"}
+        
     result = await db["bonre_shops"].delete_one({"_id": shop_id})
     if result.deleted_count == 1:
         return {"message": "Shop deleted successfully"}

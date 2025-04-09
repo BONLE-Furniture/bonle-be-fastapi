@@ -913,8 +913,6 @@ async def update_prices_all():
             shop_sld = info["site"]
             price = info["price"]
 
-            price_records.append((shop_id, price))
-
             existing_price_doc = await db["bonre_prices"].find_one({"product_id": product_id, "shop_sld": shop_sld})
             if existing_price_doc:
                 existing_price_date = existing_price_doc["prices"][-1]["date"]
@@ -924,6 +922,7 @@ async def update_prices_all():
                         {"$push": {"prices": {"date": current_date, "price": price}}}
                     )
                     updated_count += 1
+                    price_records.append((shop_id, price))
             else:
                 new_doc = {
                     "product_id": product_id,
@@ -933,6 +932,7 @@ async def update_prices_all():
                 }
                 await db["bonre_prices"].insert_one(new_doc)
                 updated_count += 1
+                price_records.append((shop_id, price))
 
         # 최저가 업데이트
         if price_records:

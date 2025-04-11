@@ -1382,6 +1382,43 @@ def shutdown_scheduler():
         logger.error(f"Error shutting down scheduler: {e}", exc_info=True)
 
 @app.get("/admin-search")
-def search(keyword: str = Query("놀", description="검색어"), number: int = Query(2, description="사이트당 결과 수")):
-    result = run_search(keyword, number)
-    return {"results": result}
+async def search(keyword: str = Query("놀", description="검색어"), number: int = Query(2, description="사이트당 결과 수")):
+    # 1. 여러 사이트에서 검색 결과 가져오기
+    search_results = run_search(keyword, number)
+    
+    # 2. DB에서 모든 제품의 shop_urls 가져오기
+    products = await db["bonre_products"].find({
+        "upload": True
+    }).to_list(1000)
+    
+    # 3. DB에 있는 URL 목록 생성
+    existing_urls = set()
+    for product in products:
+        if "shop_urls" in product:
+            print("제품 shop_urls:", product["shop_urls"])
+            for shop_url in product["shop_urls"]:
+                if shop_url.get("url"):
+                    existing_urls.add(shop_url["url"])
+    
+    # 4. 검색 결과 처리
+    processed_results = []
+    for result in search_results:
+        product_url = result.get("product_url", "")
+        
+        # URL 직접 비교
+        already_exist = product_url in existing_urls if product_url else False
+        
+        # 결과 데이터 구성
+        processed_result = {
+            "image_url": result.get("image_url"),
+            "product_url": result.get("product_url"),
+            "name": result.get("name"),
+            "price": result.get("price"),
+            "brand": result.get("brand"),
+            "site": result.get("site"),
+            "already_exist": already_exist
+        }
+        processed_results.append(processed_result)
+    
+    return {"results": processed_results}
+

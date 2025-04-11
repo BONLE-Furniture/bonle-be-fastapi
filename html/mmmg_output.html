@@ -386,7 +386,7 @@
   </script>
   <script type="text/javascript">
    window.CAFE24 = window.CAFE24 || {};
-CAFE24.MANIFEST_CACHE_REVISION = '2504091393';
+CAFE24.MANIFEST_CACHE_REVISION = '2504091394';
 CAFE24.getDeprecatedNamespace = function(sDeprecatedNamespace, sSupersededNamespace) {
 var sNamespace = sSupersededNamespace 
 ? sSupersededNamespace 
@@ -592,7 +592,7 @@ var EC_GLOBAL_MALL_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_MAL
 CAFE24.GLOBAL_DATETIME_INFO = {
 oConstants: {"STANDARD_DATE_REGEX":"\/([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))\/","IN_ZONE":"inZone","OUT_ZONE":"outZone","IN_FORMAT":"inFormat","OUT_FORMAT":"outFormat","IN_DATE_FORMAT":"inDateFormat","IN_TIME_FORMAT":"inTimeFormat","OUT_DATE_FORMAT":"outDateFormat","OUT_TIME_FORMAT":"outTimeFormat","IN_FORMAT_DATE_ONLY":1,"IN_FORMAT_TIME_ONLY":2,"IN_FORMAT_ALL":3,"OUT_FORMAT_DATE_ONLY":1,"OUT_FORMAT_TIME_ONLY":2,"OUT_FORMAT_ALL":3,"DATE_ONLY":"YYYY-MM-DD","TIME_ONLY":"HH:mm:ss","FULL_TIME":"YYYY-MM-DD HH:mm:ss","ISO_8601":"YYYY-MM-DD[T]HH:mm:ssZ","YEAR_ONLY":"YYYY","MONTH_ONLY":"MM","DAY_ONLY":"DD","WEEK_ONLY":"e","TIME_H_I_ONLY":"HH:mm","TIME_HOUR_ONLY":"HH","TIME_MINUTE_ONLY":"mm","POSTGRE_FULL_TIME":"YYYY-MM-DD HH24:MI:SS","POSTGRE_TIME_ONLY":" HH24:MI:SS","MICRO_SECOND_ONLY":"u","SEOUL":"Asia\/Seoul","TOKYO":"Asia\/Tokyo","SHANGHAI":"Asia\/Shanghai","TAIPEI":"Asia\/Taipei","HANOI":"Asia\/Bangkok","LOS_ANGELES":"America\/Los_Angeles","LISBON":"Europe\/Lisbon","MADRID":"Europe\/Madrid","SINGAPORE":"Asia\/Singapore","UTC":"Etc\/UTC","MAX_DATETIME":"9999-12-31 23:59:59"},
 oOptions: {"inZone":"Asia\/Seoul","inFormat":"YYYY-MM-DD HH:mm:ss","inDateFormat":"YYYY-MM-DD","inTimeFormat":"HH:mm:ss","outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"},
-oPolicies: {"shop":{"outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"}},
+oPolicies: [],
 sOverrideTimezone: '',
 sMomentNamespace: 'EC_GLOBAL_MOMENT'
 };
@@ -600,18 +600,16 @@ CAFE24.FRONT_JS_CONFIG_MANAGE = {"sSmartBannerScriptUrl":"https:\/\/app4you.cafe
 var EC_FRONT_JS_CONFIG_MANAGE = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MANAGE');
 CAFE24.FRONT_JS_CONFIG_MEMBER = {"sAuthUrl":"https:\/\/ipin-ec.cafe24.com\/certify\/v1\/?action=auth"};
 var EC_FRONT_JS_CONFIG_MEMBER = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MEMBER');
-CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-09","locale":"ko"},"aProductPurchaseInfo_143":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_800":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_807":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_802":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_806":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_805":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_803":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_804":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_809":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_801":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_921":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_920":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_1082":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_1113":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true}};
+CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-12","locale":"ko"}};
 var EC_FRONT_JS_CONFIG_SHOP = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_SHOP');
-CAFE24.FRONT_JS_CONFIG_CURATION = {"V":6,"bIsElasticInUse":true,"is_facet_open":false,"open_facet_element":[],"iCatgoryNum":0};
+CAFE24.FRONT_JS_CONFIG_CURATION = {"V":6,"bIsElasticInUse":true,"bIsFacetClear":true};
 var EC_FRONT_JS_CONFIG_CURATION = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_CURATION');
 typeof window.CAFE24 === "undefined" && (window.CAFE24 = {});
-CAFE24.FRONTEND = {"FW_MANIFEST_CACHE_REVISION":2504091393,"IS_WEB_VIEW":"F"};
+CAFE24.FRONTEND = {"FW_MANIFEST_CACHE_REVISION":2504091394,"IS_WEB_VIEW":"F"};
 CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","path":{"origin":"\/product\/search.html","result":"\/product\/search.html","prefix":""},"shop_no":0,"skin_code":"default","support_language_list":{"ar":"ar_EG","ar-EG":"ar_EG","de":"de_DE","de-DE":"de_DE","en":"en_US","en-IN":"en_IN","en-PH":"en_PH","en-US":"en_US","es":"es_ES","es-ES":"es_ES","hi":"hi_IN","hi-IN":"hi_IN","id":"id_ID","id-ID":"id_ID","it":"it_IT","it-IT":"it_IT","ja":"ja_JP","ja-JP":"ja_JP","ko":"ko_KR","ko-KR":"ko_KR","ms":"ms_MY","ms-MY":"ms_MY","pt":"pt_PT","pt-PT":"pt_PT","ru":"ru_RU","ru-RU":"ru_RU","th":"th_TH","th-TH":"th_TH","tr":"tr_TR","tr-TR":"tr_TR","vi":"vi_VN","vi-VN":"vi_VN","zh":"zh_CN","zh-CN":"zh_CN","zh-HK":"zh_HK","zh-MO":"zh_MO","zh-SG":"zh_SG","zh-TW":"zh_TW"}};
   </script>
-  <link crossorigin="anonymous" href="//optimizer.poxo.com/css/common/9d825d0d39364d4560f5f9841c1a7a1173c4ba47/1744071157" rel="stylesheet" type="text/css"/>
+  <link crossorigin="anonymous" href="//optimizer.poxo.com/css/common/9d825d0d39364d4560f5f9841c1a7a1173c4ba47/1744188559" rel="stylesheet" type="text/css"/>
   <link crossorigin="anonymous" href="//optimizer.poxo.com/css/mmmgshop/15082b5ea64f62a078634a63e4fba8328b1eabd3.8989546ed0e5c891f105bdca616b7adc/1740472594" rel="stylesheet" type="text/css"/>
-  <style type="text/css">
-  </style>
   <title>
    MILLIMETER MILLIGRAM
   </title>
@@ -881,7 +879,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
            </option>
           </select>
          </span>
-         <input class="inputTypeText" fw-filter="" fw-label="상품명/제조사" fw-msg="" id="keyword" name="keyword" placeholder="" size="15" type="text" value="놀"/>
+         <input class="inputTypeText" fw-filter="" fw-label="상품명/제조사" fw-msg="" id="keyword" name="keyword" placeholder="" size="15" type="text" value="넬슨"/>
          <div class="search-btn">
           <button class="btnSearch" onclick="">
            SEARCH
@@ -1715,542 +1713,9 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
       </span>
       ”
      </div>
-     <p class="noData displaynone">
+     <p class="noData">
       검색 결과가 없습니다.
      </p>
-    </div>
-    <div class="xans-element- xans-search xans-search-result">
-     <!--
-                $count = 24
-            -->
-     <ul class="prdList grid4 prd-list row">
-      <!-- <li id="anchorBoxId_" class="list-item col-6 col-md-3 fs-14">
-                    <div class="thumbnail">
-                        <div class="prdImg">
-                            <a href=""><img src="" id="" alt="" /><span module="Search_Imagestyle"><span class="prdIcon " style="background-image:url('');"></span></span></a>
-                            <span class="wish"></span>
-                        </div>
-                        <div class="icon">
-                            <div class="promotion">      </div>
-                            <div class="button">
-                                <div class="likeButton "><button type="button"> <strong></strong></button></div>
-                                <div class="option"></div>                              </div>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <strong class="name"><a href="" class="displaynone"><span class="title displaynone"> :</span> </a></strong>
-                        <p class="ec-base-help txtWarn txt11 displaynone"> 단독구매상품</p>
-                        <span class="name displaynone">월 원 / 개월</span>
-                        <ul module="search_ListItem" class="spec">
-                            <li class="displaynone"><strong class="title displaynone"> :</strong> </li>
-                            <li class="displaynone"><strong class="title displaynone"> :</strong> </li>
-                        </ul>
-                    </div>
-                </li>
-                <li id="anchorBoxId_" class="list-item col-6 col-md-3 fs-14">
-                    <div class="thumbnail">
-                        <div class="prdImg">
-                            <a href=""><img src="" id="" alt="" /><span module="Search_Imagestyle"><span class="prdIcon " style="background-image:url('');"></span></span></a>
-                            <span class="wish"></span>
-                        </div>
-                        <div class="icon">
-                            <div class="promotion">      </div>
-                            <div class="button">
-                                <div class="likeButton "><button type="button"> <strong></strong></button></div>
-                                <div class="option"></div>                              </div>
-                        </div>
-                    </div>
-                    <div class="description">
-                        <strong class="name"><a href="" class="displaynone"><span class="title displaynone"> :</span> </a></strong>
-                        <p class="ec-base-help txtWarn txt11 displaynone"> 단독구매상품</p>
-                        <span class="name displaynone">월 원 / 개월</span>
-                        <ul module="search_ListItem" class="spec">
-                            <li class="displaynone"><strong class="title displaynone"> :</strong> </li>
-                            <li class="displaynone"><strong class="title displaynone"> :</strong> </li>
-                        </ul>
-                    </div>
-                </li> -->
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_143">
-       <a href="/product/detail.html?product_no=143&amp;cate_no=57&amp;display_group=1" name="anchorBoxName_143">
-        <img alt="MILLIMETER MILLIGRAM제주 그리팅 놀멍놀멍(천천히)" class="prd-img" id="eListPrdImage143_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20240709/d305a81a9120904f570680c1c6a8b613.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">MILLIMETER MILLIGRAM</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           MILLIMETER MILLIGRAM
-           <br/>
-           제주 그리팅 놀멍놀멍(천천히)
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           5,500원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_800">
-       <a href="/product/detail.html?product_no=800&amp;cate_no=29&amp;display_group=1" name="anchorBoxName_800">
-        <img alt="KARIMOKU NEW STANDARD카스터 테이블 180 – 퓨어 오크" class="prd-img" id="eListPrdImage800_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20240803/4e9c5ba794ae83e4f794280ff0fffd8d.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU NEW STANDARD</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           KARIMOKU NEW STANDARD
-           <br/>
-           카스터 테이블 180 – 퓨어 오크
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           2,489,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_807">
-       <a href="/product/detail.html?product_no=807&amp;cate_no=29&amp;display_group=1" name="anchorBoxName_807">
-        <img alt="KARIMOKU NEW STANDARD카스터 테이블 – 리노륨 150" class="prd-img" id="eListPrdImage807_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20240803/aa52290a60ac605eb724342c63ecc9a9.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU NEW STANDARD</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           KARIMOKU NEW STANDARD
-           <br/>
-           카스터 테이블 – 리노륨 150
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           2,646,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_802">
-       <a href="/product/detail.html?product_no=802&amp;cate_no=29&amp;display_group=1" name="anchorBoxName_802">
-        <img alt="KARIMOKU NEW STANDARD카스터 테이블 150 – 퓨어 오크" class="prd-img" id="eListPrdImage802_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20240803/92392ac1a041157e006d85856ff3654a.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU NEW STANDARD</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           KARIMOKU NEW STANDARD
-           <br/>
-           카스터 테이블 150 – 퓨어 오크
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           1,888,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_806">
-       <a href="/product/detail.html?product_no=806&amp;cate_no=29&amp;display_group=1" name="anchorBoxName_806">
-        <img alt="KARIMOKU NEW STANDARD카스터 테이블 – 리노륨 180" class="prd-img" id="eListPrdImage806_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20240803/af6e4a2045b95e2b0b84beeeebfa184a.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU NEW STANDARD</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           KARIMOKU NEW STANDARD
-           <br/>
-           카스터 테이블 – 리노륨 180
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           3,412,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_805">
-       <a href="/product/detail.html?product_no=805&amp;cate_no=29&amp;display_group=1" name="anchorBoxName_805">
-        <img alt="KARIMOKU NEW STANDARD카스터 테이블 75 – 블랙" class="prd-img" id="eListPrdImage805_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20240803/c1ea62f8aadad334841a178bae3bb732.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU NEW STANDARD</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           KARIMOKU NEW STANDARD
-           <br/>
-           카스터 테이블 75 – 블랙
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           1,545,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_803">
-       <a href="/product/detail.html?product_no=803&amp;cate_no=29&amp;display_group=1" name="anchorBoxName_803">
-        <img alt="KARIMOKU NEW STANDARD카스터 테이블 150 – 블랙" class="prd-img" id="eListPrdImage803_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20240803/c3dc7db1614d0a7ccba5a961739a3aab.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU NEW STANDARD</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           KARIMOKU NEW STANDARD
-           <br/>
-           카스터 테이블 150 – 블랙
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           1,888,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_804">
-       <a href="/product/detail.html?product_no=804&amp;cate_no=29&amp;display_group=1" name="anchorBoxName_804">
-        <img alt="KARIMOKU NEW STANDARD카스터 테이블 75 – 퓨어 오크" class="prd-img" id="eListPrdImage804_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20240803/4833fed5be9791fad77b97e387e74e48.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU NEW STANDARD</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           KARIMOKU NEW STANDARD
-           <br/>
-           카스터 테이블 75 – 퓨어 오크
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           1,545,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_809">
-       <a href="/product/detail.html?product_no=809&amp;cate_no=29&amp;display_group=1" name="anchorBoxName_809">
-        <img alt="KARIMOKU NEW STANDARD카스터 테이블 – 리노륨 75" class="prd-img" id="eListPrdImage809_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20240803/b36914014c6040e614300f5cf317c679.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU NEW STANDARD</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           KARIMOKU NEW STANDARD
-           <br/>
-           카스터 테이블 – 리노륨 75
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           2,145,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_801">
-       <a href="/product/detail.html?product_no=801&amp;cate_no=29&amp;display_group=1" name="anchorBoxName_801">
-        <img alt="KARIMOKU NEW STANDARD카스터 테이블 180 – 블랙" class="prd-img" id="eListPrdImage801_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20240803/bf3218314715083da2ac0643058b4c11.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU NEW STANDARD</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           KARIMOKU NEW STANDARD
-           <br/>
-           카스터 테이블 180 – 블랙
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           2,489,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_921">
-       <a href="/product/detail.html?product_no=921&amp;cate_no=30&amp;display_group=1" name="anchorBoxName_921">
-        <img alt="KARIMOKU 60D 체어 – 타프 그린" class="prd-img" id="eListPrdImage921_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20241029/6f3ffcff2449ff2de5ea6958a12eb212.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU 60</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           KARIMOKU 60
-           <br/>
-           D 체어 – 타프 그린
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           767,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_920">
-       <a href="/product/detail.html?product_no=920&amp;cate_no=30&amp;display_group=1" name="anchorBoxName_920">
-        <img alt="KARIMOKU 60D 체어 – 스탠다드 블랙" class="prd-img" id="eListPrdImage920_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20241008/d0891170208ae929f7e8b68ca464cacb.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU 60</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           KARIMOKU 60
-           <br/>
-           D 체어 – 스탠다드 블랙
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           758,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_1082">
-       <a href="/product/detail.html?product_no=1082&amp;cate_no=26&amp;display_group=1" name="anchorBoxName_1082">
-        <img alt="《Better Things, Ordinary Days》 기획전" class="prd-img" id="eListPrdImage1082_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20250202/30069c55df61f6296a215abc5133f389.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-          <img alt="추천" class="icon_img" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/upload/icon_202405281050395300.png"/>
-         </div>
-        </div>
-        <!-- <div class="brand">KARIMOKU NEW STANDARD</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           《Better Things, Ordinary Days》 기획전
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           1원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-      <li class="list-item col-6 col-md-3 fs-14 xans-record-" id="anchorBoxId_1113">
-       <a href="/product/detail.html?product_no=1113&amp;cate_no=45&amp;display_group=1" name="anchorBoxName_1113">
-        <img alt="MILLIMETER MILLIGRAM드립백 버라이어티 세트 B" class="prd-img" id="eListPrdImage1113_" src="//ecimg.cafe24img.com/pg970b05192270049/mmmgshop/web/product/medium/20250408/4816ea1402e24ca343f3364bad2a4a79.jpg"/>
-        <div class="icon">
-         <div class="sale-icon">
-          <img alt="" src="/mmmg/image/icon/product_sale_01.png"/>
-         </div>
-         <div class="soldout-icon">
-         </div>
-         <div class="happymarket-icon">
-         </div>
-        </div>
-        <!-- <div class="brand">MILLIMETER MILLIGRAM</div> -->
-        <div class="text">
-         <div class="title">
-          <span style="font-size:12px;color:#555555;">
-           MILLIMETER MILLIGRAM
-           <br/>
-           드립백 버라이어티 세트 B
-          </span>
-         </div>
-         <div class="price">
-          <p class="normal-price">
-           28,000원
-          </p>
-          <p class="sale-price">
-          </p>
-          <p class="soldout">
-          </p>
-         </div>
-        </div>
-       </a>
-      </li>
-     </ul>
-    </div>
-    <div class="xans-element- xans-search xans-search-paging pagination">
-     <!-- <a href="#none" class="first"><img src="//img.echosting.cafe24.com/skin/base/common/btn_page_first.gif" alt="첫 페이지" /></a> -->
-     <a class="prev" href="#none">
-      <img alt="이전 페이지" src="//img.echosting.cafe24.com/skin/base/common/btn_page_prev.gif"/>
-     </a>
-     <ol>
-      <li class="xans-record-">
-       <a class="this" href="?keyword=%EB%86%80&amp;page=1&amp;search_form%5Bsearch_price%5D%5B0%5D=0&amp;search_form%5Bsearch_price%5D%5B1%5D=0&amp;order_by=default">
-        1
-       </a>
-      </li>
-     </ol>
-     <a class="next" href="#none">
-      <img alt="다음 페이지" src="//img.echosting.cafe24.com/skin/base/common/btn_page_next.gif"/>
-     </a>
-     <a class="last d-none" href="#none">
-      <img alt="마지막 페이지" src="//img.echosting.cafe24.com/skin/base/common/btn_page_last.gif"/>
-     </a>
     </div>
    </div>
   </div>
@@ -2342,72 +1807,60 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
       <div>
        <div>
         OFFLINE STORE
-        <br>
-         240 ITAEWON-RO, YONGSAN-GU, SEOUL
-         <br>
-          EVERYDAY 12:00-19:00
-          <br>
-           TEL.
-           <a href="tel:+82-2-549-1520">
-            +82-2-549-1520
-           </a>
-          </br>
-         </br>
-        </br>
+        <br/>
+        240 ITAEWON-RO, YONGSAN-GU, SEOUL
+        <br/>
+        EVERYDAY 12:00-19:00
+        <br/>
+        TEL.
+        <a href="tel:+82-2-549-1520">
+         +82-2-549-1520
+        </a>
        </div>
        <div>
         ONLINE STORE CS
-        <br>
-         TUESDAY TO FRIDAY 13:00-18:00
-         <br>
-          TEL.
-          <a href="tel:+82-3210-1601">
-           +82-3210-1601
-          </a>
-          <br>
-           Q&amp;A.
-           <a href="mailto:mmmgonline@mmmg.net">
-            MMMGONLINE@MMMG.NET
-           </a>
-           <br class="d-none d-md-block">
-            <br>
-             <span class="d-none d-md-inline">
-              GLOBAL STORE
-              <br/>
-             </span>
-             <span class="d-none d-md-inline">
-              <a href="https://en-store.mmmg.kr/" target="_blank">
-               EN-STORE.MMMG.KR
-              </a>
-             </span>
-            </br>
-           </br>
-          </br>
-         </br>
-        </br>
+        <br/>
+        TUESDAY TO FRIDAY 13:00-18:00
+        <br/>
+        TEL.
+        <a href="tel:+82-3210-1601">
+         +82-3210-1601
+        </a>
+        <br/>
+        Q&amp;A.
+        <a href="mailto:mmmgonline@mmmg.net">
+         MMMGONLINE@MMMG.NET
+        </a>
+        <br class="d-none d-md-block"/>
+        <br/>
+        <span class="d-none d-md-inline">
+         GLOBAL STORE
+         <br/>
+        </span>
+        <span class="d-none d-md-inline">
+         <a href="https://en-store.mmmg.kr/" target="_blank">
+          EN-STORE.MMMG.KR
+         </a>
+        </span>
        </div>
        <div class="">
         B2B INQUIRY
-        <br>
-         <a href="mailto:contact@mmmg.net">
-          CONTACT@MMMG.NET
-         </a>
-        </br>
+        <br/>
+        <a href="mailto:contact@mmmg.net">
+         CONTACT@MMMG.NET
+        </a>
        </div>
        <div class="d-md-none">
         오프라인 스토어
-        <br>
-         서울 용산구 이태원로 240
-         <br>
-          월-일 12:00-19:00
-          <br>
-           문의
-           <a href="tel:+82-2-549-1520">
-            +82-549-1520
-           </a>
-          </br>
-         </br>
-        </br>
+        <br/>
+        서울 용산구 이태원로 240
+        <br/>
+        월-일 12:00-19:00
+        <br/>
+        문의
+        <a href="tel:+82-2-549-1520">
+         +82-549-1520
+        </a>
        </div>
        <div class="d-md-none">
         온라인 스토어 CS
@@ -2727,7 +2180,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
   <span itemscope="" itemtype="https://schema.org/Organization">
    <link href="https://mmmg.kr" itemprop="url"/>
   </span>
-  <script src="/app/Eclog/js/cid.generate.js?vs=7deea2e5bb78ede14fa7346a5c7e385e&amp;u=mmmgshop.1" type="text/javascript">
+  <script src="/app/Eclog/js/cid.generate.js?vs=70d63eafe7e8090808107a45c1e95826&amp;u=mmmgshop.1" type="text/javascript">
   </script>
   <script>
    (function (i, s, o, g) {
@@ -2946,31 +2399,10 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
    </noscript>
   </div>
   <!-- CMC3 script -->
-  <!-- CMC3 script -->
-  <div id="fbe_search_script" style="display:none;">
-   <script type="text/javascript">
-    !function() {
-  try {
-    let event_key = 'Search';
-    let event_data = {
-      content_ids : ['143','800','807','802','806','805','803','804','809','801','921','920','1082','1113'],
-      content_type : 'product_group',
-      search_string : '놀'
-    };
-    if (typeof facebookChannel !== 'undefined') {
-      facebookChannel.pixelEvent(event_key, function () {
-        fbq('trackSingle', '702872017528635', event_key, event_data);
-      });
-    }
-  } catch (e) { console.error(e); }
-}();
-   </script>
-  </div>
-  <!-- CMC3 script -->
   <!-- External Script End -->
-  <script charset="utf-8" src="/ind-script/i18n.php?lang=ko_KR&amp;domain=front&amp;v=2504091393" type="text/javascript">
+  <script charset="utf-8" src="/ind-script/i18n.php?lang=ko_KR&amp;domain=front&amp;v=2504091394" type="text/javascript">
   </script>
-  <script crossorigin="anonymous" src="//optimizer.poxo.com/js/common/0b8b1d9592107a0f044bfd6892e4eb1b0ab74187/1744071157">
+  <script crossorigin="anonymous" src="//optimizer.poxo.com/js/common/36777a6a6c5fa539c1def8a66dd32e39f791eb61/1744188559">
   </script>
   <script crossorigin="anonymous" src="//optimizer.poxo.com/js/mmmgshop/3e36daa56b3b78249218db3def5b6ae092acd24c/1716098001">
   </script>
@@ -3155,15 +2587,8 @@ isUseLoginKeepingSubmit = true;
 isUseLoginKeeping();
 } catch(e) {
 }
-CAFE24.FRONT_PRODUCT_SEARCH_FIX_LIST_FORM.iLayerFormTotalCount = 14;
+CAFE24.FRONT_PRODUCT_SEARCH_FIX_LIST_FORM.iLayerFormTotalCount = 0;
 CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"","tail":"\uc6d0"},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
-if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_COMMON !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_COMMON.initObject();}
-if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_BIND !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_BIND.initChooseBox();}
-if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_DATA !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_DATA.initData();}
-if (typeof CAFE24.SHOP_FRONT_NEW_LIKE_COMMON !== "undefined") {CAFE24.SHOP_FRONT_NEW_LIKE_COMMON.init({"bIsUseLikeProduct":false,"bIsUseLikeCategory":false});}
-if (typeof CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT !== "undefined") {CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT.bIsReviewTalk = 'F';}
-var basket_result = '/product/add_basket.html';
-var basket_option = '/product/basket_option.html';
 var aLogData = {"log_server1":"eclog2-225.cafe24.com","log_server2":"elg-db-svcm-319.cafe24.com","mid":"mmmgshop","stype":"e","domain":"","shop_no":1,"lang":"ko_KR","ver":2,"hash":"","ca":"cfa-js.cafe24.com\/cfa.js","etc":"","mobile_flag":"F"};
 var sMileageName = '적립금';
 var sMileageUnit = '[:PRICE:]원';

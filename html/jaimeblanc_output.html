@@ -550,13 +550,13 @@ var EC_GLOBAL_MALL_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_MAL
 CAFE24.GLOBAL_DATETIME_INFO = {
 oConstants: {"STANDARD_DATE_REGEX":"\/([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))\/","IN_ZONE":"inZone","OUT_ZONE":"outZone","IN_FORMAT":"inFormat","OUT_FORMAT":"outFormat","IN_DATE_FORMAT":"inDateFormat","IN_TIME_FORMAT":"inTimeFormat","OUT_DATE_FORMAT":"outDateFormat","OUT_TIME_FORMAT":"outTimeFormat","IN_FORMAT_DATE_ONLY":1,"IN_FORMAT_TIME_ONLY":2,"IN_FORMAT_ALL":3,"OUT_FORMAT_DATE_ONLY":1,"OUT_FORMAT_TIME_ONLY":2,"OUT_FORMAT_ALL":3,"DATE_ONLY":"YYYY-MM-DD","TIME_ONLY":"HH:mm:ss","FULL_TIME":"YYYY-MM-DD HH:mm:ss","ISO_8601":"YYYY-MM-DD[T]HH:mm:ssZ","YEAR_ONLY":"YYYY","MONTH_ONLY":"MM","DAY_ONLY":"DD","WEEK_ONLY":"e","TIME_H_I_ONLY":"HH:mm","TIME_HOUR_ONLY":"HH","TIME_MINUTE_ONLY":"mm","POSTGRE_FULL_TIME":"YYYY-MM-DD HH24:MI:SS","POSTGRE_TIME_ONLY":" HH24:MI:SS","MICRO_SECOND_ONLY":"u","SEOUL":"Asia\/Seoul","TOKYO":"Asia\/Tokyo","SHANGHAI":"Asia\/Shanghai","TAIPEI":"Asia\/Taipei","HANOI":"Asia\/Bangkok","LOS_ANGELES":"America\/Los_Angeles","LISBON":"Europe\/Lisbon","MADRID":"Europe\/Madrid","SINGAPORE":"Asia\/Singapore","UTC":"Etc\/UTC","MAX_DATETIME":"9999-12-31 23:59:59"},
 oOptions: {"inZone":"Asia\/Seoul","inFormat":"YYYY-MM-DD HH:mm:ss","inDateFormat":"YYYY-MM-DD","inTimeFormat":"HH:mm:ss","outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"},
-oPolicies: [],
+oPolicies: {"shop":{"outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"}},
 sOverrideTimezone: '',
 sMomentNamespace: 'EC_GLOBAL_MOMENT'
 };
 CAFE24.FRONT_JS_CONFIG_MANAGE = {"sSmartBannerScriptUrl":"https:\/\/app4you.cafe24.com\/SmartBanner\/tunnel\/scriptTags?vs=1563164396689206","sMallId":"ehblue","sDefaultAppDomain":"https:\/\/app4you.cafe24.com","sWebLogOffFlag":"F"};
 var EC_FRONT_JS_CONFIG_MANAGE = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MANAGE');
-CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-12","locale":"ko"}};
+CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-13","locale":"ko"},"aProductPurchaseInfo_111":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true}};
 var EC_FRONT_JS_CONFIG_SHOP = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_SHOP');
 CAFE24.FRONT_JS_CONFIG_MEMBER = {"sAuthUrl":"https:\/\/ipin-ec.cafe24.com\/certify\/v1\/?action=auth"};
 var EC_FRONT_JS_CONFIG_MEMBER = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MEMBER');
@@ -566,6 +566,8 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
   </script>
   <link href="/ind-script/optimizer.php?filename=nY5BCgIxEATvYa--Y1T0BYIPUHzAZHbWhE0yYZKA_t7Vkx4WJNemq7rBSWTY7RWyyl0xgnKRpsRApcCkkiqQxChpWIIN_NNnMkVCq16SsfLoBFutvaMBn6x9aEUbuBOVbIJPbCymtLofvIWbz0gzXL59JwycRlQ4DMdhC1PAmj3NaxrMGa5O8q_k_Dm1dMZGtYMsjEruDb4A&amp;type=css&amp;k=dfc749202ee4f0e29186b4d8083aa2c4d8e6bdeb&amp;t=1726130154" rel="stylesheet" type="text/css"/>
   <link href="/ind-script/optimizer_user.php?filename=tdS9bgMhDAfwPde1z-Ep79ChW58AfL7DKmCETZS8fUkTRV06NHInxMf9EObPQZJCQLgMpa5AKeZB0EbMjEuykkFXWlZS3ivoJ9cjoCoUWUee6_ps0UApdEzLJr28zOlX-Luaw0WGQQzK-L0FSilS3bjbgBtHeJgdOgx2J00kGzd3N1H2R-8J8HfDzjUY-Vc3RHczDjPHqD5YOT9r_nijdz7LLibNDyxjplSTtHdW82Nvv5I3Cit1R9Vmlq4l2LZ_QKufuYnY8wf_NUpzwrOcj7v_SNwa192PRqmn-TVLbXhVvwA&amp;type=css&amp;k=e11a5e864a12421a3c9c0fe01083d82fb81044f0&amp;t=1735203618&amp;user=T" rel="stylesheet" type="text/css"/>
+  <style type="text/css">
+  </style>
   <title>
    J'aime blanc - 짐블랑
   </title>
@@ -1457,7 +1459,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
             브랜드명
            </option>
           </select>
-          <input class="inputTypeText" fw-filter="" fw-label="상품명/제조사" fw-msg="" id="keyword" name="keyword" placeholder="" size="15" type="text" value="넬슨"/>
+          <input class="inputTypeText" fw-filter="" fw-label="상품명/제조사" fw-msg="" id="keyword" name="keyword" placeholder="" size="15" type="text" value="쿠션"/>
          </div>
          <div class="popular" id="except_keyword_wrap_id" style="display:none">
           <strong>
@@ -1516,7 +1518,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
         <p class="record">
          총
          <strong>
-          0
+          1
          </strong>
          개 의 상품이 검색되었습니다.
         </p>
@@ -1538,7 +1540,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
          </li>
         </ul>
        </div>
-       <div class="noData">
+       <div class="noData displaynone">
         <strong class="warning">
          검색결과가 없습니다.
         </strong>
@@ -1560,6 +1562,92 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
       </div>
      </form>
      <!-- //참고 -->
+     <div class="xans-element- xans-search xans-search-result ec-base-product">
+      <!--
+        $count = 30
+    -->
+      <ul class="prdList grid5">
+       <li class="xans-record-" id="anchorBoxId_111">
+        <div class="thumbnail">
+         <a href="/product/detail.html?product_no=111&amp;cate_no=245&amp;display_group=1">
+          <img alt="" id="eListPrdImage111_" src="//jaimeblanc.com/web/product/medium/ehblue_111.jpg"/>
+         </a>
+         <span class="wish">
+         </span>
+        </div>
+        <div class="description">
+         <!--<div class="icon">
+                    <div class="promotion">    </div>
+                    <div class="button">
+                       <div class="likeButton displaynone"><button type="button"> <strong></strong></button></div>
+                       <div class="option"></div>  <img src="//img.echosting.cafe24.com/design/common/btn_prd_zoom.gif"  onClick="zoom('111', '245', '1','', '');" style="cursor:pointer" alt="상품 큰 이미지 보기" />                   </div>
+                </div>-->
+         <p class="name">
+          <a class="" href="/product/detail.html?product_no=111&amp;cate_no=245&amp;display_group=1">
+           <span class="title displaynone">
+            <span style="font-size:12px;color:#555555;">
+             상품명
+            </span>
+            :
+           </span>
+           <span style="font-size:12px;color:#555555;">
+            구름 쿠션솜
+           </span>
+          </a>
+         </p>
+         <ul class="xans-element- xans-search xans-search-listitem spec">
+          <li class="xans-record-">
+           <strong class="title displaynone">
+            <span style="font-size:12px;color:#ababab;">
+             브랜드
+            </span>
+            :
+           </strong>
+           <span style="font-size:12px;color:#ababab;">
+            J'aime Blanc
+           </span>
+          </li>
+          <li class="xans-record-">
+           <strong class="title displaynone">
+            <span style="font-size:12px;color:#a39080;">
+             판매가
+            </span>
+            :
+           </strong>
+           <span style="font-size:12px;color:#a39080;">
+            8,000원
+           </span>
+           <span id="span_product_tax_type_text" style="">
+           </span>
+          </li>
+         </ul>
+         <p class="name">
+         </p>
+        </div>
+       </li>
+      </ul>
+     </div>
+     <div class="xans-element- xans-search xans-search-paging ec-base-paginate">
+      <a class="first" href="#none">
+       <img alt="첫 페이지" src="/imgs/btn_page_first.gif"/>
+      </a>
+      <a href="#none">
+       <img alt="이전 페이지" src="/imgs/btn_page_prev.gif"/>
+      </a>
+      <ol>
+       <li class="xans-record-">
+        <a class="this" href="?keyword=%EC%BF%A0%EC%85%98&amp;page=1&amp;CategoryUrl=%2Fproduct%2Flist.html&amp;ProductUrl=%2Fproduct%2Fdetail.html&amp;SearchUrl=%2Fproduct%2Fsearch.html">
+         1
+        </a>
+       </li>
+      </ol>
+      <a href="#none">
+       <img alt="다음 페이지" src="/imgs/btn_page_next.gif"/>
+      </a>
+      <a class="last" href="#none">
+       <img alt="마지막 페이지" src="/imgs/btn_page_last.gif"/>
+      </a>
+     </div>
     </div>
     <hr class="layout"/>
    </div>
@@ -1680,7 +1768,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
   <span itemscope="" itemtype="https://schema.org/Organization">
    <link href="https://jaimeblanc.com" itemprop="url"/>
   </span>
-  <script src="/app/Eclog/js/cid.generate.js?vs=70d63eafe7e8090808107a45c1e95826&amp;u=ehblue.1" type="text/javascript">
+  <script src="/app/Eclog/js/cid.generate.js?vs=e7785abec1d58facfd3eda0d34fd25ad&amp;u=ehblue.1" type="text/javascript">
   </script>
   <script>
    (function (i, s, o, g) {
@@ -1698,7 +1786,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
   </script>
   <script charset="utf-8" src="/ind-script/i18n.php?lang=ko_KR&amp;domain=front&amp;v=2504091394" type="text/javascript">
   </script>
-  <script src="/ind-script/optimizer.php?filename=zVjbcts2EH23-JrvoN2knb7act1mYk80jjN5XoJLEiaARXGxzHx9l5ScWnVI8WLPdDRDUuSeg8Vib0Bakcb07BeXFg40bsnVqUNP0QlM730qz343yb1_lw7JRWlB1On93xFds7-9T35LTici8TGgM6D8_kUiiGqJS1miU7OmkKBICjMbakiQKZQUYRbFWfKBf7MG56-B3H_sZh2VjD9Y3RwCBskCmqVMSFHcdA_fZKjuvl9CgERLM4FHyYxReMfPx1HeOmlCMYKeRGzVuiKn12SCI6XQHcdtVPTn1l44mZcj9IlBquNShaPOUieeFCPInASyJ0oaPMnAmDF67SgEaU1mrPQjGI5Gw65tHYbxo3S4gNoqXpefg8Da9IYyqTC9fYbf6TdglR6cpjzyK7-VdtqARTSiNWgrl0cOG93rxGMZBpRgV02_7qLnOYWC740iyCeBdAzQjvs58-ge-hanB2xJNYVUo10vxwKiCq0JvAYXLga8rhX6UpE9GPCqo_kENVBat9eNfEQ1FCUDNOvOS74OOkkP9BKzWE5G3WKBDo3AdXTtvdk4Kabr7RGcqCYtVICiaF4mxOkFKStlB_p_lMeck7Xx7L1-KROCl6ZcyqIxQN6Wnmk8VsVScq57ACUZTu6J78eLhB_AL6ZtFTa5f0nPDJatiG83QoXK4pvPowKTv6ivrzkAZ0jJkfRm_JxNw6uZSZEALjM1Hc_P_2owJa2smd7k4NIPya_JaVpwobZS1DNJ1Nmp6VV2IB9-6fJh-4ErWFfMniiPz1uDgbJtIqPHlZNlFSZicgflRMhTqR_oD3biz6e6xUxROc2w-yqTerbbyvbXmlF4sf-3KriVhbBUk9eiGdf5VkGzRwQZJPrj0mvX2ECfsJm0QuAbI3bX2TiNOhtqiI7AP7scnTBhNsEF-BrDcgY73NiM4tjsG-G5LGuKXNOWzOWGm3Qo58_jEi15OX_8b9JX19IvIxAUF5jAocAF8NsOXmPDhStfyHJHAdR60Wy6-JjvlmiwkEtD4xqaBTr86SCf75DnMRAnXSk6Gi6n2_mxwfs4uSEb7fwAjZ7VQceB_iCXLMxNcy1r3OeLZR5yQLUo9jpf-0u2x1nNK3jtnukOslfh-RhQL5_eJe93pPpoCprvBAqkhkzhAo0shMqRwtWRLnaEOte95yc9YDujSu2q_Ir7ub4Typ4GaLOF1G6Bd8-a59x_wNkzrt8mvCFQQ5H2x35Le3g21bXZ_NkLJ22YiG4PWNLztn23KLpjwAKGmoOfkhxkMWvXIw8gHcWAV_KRJf8B&amp;type=js&amp;k=18c84e9778e9024728217d6d6256ad2ddfb5a850&amp;t=1744071412">
+  <script src="/ind-script/optimizer.php?filename=zZlbV-M2EMffwa_9HIZ229NXkiwtZ6HkELY8T-RxIqxbdSF4P33HTtglBd9kc04Ph8RJ9P9pJM9oRla61RLT859tmluQuNO2SC06HSzD9NGl_Px3lTy6n9K2doEbYEX6-E9AWx7efkl-S84GKvHZo1Ug3OGLhGldcBxLCVZEDSFBluQqWqo00yoXnPkoxHnyif6iOqdfvbb_mTdj9Yb0R3c3A4-eUwNJrZRPkd3UFw_cb--_LcBDIrkawBF8TSq8p-tulTOWK5_3wGsWKrMutZVzrbzVQqDt1i1FcBfGzCzPNj3sCZ6L7la51fVMnTgtSKHVidfmRHCFJ2tQqo9dewTTUmrVt_UzKIpGRa5tLPr-vdQ6j9IIui_vi8CY9EavucD07pV-b1_LrDTopM4CfeV23AzrMA-KVRNatcsChY1sdOK-hBYjyFXTr_voeY0Q8K0UGrJBIhk8VP3erh3ap6ab0yA2WpQ5F71dL8McgvDVFDgJ1s9avK5qtNpqc9ThZY35AgXotKhel_wZRVuUtGDmtZd8bXWSBukC12EzWHWHOVpUDOfBVu_l0nI23G6HYNl20I3ykOfl2wVxeEJab3gt-n-kx4wWa-XIe91YEoLjajOWItFDVqWeYRwjwobTWvcEgpNc2xfe9y8SugA3GlsZrDL3Fk8EQ7OIH9fDFoXBDx_HFlT2Jr9O2QGtkJwi6cP4tJr6yaZJaAaUZgrdvT7_sGDIsjInvMrApp-SX5OzNKdEbTgrIiHi_Ew1GtuyHq7q9bD6gTJYncxekINRf-Gu-l_uc_A1dz4Kcbitj66pSBqgf8cV-g_kVqgiSvtSheykS6giZwW9gg9xhtyaurL5_Owt1FbVn-uPKy0yHfzU2LjE2gG9krCZHLrgjurbklOdOyH6inArSmgCVyiwLiynN9wSeAauwMlv32VQ2Zt0PB77IEf573fYvGX7MxilprFpxlU2CWjxpn6JBP29TymNrteUDg61ceqoq1PTHMi99Ozw6TSnDTj4sZZMhQkxm47j5HQRH9U_IKt6aY9hXPMC05nVO0q6c2BbjKeMCKdX-sOIBmMOOtrSeeAinYWqgqQvpY6e3zt84rjzIIrD5VwH5buLMAmKMkwqdXB4avlmO1STWdgMlLw8d2h5WLFv_nqoO1wL3aOnrZdUiHnuObru1nNbGq-_YDnIFnClYvvXaJ1EuW57DtEhv7UZWqZ8NGCfRccTTHvZ04vRGUcdFPJ12kqOGcsNF9haaXXoF2i04_H9P3C3bS_9ewBYc8j3IFBphSPkd7W8wJL2i9lIyr2mhWw-ajR1fMS7JSrM-djQuIZyhA1_WMjiHfIieE1VA2c1hhLHLj42gvB8qU0w8QEaaEMn0VKgP_ExN-amrNLvYb0Y5yFHqFGxV_van7w6RSon8NoD6R7Wk3Cqfdn44e1LlSuV63gnEMAlrAWOsMiA31ot8LTj4VEPc64bjy0axCYiS-2z_ClVLnzYlmS5g9TsIGFa0pibzxUb-nW7hEHzsV-l-nx4knx8JFQXlPSzY5YbP1BdnWukF1WhapDVp285tBUH70KOVjFj5j3P_awOHi_5M7X8Fw&amp;type=js&amp;k=17d35ac17f73972c7d8622d91e99596f60e4ccd6&amp;t=1744071412">
   </script>
   <script src="/ind-script/optimizer_user.php?filename=rc7BDcIwDIXhAcK1c_jEJEzQOFbj1o4DjkFs30qoA4C4vcv_6UE1JSBM4fRwoJolCHpkYUx1qIAXSoWclwa-cbuCzG-LAXl2Rlj9My6rT_C9deRoqtZ-79VKCJ2v7sG4pSfT61-ihgz2av1WuXduywHv&amp;type=js&amp;k=831174a06b08c04706f2d28f410b54bcddec2c33&amp;t=1519945449&amp;user=T">
   </script>
@@ -1885,12 +1973,19 @@ isUseLoginKeeping();
 }
 var bUseElastic = false;
 var sSearchBannerUseFlag = 'F';
+CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"","tail":"\uc6d0"},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_COMMON !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_COMMON.initObject();}
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_BIND !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_BIND.initChooseBox();}
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_DATA !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_DATA.initData();}
+if (typeof CAFE24.SHOP_FRONT_NEW_LIKE_COMMON !== "undefined") {CAFE24.SHOP_FRONT_NEW_LIKE_COMMON.init({"bIsUseLikeProduct":false,"bIsUseLikeCategory":false});}
+if (typeof CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT !== "undefined") {CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT.bIsReviewTalk = 'F';}
+var basket_result = '/product/add_basket.html';
+var basket_option = '/product/basket_option.html';
 var aLogData = {"log_server1":"eclog2-259.cafe24.com","log_server2":"elg-db-svcm-059.cafe24.com","mid":"ehblue","stype":"e","domain":"","shop_no":1,"lang":"ko_KR","ver":2,"hash":"","ca":"cfa-js.cafe24.com\/cfa.js","etc":"","mobile_flag":"F"};
 var sMileageName = '적립금';
 var sMileageUnit = '[:PRICE:]원';
 var sDepositName = '예치금';
 var sDepositUnit = '원';
-CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"","tail":"\uc6d0"},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
 CAFE24.APPSCRIPT_ASSIGN_DATA = CAFE24.APPSCRIPT_ASSIGN_DATA || [{'src':'https://cax.channel.io/cafe24/plugins/141e2c01-4c1b-497e-8d69-0563fa1f24c1.js?vs=20220215151711.1&client_id=QKWiDNLcK9koJO0swpfnuE'}];
 CAFE24.APPSCRIPT_SDK_DATA = CAFE24.APPSCRIPT_SDK_DATA || ['product','application','category','store','design','collection','customer','order','personal','privacy','promotion','supply'];
 var EC_APPSCRIPT_ASSIGN_DATA = CAFE24.getDeprecatedNamespace('EC_APPSCRIPT_ASSIGN_DATA');

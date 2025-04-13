@@ -564,7 +564,7 @@ var EC_GLOBAL_MALL_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_MAL
 CAFE24.GLOBAL_DATETIME_INFO = {
 oConstants: {"STANDARD_DATE_REGEX":"\/([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))\/","IN_ZONE":"inZone","OUT_ZONE":"outZone","IN_FORMAT":"inFormat","OUT_FORMAT":"outFormat","IN_DATE_FORMAT":"inDateFormat","IN_TIME_FORMAT":"inTimeFormat","OUT_DATE_FORMAT":"outDateFormat","OUT_TIME_FORMAT":"outTimeFormat","IN_FORMAT_DATE_ONLY":1,"IN_FORMAT_TIME_ONLY":2,"IN_FORMAT_ALL":3,"OUT_FORMAT_DATE_ONLY":1,"OUT_FORMAT_TIME_ONLY":2,"OUT_FORMAT_ALL":3,"DATE_ONLY":"YYYY-MM-DD","TIME_ONLY":"HH:mm:ss","FULL_TIME":"YYYY-MM-DD HH:mm:ss","ISO_8601":"YYYY-MM-DD[T]HH:mm:ssZ","YEAR_ONLY":"YYYY","MONTH_ONLY":"MM","DAY_ONLY":"DD","WEEK_ONLY":"e","TIME_H_I_ONLY":"HH:mm","TIME_HOUR_ONLY":"HH","TIME_MINUTE_ONLY":"mm","POSTGRE_FULL_TIME":"YYYY-MM-DD HH24:MI:SS","POSTGRE_TIME_ONLY":" HH24:MI:SS","MICRO_SECOND_ONLY":"u","SEOUL":"Asia\/Seoul","TOKYO":"Asia\/Tokyo","SHANGHAI":"Asia\/Shanghai","TAIPEI":"Asia\/Taipei","HANOI":"Asia\/Bangkok","LOS_ANGELES":"America\/Los_Angeles","LISBON":"Europe\/Lisbon","MADRID":"Europe\/Madrid","SINGAPORE":"Asia\/Singapore","UTC":"Etc\/UTC","MAX_DATETIME":"9999-12-31 23:59:59"},
 oOptions: {"inZone":"Asia\/Seoul","inFormat":"YYYY-MM-DD HH:mm:ss","inDateFormat":"YYYY-MM-DD","inTimeFormat":"HH:mm:ss","outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"},
-oPolicies: [],
+oPolicies: {"shop":{"outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"}},
 sOverrideTimezone: '',
 sMomentNamespace: 'EC_GLOBAL_MOMENT'
 };
@@ -572,7 +572,7 @@ CAFE24.FRONT_JS_CONFIG_MANAGE = {"sSmartBannerScriptUrl":"https:\/\/app4you.cafe
 var EC_FRONT_JS_CONFIG_MANAGE = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MANAGE');
 CAFE24.FRONT_JS_CONFIG_MEMBER = {"sAuthUrl":"https:\/\/ipin-ec.cafe24.com\/certify\/v1\/?action=auth"};
 var EC_FRONT_JS_CONFIG_MEMBER = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MEMBER');
-CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-12","locale":"ko"}};
+CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-13","locale":"ko"},"aProductPurchaseInfo_2272":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2082":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2081":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2080":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_1690":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_1689":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_1128":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_1127":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_729":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_727":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_726":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_725":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_724":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_531":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true}};
 var EC_FRONT_JS_CONFIG_SHOP = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_SHOP');
 typeof window.CAFE24 === "undefined" && (window.CAFE24 = {});
 CAFE24.FRONTEND = {"FW_MANIFEST_CACHE_REVISION":2504091394,"IS_WEB_VIEW":"F"};
@@ -580,6 +580,8 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
         </script>
         <link href="/ind-script/optimizer.php?filename=nY9BDsIwDATvVa-8w4DgBUg8AMQDnNSlVhM7chIJfk_hBAekKldrZ3YNk0aC3d4gmd4NIxhlreYJfM4wmkoBrzGq9MthA2vy5LusoRZW6Zw-GsFaSmtpwCdZG1rQBWpENXWBhTqHIn_7Azu4cUI_w-Xbd8JAMqDBoT_2WxgDlsR-_qfBlOA6afqVnD-jlsxQfVn_hWjlHHhYRkeWhsZMaH56gy8&amp;type=css&amp;k=591e0b3f5ee52cf6fbc5cdee8af5c94707d7b8dc&amp;t=1726130154" rel="stylesheet" type="text/css">
          <link href="/ind-script/optimizer_user.php?filename=tdWxUsMwDADQvenKd_jgL5j5AsVWYl1tyUT2Bf4eF1qOpQtyNuWSe5EsRXFRMjr0U1Pc1DXeiYMrbU7kp1hzchpwCqi0stML8cuzm_bivKpL8Cmtnnv45AyM7lRwO2diMwVMGSqanb2ccFnQ_7-4ShkVEv4G5pwiQujHZGWqlPMMzAMopYAz2J1FpBrS-RlDN4OS__bQn_oFnvoNA3uVsoTWe3h7Q26pkkYpb5FKIV7Nlb838hezkgSCNZtbpcr3dkw9HNcSLzkLj_OMq-fhyDQab86t1pG1390K8yGoYVc9ZkX6t1PGwxHTAeoiKRwwCPIxHu2P-fFq2fo-8PUIOLzyIgfAsBJb_v1_9v2teqcIm48BKlzVLw&amp;type=css&amp;k=bd53753a86f92527d5bc41fa5a063e7ac0efdd16&amp;t=1737965082&amp;user=T" rel="stylesheet" type="text/css">
+          <style type="text/css">
+          </style>
           <title>
            가리모쿠 공식매장・언와인드
           </title>
@@ -1141,7 +1143,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
           상품검색
          </legend>
          <div class="searchInput">
-          <input class="keyword" id="ec-product-searchdata-keyword" name="keyword" type="text" value="넬슨"/>
+          <input class="keyword" id="ec-product-searchdata-keyword" name="keyword" type="text" value="쿠션"/>
           <input alt="검색" class="btnSearch" id="ec-product-searchdata-submit_button" src="//img.echosting.cafe24.com/skin/skin/product/ico_search.svg" type="image"/>
           <ul class="autoDrop" id="">
           </ul>
@@ -1319,7 +1321,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
         <p class="record">
          상품 검색 결과
          <strong class="txtEm">
-          0 건
+          14 건
          </strong>
         </p>
         <div class="xans-element- xans-product xans-product-searchdata xans-record-">
@@ -1350,11 +1352,1081 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
          </div>
         </div>
        </div>
-       <p class="noData">
+       <p class="noData displaynone">
         검색 결과가 없습니다.
        </p>
       </div>
       <div class="gInnerMargin">
+       <div class="xans-element- xans-search xans-search-result ec-base-product">
+        <!--
+            $count = 20
+        -->
+        <ul class="prdList grid4 m_grid2">
+         <li class="xans-record-" id="anchorBoxId_2272">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/customize-가리모쿠ca42-다이닝-체어-쿠션/2272/category/63/display/1/" name="anchorBoxName_2272">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage2272_" src="//unwind.kr/web/product/medium/202411/dff47c46edd7789ba29691f8a2fee865.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="2272" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="734,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/customize-가리모쿠ca42-다이닝-체어-쿠션/2272/category/63/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               [customize] 가리모쿠_CA42, 다이닝 체어 (쿠션)
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Karimoku
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               734,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_2082">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/plotica-field-cushion/2082/category/292/display/1/" name="anchorBoxName_2082">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage2082_" src="//unwind.kr/web/product/medium/202404/6a79b7d058a6c1b6b3a3d361df23fa85.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="2082" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="50,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/plotica-field-cushion/2082/category/292/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               PLOTICA field cushion
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Plotica
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               50,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+             <li class="mileage_value xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#ff5e0d;">
+                적립금
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#ff5e0d;">
+               <span id="span_mileage_text">
+                <img alt="적립금" src="/web/upload/icon_202403171640060700.png" style="margin-bottom:2px;">
+                 1,500 POiNT
+                </img>
+               </span>
+               (3%)
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_2081">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/plotica-nomad-cushion/2081/category/292/display/1/" name="anchorBoxName_2081">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage2081_" src="//unwind.kr/web/product/medium/202404/a0ec503153510d04dd80ff25907007cc.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="2081" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="85,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/plotica-nomad-cushion/2081/category/292/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               PLOTICA nomad cushion
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Plotica
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               85,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+             <li class="mileage_value xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#ff5e0d;">
+                적립금
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#ff5e0d;">
+               <span id="span_mileage_text">
+                <img alt="적립금" src="/web/upload/icon_202403171640060700.png" style="margin-bottom:2px;">
+                 2,500 POiNT
+                </img>
+               </span>
+               (3%)
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_2080">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/plotica-solid-cushion/2080/category/292/display/1/" name="anchorBoxName_2080">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage2080_" src="//unwind.kr/web/product/medium/202404/3acd33316e05880840b65653cc296084.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="2080" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="50,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/plotica-solid-cushion/2080/category/292/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               PLOTICA solid cushion
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Plotica
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               50,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+             <li class="mileage_value xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#ff5e0d;">
+                적립금
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#ff5e0d;">
+               <span id="span_mileage_text">
+                <img alt="적립금" src="/web/upload/icon_202403171640060700.png" style="margin-bottom:2px;">
+                 1,500 POiNT
+                </img>
+               </span>
+               (3%)
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_1690">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/가리모쿠60하프-쿠션half-cushionserum-dark-gray/1690/category/63/display/1/" name="anchorBoxName_1690">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage1690_" src="//unwind.kr/web/product/medium/202310/6f0d7fc559e87b899d628bf17bee42c2.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="1690" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="134,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/가리모쿠60하프-쿠션half-cushionserum-dark-gray/1690/category/63/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               가리모쿠60_하프 쿠션(Half cushion)_serum dark gray
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Karimoku60
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               134,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_1689">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/가리모쿠60로비쿠션-lobby-cushionserum-dark-gray/1689/category/63/display/1/" name="anchorBoxName_1689">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage1689_" src="//unwind.kr/web/product/medium/202310/3c28dd80ce23f1b36cce02418ff2b845.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="1689" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="309,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/가리모쿠60로비쿠션-lobby-cushionserum-dark-gray/1689/category/63/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               가리모쿠60_로비쿠션 (Lobby cushion)_serum dark gray
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Karimoku60
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               309,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_1128">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/가리모쿠-뉴스탠다드-스트라이프-쿠션-s-stripes-cushion-s/1128/category/63/display/1/" name="anchorBoxName_1128">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage1128_" src="//unwind.kr/web/product/medium/202109/881aef9ccaf6ae69dbe79ebdc0717979.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="1128" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="189,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/가리모쿠-뉴스탠다드-스트라이프-쿠션-s-stripes-cushion-s/1128/category/63/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               가리모쿠 뉴스탠다드 스트라이프 쿠션 S (Stripes cushion S)
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Karimoku New Standard
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               189,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_1127">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/가리모쿠-뉴스탠다드-스트라이프-쿠션-l-stripes-cushion-l/1127/category/63/display/1/" name="anchorBoxName_1127">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage1127_" src="//unwind.kr/web/product/medium/202109/eea3d92b3e63bc05431073d92c5d4dfe.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="1127" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="241,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/가리모쿠-뉴스탠다드-스트라이프-쿠션-l-stripes-cushion-l/1127/category/63/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               가리모쿠 뉴스탠다드 스트라이프 쿠션 L (Stripes cushion L)
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Karimoku New Standard
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               241,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_729">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/가리모쿠60로비쿠션-lobby-cushionmoquette-green/729/category/63/display/1/" name="anchorBoxName_729">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage729_" src="//unwind.kr/web/product/medium/202111/dbfc55c207ed78c5ce0706c19f3fce29.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="729" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="300,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/가리모쿠60로비쿠션-lobby-cushionmoquette-green/729/category/63/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               가리모쿠60_로비쿠션 (Lobby cushion)_moquette green
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Karimoku60
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               300,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_727">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/가리모쿠60쿠션커버-cushion-coverbruno-brown/727/category/63/display/1/" name="anchorBoxName_727">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage727_" src="//unwind.kr/web/product/medium/202111/183b20953c4ea152815ac9258bd2a418.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="727" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="143,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/가리모쿠60쿠션커버-cushion-coverbruno-brown/727/category/63/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               가리모쿠60_쿠션커버 (Cushion cover)_bruno brown
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Karimoku60
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               143,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_726">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/가리모쿠60쿠션커버-cushion-covermoquette-green/726/category/63/display/1/" name="anchorBoxName_726">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage726_" src="//unwind.kr/web/product/medium/202111/153cc2c4a466a76871abf4055259937f.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="726" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="110,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/가리모쿠60쿠션커버-cushion-covermoquette-green/726/category/63/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               가리모쿠60_쿠션커버 (Cushion cover)_moquette green
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Karimoku60
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               110,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_725">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/가리모쿠60쿠션커버-cushion-covertarp-blue/725/category/63/display/1/" name="anchorBoxName_725">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage725_" src="//unwind.kr/web/product/medium/202111/3e0aed6e44658ff59032230316bcdc87.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="725" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="92,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/가리모쿠60쿠션커버-cushion-covertarp-blue/725/category/63/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               가리모쿠60_쿠션커버 (Cushion cover)_tarp blue
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Karimoku60
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               92,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_724">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/가리모쿠60쿠션커버-cushion-coversunflower/724/category/63/display/1/" name="anchorBoxName_724">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage724_" src="//unwind.kr/web/product/medium/202111/0e8e9f38a18bb130c43f0c99934352d8.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="724" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="203,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/가리모쿠60쿠션커버-cushion-coversunflower/724/category/63/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               가리모쿠60_쿠션커버 (Cushion cover)_sunflower
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Karimoku60
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               203,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+         <li class="xans-record-" id="anchorBoxId_531">
+          <div class="prdList__item">
+           <div class="thumbnail">
+            <div class="prdImg">
+             <a href="/product/가리모쿠60하프-쿠션half-cushionmoquette-green/531/category/63/display/1/" name="anchorBoxName_531">
+              <img alt="언와인드, 라탄가구, 언와이드, djsdhkdlsem, djsdhkdlem" id="eListPrdImage531_" src="//unwind.kr/web/product/medium/202107/df9883ef7524be6ea577a4a0cfff32ed.jpg"/>
+             </a>
+            </div>
+            <div class="likeButton displaynone">
+             <button type="button">
+              <strong>
+              </strong>
+             </button>
+            </div>
+            <div class="iconarea">
+             <span class="ico2">
+              <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="F" productno="531" src="/web/upload/icon_202403171520009900.png"/>
+             </span>
+             <span class="ico1 displaynone">
+             </span>
+            </div>
+           </div>
+           <div class="description">
+            <span class="discount_rate" data-prod-custom="" data-prod-price="118,000" data-sale-price="">
+            </span>
+            <strong class="name">
+             <a class="" href="/product/가리모쿠60하프-쿠션half-cushionmoquette-green/531/category/63/display/1/">
+              <span class="title displaynone">
+               <span style="font-size:14px;color:#282828;">
+                상품명
+               </span>
+               :
+              </span>
+              <span style="font-size:14px;color:#282828;">
+               가리모쿠60_하프 쿠션(Half cushion)_moquette green
+              </span>
+             </a>
+            </strong>
+            <ul class="xans-element- xans-search xans-search-listitem spec">
+             <li class="prd_brand xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:12px;color:#a1a1a1;">
+                브랜드
+               </span>
+               :
+              </strong>
+              <span style="font-size:12px;color:#a1a1a1;">
+               Karimoku60
+              </span>
+             </li>
+             <li class="product_price xans-record-">
+              <strong class="title displaynone">
+               <span style="font-size:13px;color:#282828;">
+                판매가
+               </span>
+               :
+              </strong>
+              <span style="font-size:13px;color:#282828;">
+               118,000원
+              </span>
+              <span id="span_product_tax_type_text" style="">
+              </span>
+             </li>
+            </ul>
+            <div class="icon">
+            </div>
+            <div class="option">
+            </div>
+           </div>
+          </div>
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="xans-element- xans-search xans-search-paging ec-base-paginate typeList">
+       <a class="first" href="#none">
+        첫 페이지
+       </a>
+       <a href="#none">
+        이전 페이지
+       </a>
+       <ol>
+        <li class="xans-record-">
+         <a class="this" href="?keyword=%EC%BF%A0%EC%85%98&amp;page=1&amp;CategoryUrl=%2Fproduct%2Flist.html&amp;ProductUrl=%2Fproduct%2Fdetail.html&amp;SearchUrl=%2Fproduct%2Fsearch.html">
+          1
+         </a>
+        </li>
+       </ol>
+       <a href="#none">
+        다음 페이지
+       </a>
+       <a class="last" href="#none">
+        마지막 페이지
+       </a>
       </div>
      </div>
     </div>
@@ -1624,7 +2696,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
   <span itemscope="" itemtype="https://schema.org/Organization">
    <link href="https://unwind.kr" itemprop="url"/>
   </span>
-  <script src="/app/Eclog/js/cid.generate.js?vs=70d63eafe7e8090808107a45c1e95826&amp;u=unwind.1" type="text/javascript">
+  <script src="/app/Eclog/js/cid.generate.js?vs=e7785abec1d58facfd3eda0d34fd25ad&amp;u=unwind.1" type="text/javascript">
   </script>
   <script>
    (function (i, s, o, g) {
@@ -1843,6 +2915,27 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
    </noscript>
   </div>
   <!-- CMC3 script -->
+  <!-- CMC3 script -->
+  <div id="fbe_search_script" style="display:none;">
+   <script type="text/javascript">
+    !function() {
+  try {
+    let event_key = 'Search';
+    let event_data = {
+      content_ids : ['2272','2082','2081','2080','1690','1689','1128','1127','729','727','726','725','724','531'],
+      content_type : 'product_group',
+      search_string : '쿠션'
+    };
+    if (typeof facebookChannel !== 'undefined') {
+      facebookChannel.pixelEvent(event_key, function () {
+        fbq('trackSingle', '1701811073495927', event_key, event_data);
+      });
+    }
+  } catch (e) { console.error(e); }
+}();
+   </script>
+  </div>
+  <!-- CMC3 script -->
   <!-- yts -->
   <!-- Event snippet for Youtube Shopping Conversion -->
   <!-- Google tag (gtag.js) -->
@@ -1859,7 +2952,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
   </script>
   <script charset="utf-8" src="/ind-script/i18n.php?lang=ko_KR&amp;domain=front&amp;v=2504091394" type="text/javascript">
   </script>
-  <script src="/ind-script/optimizer.php?filename=zVjbcts2EH23-NrvoJ1epq-2FLeZWI3GcSbPS3BJwQSwKC6Wma_vklJSqzYpXuyZPkiiQJyDBXD2AqRb0phevHNp4UDjjlyVOvQUncD03qfy4neT3Puf0r5-UVoQVXr_d0RXH35-Tn5Lzkci8TGgM6D8oSERRJXEuSzRqUlTSFAkhZkMBSXBT0Pz20DuPxO3jkrGH21PDgGD5A6ae5mQoli3D19l2N59W0GAREszgkfJjFF4x8-nUd46aUIxgJ5EbMy6JqeXZIIjpdCdxm1U9JfWXjmZlwPsiUGq070KR-1KnXlSjCBzFsieKWnwLANjhti1pxCkNZmhvR_BsDsZ1qZ1GIaP0uICaqt4X14GgbXpmjKpML19gt_b17MqHThNeeQmv5N23IBFNKJZ0KZfHkVIdKeIhzL0GMFSTb_svecphYJvtSLIR4F0DNCM-ynz6B66NqcDbEnVhVSDpZdjAVGFZgm8BheuXlDd-CiXlbIF_T9ibs4BxHheUT-XCcFLU85l0Rggb8Jhpxo_b8kebet1u1kfoQJKq-Z7Ix9R9cWiHppl64tfel2xA7rCLJajUbdYoEMjcBld81tvnBQT7OagU5Krb6QP3eArApcfobk1yZrW0SN6BCe2oxwwQFHUzxPdSZVYFUvJ0fWBUzWLg9x3tfxomJTEn9M2cjS5f07PDJZ9BN9uhC0qi28-jy2YXI2OYSMG4JgseY_fjJ_jd3i1ZVIkgBNbRaczwr8WjBH8kulNDi79Jfk1OU8LLg2sFNVEEnVxbjqN7fHUz62nNi84Z7bp8zvlODsOASr1PMzCdoepQXhx-LcouNaEMNeS16KJUyL_X7hrPpt9LbRf7lVnEnsqK0NRelYWS3pQ_a_BQNmcIqLHhZPlNozE5A56ctR63_XpDHeYKSpPj7INmjUVZJDoT_deutoG-oj1KFvA10bsvyfjNOqsq24cAP_keK-ECZMJrsBXGOYz2P4yYRDHQbCTWZYUOSvOmcuaDxZQTp_HCi15OX38r9Jv-0umAQSC4owlcChwBvy2hVdYc-rLZ7LcUQC1nDWb1j-myxINFnKua9xAPcOGPxzk0wV5GQNxHpKipeF8sZvuG3z2lBuy0U530OjZHHTs6A9yzsas-WBR4SFezFPIEdUs32u19qdsruDqV1DtgekOslfh-RBQz5_eis_DUn0wBU0XgQKpIVM4wyILYetI4eJEHTzAnJvOO58OsJ2QpfZZfsGVS1dV1QH0u4TPBKrPVd4f7iyOL8TaQpBfe-GkDSPRzX1DetkUmBZFe_dYQF92f5HkKAxZuxx46-koBryWj9zzHw&amp;type=js&amp;k=8a847292863df357eb941b943c4be7cfa9bd429c&amp;t=1744071412">
+  <script src="/ind-script/optimizer.php?filename=zVlLU-M4EL6Dr_s7DPuqvZJk2KUGFooww1mR24mwpNbqQfD8-m07YYYs8Us2VXuIY8v6PrWkflrpBhWk5z_bNLdMwRZtkVpwGCyH9Mml4vwPnTy5n9K2fkEYxov06Z8Attz__ZL8npwNRMKLB6uZdPuGhCMWAsayBCujppAAT3IdDWVSMBeHprce7X8mbiyuCX-wPRnz4AV1UNRL-xT4TX3zKPzm4duCeZYooQfwSLEiFDzQfTfKGSu0z3vQIw-VWJdo1Ry1tygl2G7cnQzuwpiZFdm6hzzBC9ndK7dYr9SJQ0kI1CcezYkUGk5WTOs-cu0oOCqFum_vF6bJnDTpprHg-49S4zwoI2lfjoOYMekNroSE9P4Nfidfy6o04BRmgZrcVphhA-ZB82pBq35Z4D5RjUrcl6FFCFLV9MvOet5SSPatlMiyQSAVPKvGvV05sM9Nm9MANijLXMjeqpdBzoL01RI4xayfHdG64V5utRY16P_hczNyINrRirqxTMCc0OuxLAo8yyp32KiNyw2ag229rDfrMysYpkV1vRMvINt8UQvNvLbFL62m2ABdwCqsB6PuIQcLmsM82Oq_vLOCR8hNTmeNtrwWzjeDZ8hsdoCm1mRVtQ4e0QGzfDPIAD3L8_J9oOvUEiPDWpB3faZQTcqB9lVbvjdEBfH3tJU66sy9pycGQzYCHzfCBqSBD5_HhulMDvZhAwYgnyxojz-Mn_y3n2yZJHJGga3A7ojwQ4IhCj8nep0xm_6a_JacpTmlBkbwIpJEnp_pRmFbLHVZW2r1gmJmHT5fKYfJsXdQqaNhTk2zm-qF5_un05xyTebHSjIVTYjx_H_Dtvrd7XKh3XIvGoPYW7XSGIQjzSKVbsz_ew_c7vtbKPZW9uRQj8Yfscz-E7mVuojCvqahW-USKsl4QVfmQ5wgt6ZObT-9eMtqqern-nGJMsPgp6aNi_kdpFeKrScnXQhHBU4pqNCZkPqK6JaUPUpYgoS6sphecEvEM-YKmHz7LoPO3uW-42kf1Sj9_U42b6l_B1PpaWSaCZ1NQrSIKRaOEX3dRfhY1fvhhi_4BCTL2onFcFyLAtKZxS1F-znjG4hnGaE4b_D7GQ2m2eOorvJMyHQWqtSVGhVGr-89PAvYeiaL_e0cg_bdYVoxTb40VRgcnFqx3gzFZJa1uIebXde3Mm9hJXHdPcrGK0rlvPACXHfvuS2Nx89QDpKFuVLz3TUap0Ctmj7X9IDfWkqRuPbRBDvHP57BtEfqXhydBtHBQkpLxeiYudwICa3JQQd-AQadiB__UbhNe7bag4A3224PBsoGYAT8voYXUFLFmY1keUDySPNRs6ntI14tQUMuxprGNStHyPCnZVm8Ql4Ej1T-CV7TUATYxttGkF7coQkm3kAD1SAKLBn6sxizMTdlFUf3_mKchhxQjbK9Wtf-EtXJVzmB1u6ZHthqEp6qlBg_vV3OcaVzjFcCyYRiKwkjJDLMbyxKOO34_NRDnOvGo5YGsImIUrsof0qZS9vHjCNAt004az5rrFCf9kcFh-dQdWpHrx23wviB6Oozf3pRpYwGeH3kl7O26H6U5MANGTPvedhoMXi4FC_U818&amp;type=js&amp;k=4dc96bc27ccc6feab5545c5a0c9134d3af6ee80b&amp;t=1744071412">
   </script>
   <script src="/ind-script/optimizer_user.php?filename=rdM7bsMwDAbgPdbacxAucoOu3XoCWmItOhKpmlSN3D4pCuQAUTZOH_jzAVkrAcWpG-0GXQ6WBK0vheOUvRawRFMi41XALizvM0xHg82g4oU-0OmTzcNmb_A8ZQc32kNlGYS2n0779URoLOtLrM6nOcxzOI9051zJsNCjGGwtaq06OqtMmO5DH0NWWQJG59_RSEa4xzyIuLawoMhwrG9Vfx75ew5N_b7vglftDrUXZ8vavjK3Nn6aRTH9Kzc&amp;type=js&amp;k=872331c572acfb1783b59fe413309c255d7eeea5&amp;t=1710570741&amp;user=T">
   </script>
@@ -2051,6 +3144,13 @@ CAFE24.FRONT_PRODUCT_SEARCH_DATA.bEmptyElasticData = true;
 CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"","tail":"\uc6d0"},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
 CAFE24.FRONT_PRODUCT_SEARCH_DATA.setNoDataList();
 CAFE24.FRONT_PRODUCT_SEARCH_DATA.bEmptyElasticData = true;
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_COMMON !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_COMMON.initObject();}
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_BIND !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_BIND.initChooseBox();}
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_DATA !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_DATA.initData();}
+if (typeof CAFE24.SHOP_FRONT_NEW_LIKE_COMMON !== "undefined") {CAFE24.SHOP_FRONT_NEW_LIKE_COMMON.init({"bIsUseLikeProduct":false,"bIsUseLikeCategory":false});}
+if (typeof CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT !== "undefined") {CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT.bIsReviewTalk = 'F';}
+var basket_result = '/product/add_basket.html';
+var basket_option = '/product/basket_option.html';
 var aLogData = {"log_server1":"eclog2-260.cafe24.com","log_server2":"elg-db-svcm-161.cafe24.com","mid":"unwind","stype":"e","domain":"","shop_no":1,"lang":"ko_KR","ver":2,"hash":"","ca":"cfa-js.cafe24.com\/cfa.js","etc":"","mobile_flag":"F"};
 var sMileageName = 'UNWiND POiNT';
 var sMileageUnit = '[:PRICE:] POiNT';

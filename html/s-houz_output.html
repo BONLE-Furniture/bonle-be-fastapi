@@ -556,13 +556,13 @@ var EC_GLOBAL_MALL_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_MAL
 CAFE24.GLOBAL_DATETIME_INFO = {
 oConstants: {"STANDARD_DATE_REGEX":"\/([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))\/","IN_ZONE":"inZone","OUT_ZONE":"outZone","IN_FORMAT":"inFormat","OUT_FORMAT":"outFormat","IN_DATE_FORMAT":"inDateFormat","IN_TIME_FORMAT":"inTimeFormat","OUT_DATE_FORMAT":"outDateFormat","OUT_TIME_FORMAT":"outTimeFormat","IN_FORMAT_DATE_ONLY":1,"IN_FORMAT_TIME_ONLY":2,"IN_FORMAT_ALL":3,"OUT_FORMAT_DATE_ONLY":1,"OUT_FORMAT_TIME_ONLY":2,"OUT_FORMAT_ALL":3,"DATE_ONLY":"YYYY-MM-DD","TIME_ONLY":"HH:mm:ss","FULL_TIME":"YYYY-MM-DD HH:mm:ss","ISO_8601":"YYYY-MM-DD[T]HH:mm:ssZ","YEAR_ONLY":"YYYY","MONTH_ONLY":"MM","DAY_ONLY":"DD","WEEK_ONLY":"e","TIME_H_I_ONLY":"HH:mm","TIME_HOUR_ONLY":"HH","TIME_MINUTE_ONLY":"mm","POSTGRE_FULL_TIME":"YYYY-MM-DD HH24:MI:SS","POSTGRE_TIME_ONLY":" HH24:MI:SS","MICRO_SECOND_ONLY":"u","SEOUL":"Asia\/Seoul","TOKYO":"Asia\/Tokyo","SHANGHAI":"Asia\/Shanghai","TAIPEI":"Asia\/Taipei","HANOI":"Asia\/Bangkok","LOS_ANGELES":"America\/Los_Angeles","LISBON":"Europe\/Lisbon","MADRID":"Europe\/Madrid","SINGAPORE":"Asia\/Singapore","UTC":"Etc\/UTC","MAX_DATETIME":"9999-12-31 23:59:59"},
 oOptions: {"inZone":"Asia\/Seoul","inFormat":"YYYY-MM-DD HH:mm:ss","inDateFormat":"YYYY-MM-DD","inTimeFormat":"HH:mm:ss","outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"},
-oPolicies: [],
+oPolicies: {"shop":{"outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"}},
 sOverrideTimezone: '',
 sMomentNamespace: 'EC_GLOBAL_MOMENT'
 };
 CAFE24.FRONT_JS_CONFIG_MANAGE = {"sSmartBannerScriptUrl":"https:\/\/app4you.cafe24.com\/SmartBanner\/tunnel\/scriptTags?vs=1563164396689206","sMallId":"shouzshouz","sDefaultAppDomain":"https:\/\/app4you.cafe24.com","sWebLogOffFlag":"F","cdnUrl":"https:\/\/cafe24.poxo.com\/ec01\/shouzshouz\/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==\/_"};
 var EC_FRONT_JS_CONFIG_MANAGE = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MANAGE');
-CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-12","locale":"ko"}};
+CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-13","locale":"ko"},"aProductPurchaseInfo_7327":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_7326":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_7325":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true}};
 var EC_FRONT_JS_CONFIG_SHOP = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_SHOP');
 CAFE24.FRONT_JS_CONFIG_MEMBER = {"sAuthUrl":"https:\/\/ipin-ec.cafe24.com\/certify\/v1\/?action=auth"};
 var EC_FRONT_JS_CONFIG_MEMBER = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MEMBER');
@@ -572,6 +572,8 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
   </script>
   <link href="/ind-script/optimizer.php?filename=nY5BCgIxEATvYa--Y1T0BYIPUHzAZHbWhE0yYZKA_t7Vkx4WJNemq7rBSWTY7RWyyl0xgnKRpsRApcCkkiqQxChpWIIN_NNnMkVCq16SsfLoBFutvaMBn6x9aEUbuBOVbIJPbCymtLofvIWbz0gzXL59JwycRlQ4DMdhC1PAmj3NaxrMGa5O8q_k_Dm1dMZGtYMsjEruDb4A&amp;type=css&amp;k=dfc749202ee4f0e29186b4d8083aa2c4d8e6bdeb&amp;t=1726130154" rel="stylesheet" type="text/css"/>
   <link href="/ind-script/optimizer_user.php?filename=tZVNboQwDIX30G3PYVWVep8QPINLEkdxUpU5_YThZ6pWXWEW2A-EPh6OE8PAHgFtWwSTgAxcbo8AsXSObDtk70B6bHsUugaQkcIHtBLBxCjguS8OIVPe4osVeQUdrKBJdliTJjhzb6YlqmCdmbhkiKni7Z6bt01peo_mSsFk4vBDHvnAar4zQhYqByx7r4xcHqgi0Tb1BptCp2Azs8sUT2EP6M4BK7Tb_-yl2fCcapvuFG5XclZu5R3N32eVwp1T5PqW1TyJyEdO2YT8VEfxs93Zqwbn-JmzkRJK5CD0peLLFsns6aYzKk3f10mw9Dkcb_ffIy0jzlcdZTUqGrbMI6FsWZEs9c1xiZqFsPXou3KadlFLsklN9zaxc51JT6W5Zf_8haL1T6ZQZE2apv1UZ8-WNNf0wpwxral5X4XmtjRhdBTGXSizPT3Oy0Vo7k6TegoX3oXmct6Y_SPM0Ds&amp;type=css&amp;k=94e8c31617b8cdd5638ae260bb5b7ef04f43085c&amp;t=1739605128&amp;user=T" rel="stylesheet" type="text/css"/>
+  <style type="text/css">
+  </style>
   <title>
    S.HOUZ  에스하우츠
   </title>
@@ -1186,7 +1188,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
            브랜드명
           </option>
          </select>
-         <input class="inputTypeText" fw-filter="" fw-label="상품명/제조사" fw-msg="" id="keyword" name="keyword" placeholder="" size="15" type="text" value="넬슨"/>
+         <input class="inputTypeText" fw-filter="" fw-label="상품명/제조사" fw-msg="" id="keyword" name="keyword" placeholder="" size="15" type="text" value="쿠션"/>
         </div>
         <div class="popular" id="except_keyword_wrap_id" style="display:none">
          <strong>
@@ -1277,7 +1279,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
         <div class="sp-sort-element">
          <a class="wide active" href="#none">
           <strong>
-           0
+           3
           </strong>
           PRODUCT RESULT
          </a>
@@ -1332,6 +1334,405 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
    </div>
    <!--상품목록-->
    <div layout="sp-layout-fixed" style="padding-right:15px;padding-left:15px;">
+    <div class="xans-element- xans-search xans-search-result sp-product" compare="true" control="false" grid="5">
+     <!--
+			$count = 24
+			$basket_result = /product/add_basket.html
+			$basket_option = /product/basket_option.html
+		-->
+     <!--줌슬라이더-->
+     <p class="sp-text displaynone">
+      <span>
+       <em>
+       </em>
+      </span>
+     </p>
+     <span class="sp-image displaynone">
+      <span>
+       <img src=""/>
+      </span>
+     </span>
+     <div class="sp-product-style">
+      <button grid="0">
+      </button>
+      <button grid="2">
+      </button>
+      <button grid="3">
+      </button>
+      <button grid="4">
+      </button>
+      <button grid="5">
+      </button>
+     </div>
+     <div class="sp-product-box">
+      <div class="sp-product-item xans-record-" id="anchorBoxId_7327">
+       <div class="sp-product-item-thumb">
+        <a class="sp-product-item-thumb-href" href="/product/cus209-rest-cushion-4-colors/7327/category/166/display/1/">
+         <p class="sp-product-item-thumb-cover">
+          <!--<img src="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/small/202412/68cac5c0bfb68cd6d7b1c6ca95abc3bb.jpg" alt="[몬타나]" />-->
+         </p>
+         <i class="sp-product-item-thumb-origin">
+          <img alt="[몬타나]" src="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/medium/202412/d959eb64ae786abf96f8f3dfac0f94ab.jpg"/>
+         </i>
+        </a>
+        <div class="sp-product-layer">
+         <!--<span class="sp-product-layer-func sp-zoom "><img src="https://cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/upload/icon_202109281715464700.png"  onClick="zoom('7327', '166', '1','', '');" style="cursor:pointer" alt="상품 큰 이미지 보기" /></span>-->
+         <span class="sp-product-layer-func sp-basket">
+          <img alt="장바구니 담기" class="ec-admin-icon cart" onclick="CAPP_SHOP_NEW_PRODUCT_OPTIONSELECT.selectOptionCommon(7327,  166, 'basket', '')" src="https://cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/upload/icon_202109281715561200.png"/>
+         </span>
+         <span class="sp-product-layer-func sp-option displaynone">
+         </span>
+         <!--<span class="sp-product-layer-func sp-wish displaynone"></span>
+				<span class="sp-product-layer-func sp-like displaynone sp-cnt-"> </span>
+				<span class="sp-product-layer-func sp-detailzoom" detailzoom data-url="/_sp/apps/module/zoom/zoom.html?product_no=7327">zoom</span>-->
+        </div>
+        <div class="sp-product-colorchip displaynone">
+        </div>
+       </div>
+       <div class="sp-product-spec">
+        <div class="sp-product-name">
+         <a class="" href="/product/cus209-rest-cushion-4-colors/7327/category/166/display/1/">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#555555;">
+            상품명
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#555555;">
+           CUS209 REST cushion, 4 colors
+          </span>
+         </a>
+        </div>
+        <div class="sp-product-count">
+         <a class="sp-product-count-qna sp-product-count-" href="/product/cus209-rest-cushion-4-colors/7327/category/166/display/1/#use_qna">
+         </a>
+         <a class="sp-product-count-review sp-product-count-" href="/product/cus209-rest-cushion-4-colors/7327/category/166/display/1/#use_review">
+         </a>
+        </div>
+        <div>
+         <a href="/product/cus209-rest-cushion-4-colors/7327/category/166/display/1/">
+          <span class="sp-product-enname">
+           CUS209 레스트 쿠션, 4컬러
+          </span>
+         </a>
+        </div>
+        <div class="xans-element- xans-search xans-search-listitem sp-product-description">
+         <div class="xans-record-" rel="영문상품명">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#555555;">
+            영문상품명
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#555555;">
+           CUS209 레스트 쿠션, 4컬러
+          </span>
+         </div>
+         <div class="xans-record-" rel="브랜드">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#000000;font-weight:bold;">
+            브랜드
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#000000;font-weight:bold;">
+           MONTANA
+          </span>
+         </div>
+         <div class="xans-record-" rel="판매가">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#555555;">
+            판매가
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#555555;">
+           434,000원
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </div>
+         <div class="xans-record-" rel="">
+          <span class="displaynone">
+           :
+          </span>
+         </div>
+         <div class="xans-record-" rel="배송정보">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#660000;">
+            배송정보
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#660000;">
+           주문상품, 6-7개월 소요예정
+          </span>
+         </div>
+        </div>
+        <div class="sp-c-dc-price">
+         <div class="displaynone">
+          <span class="displaynone">
+          </span>
+          원
+         </div>
+        </div>
+        <div class="sp-product-icons">
+        </div>
+       </div>
+       <p class="sp-product-check displaynone">
+        <input class="displaynone" id="checkbox-7327" type="checkbox"/>
+        <label for="checkbox-7327">
+        </label>
+       </p>
+       <p class="sp-product-inputs" data-big="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/big/202412/009bf86740cac5a8139c0aff0fa1c41e.jpg" data-c_dc="" data-custom="" data-id="7327" data-link="/product/cus209-rest-cushion-4-colors/7327/category/166/display/1/" data-medium="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/medium/202412/d959eb64ae786abf96f8f3dfac0f94ab.jpg" data-price="434,000" data-qna="" data-review="" data-sale="" data-small="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/small/202412/68cac5c0bfb68cd6d7b1c6ca95abc3bb.jpg">
+       </p>
+      </div>
+      <div class="sp-product-item xans-record-" id="anchorBoxId_7326">
+       <div class="sp-product-item-thumb">
+        <a class="sp-product-item-thumb-href" href="/product/cus139-rest-cushion-4-colors/7326/category/166/display/1/">
+         <p class="sp-product-item-thumb-cover">
+          <!--<img src="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/small/202412/68cac5c0bfb68cd6d7b1c6ca95abc3bb.jpg" alt="[몬타나]" />-->
+         </p>
+         <i class="sp-product-item-thumb-origin">
+          <img alt="[몬타나]" src="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/medium/202412/8f9efb1b49c328f17a65b59c1c96d46c.jpg"/>
+         </i>
+        </a>
+        <div class="sp-product-layer">
+         <!--<span class="sp-product-layer-func sp-zoom "><img src="https://cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/upload/icon_202109281715464700.png"  onClick="zoom('7326', '166', '1','', '');" style="cursor:pointer" alt="상품 큰 이미지 보기" /></span>-->
+         <span class="sp-product-layer-func sp-basket">
+          <img alt="장바구니 담기" class="ec-admin-icon cart" onclick="CAPP_SHOP_NEW_PRODUCT_OPTIONSELECT.selectOptionCommon(7326,  166, 'basket', '')" src="https://cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/upload/icon_202109281715561200.png"/>
+         </span>
+         <span class="sp-product-layer-func sp-option displaynone">
+         </span>
+         <!--<span class="sp-product-layer-func sp-wish displaynone"></span>
+				<span class="sp-product-layer-func sp-like displaynone sp-cnt-"> </span>
+				<span class="sp-product-layer-func sp-detailzoom" detailzoom data-url="/_sp/apps/module/zoom/zoom.html?product_no=7326">zoom</span>-->
+        </div>
+        <div class="sp-product-colorchip displaynone">
+        </div>
+       </div>
+       <div class="sp-product-spec">
+        <div class="sp-product-name">
+         <a class="" href="/product/cus139-rest-cushion-4-colors/7326/category/166/display/1/">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#555555;">
+            상품명
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#555555;">
+           CUS139 REST cushion, 4 colors
+          </span>
+         </a>
+        </div>
+        <div class="sp-product-count">
+         <a class="sp-product-count-qna sp-product-count-" href="/product/cus139-rest-cushion-4-colors/7326/category/166/display/1/#use_qna">
+         </a>
+         <a class="sp-product-count-review sp-product-count-" href="/product/cus139-rest-cushion-4-colors/7326/category/166/display/1/#use_review">
+         </a>
+        </div>
+        <div>
+         <a href="/product/cus139-rest-cushion-4-colors/7326/category/166/display/1/">
+          <span class="sp-product-enname">
+           CUS139 레스트 쿠션, 4컬러
+          </span>
+         </a>
+        </div>
+        <div class="xans-element- xans-search xans-search-listitem sp-product-description">
+         <div class="xans-record-" rel="영문상품명">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#555555;">
+            영문상품명
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#555555;">
+           CUS139 레스트 쿠션, 4컬러
+          </span>
+         </div>
+         <div class="xans-record-" rel="브랜드">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#000000;font-weight:bold;">
+            브랜드
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#000000;font-weight:bold;">
+           MONTANA
+          </span>
+         </div>
+         <div class="xans-record-" rel="판매가">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#555555;">
+            판매가
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#555555;">
+           346,000원
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </div>
+         <div class="xans-record-" rel="">
+          <span class="displaynone">
+           :
+          </span>
+         </div>
+         <div class="xans-record-" rel="배송정보">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#660000;">
+            배송정보
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#660000;">
+           주문상품, 6-7개월 소요예정
+          </span>
+         </div>
+        </div>
+        <div class="sp-c-dc-price">
+         <div class="displaynone">
+          <span class="displaynone">
+          </span>
+          원
+         </div>
+        </div>
+        <div class="sp-product-icons">
+        </div>
+       </div>
+       <p class="sp-product-check displaynone">
+        <input class="displaynone" id="checkbox-7326" type="checkbox"/>
+        <label for="checkbox-7326">
+        </label>
+       </p>
+       <p class="sp-product-inputs" data-big="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/big/202412/3eeb61be456e7fca8b96e14e4f0bcece.jpg" data-c_dc="" data-custom="" data-id="7326" data-link="/product/cus139-rest-cushion-4-colors/7326/category/166/display/1/" data-medium="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/medium/202412/8f9efb1b49c328f17a65b59c1c96d46c.jpg" data-price="346,000" data-qna="" data-review="" data-sale="" data-small="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/small/202412/68cac5c0bfb68cd6d7b1c6ca95abc3bb.jpg">
+       </p>
+      </div>
+      <div class="sp-product-item xans-record-" id="anchorBoxId_7325">
+       <div class="sp-product-item-thumb">
+        <a class="sp-product-item-thumb-href" href="/product/cus069-rest-cushion-4-colors/7325/category/166/display/1/">
+         <p class="sp-product-item-thumb-cover">
+          <!--<img src="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/small/202412/68cac5c0bfb68cd6d7b1c6ca95abc3bb.jpg" alt="[몬타나]" />-->
+         </p>
+         <i class="sp-product-item-thumb-origin">
+          <img alt="[몬타나]" src="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/medium/202412/aa4f7fe2783d31832c72ffece2d2c139.jpg"/>
+         </i>
+        </a>
+        <div class="sp-product-layer">
+         <!--<span class="sp-product-layer-func sp-zoom "><img src="https://cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/upload/icon_202109281715464700.png"  onClick="zoom('7325', '166', '1','', '');" style="cursor:pointer" alt="상품 큰 이미지 보기" /></span>-->
+         <span class="sp-product-layer-func sp-basket">
+          <img alt="장바구니 담기" class="ec-admin-icon cart" onclick="CAPP_SHOP_NEW_PRODUCT_OPTIONSELECT.selectOptionCommon(7325,  166, 'basket', '')" src="https://cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/upload/icon_202109281715561200.png"/>
+         </span>
+         <span class="sp-product-layer-func sp-option displaynone">
+         </span>
+         <!--<span class="sp-product-layer-func sp-wish displaynone"></span>
+				<span class="sp-product-layer-func sp-like displaynone sp-cnt-"> </span>
+				<span class="sp-product-layer-func sp-detailzoom" detailzoom data-url="/_sp/apps/module/zoom/zoom.html?product_no=7325">zoom</span>-->
+        </div>
+        <div class="sp-product-colorchip displaynone">
+        </div>
+       </div>
+       <div class="sp-product-spec">
+        <div class="sp-product-name">
+         <a class="" href="/product/cus069-rest-cushion-4-colors/7325/category/166/display/1/">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#555555;">
+            상품명
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#555555;">
+           CUS069 REST cushion, 4 colors
+          </span>
+         </a>
+        </div>
+        <div class="sp-product-count">
+         <a class="sp-product-count-qna sp-product-count-" href="/product/cus069-rest-cushion-4-colors/7325/category/166/display/1/#use_qna">
+         </a>
+         <a class="sp-product-count-review sp-product-count-" href="/product/cus069-rest-cushion-4-colors/7325/category/166/display/1/#use_review">
+         </a>
+        </div>
+        <div>
+         <a href="/product/cus069-rest-cushion-4-colors/7325/category/166/display/1/">
+          <span class="sp-product-enname">
+           CUS069 레스트 쿠션, 4컬러
+          </span>
+         </a>
+        </div>
+        <div class="xans-element- xans-search xans-search-listitem sp-product-description">
+         <div class="xans-record-" rel="영문상품명">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#555555;">
+            영문상품명
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#555555;">
+           CUS069 레스트 쿠션, 4컬러
+          </span>
+         </div>
+         <div class="xans-record-" rel="브랜드">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#000000;font-weight:bold;">
+            브랜드
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#000000;font-weight:bold;">
+           MONTANA
+          </span>
+         </div>
+         <div class="xans-record-" rel="판매가">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#555555;">
+            판매가
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#555555;">
+           265,000원
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </div>
+         <div class="xans-record-" rel="">
+          <span class="displaynone">
+           :
+          </span>
+         </div>
+         <div class="xans-record-" rel="배송정보">
+          <span class="displaynone">
+           <span style="font-size:11px;color:#660000;">
+            배송정보
+           </span>
+           :
+          </span>
+          <span style="font-size:11px;color:#660000;">
+           주문상품, 6-7개월 소요예정
+          </span>
+         </div>
+        </div>
+        <div class="sp-c-dc-price">
+         <div class="displaynone">
+          <span class="displaynone">
+          </span>
+          원
+         </div>
+        </div>
+        <div class="sp-product-icons">
+        </div>
+       </div>
+       <p class="sp-product-check displaynone">
+        <input class="displaynone" id="checkbox-7325" type="checkbox"/>
+        <label for="checkbox-7325">
+        </label>
+       </p>
+       <p class="sp-product-inputs" data-big="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/big/202412/71c02eef6ed029036dfd20456c21e905.jpg" data-c_dc="" data-custom="" data-id="7325" data-link="/product/cus069-rest-cushion-4-colors/7325/category/166/display/1/" data-medium="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/medium/202412/aa4f7fe2783d31832c72ffece2d2c139.jpg" data-price="265,000" data-qna="" data-review="" data-sale="" data-small="//cafe24.poxo.com/ec01/shouzshouz/FswOdE9MfRI0I8YryJi6ahbH0LundVoJ7MhrmnwPcaV3yTWMo9TLpgzZNyRkXybIHkXOBbfaF0Wem9eZm1UUJQ==/_/web/product/small/202412/68cac5c0bfb68cd6d7b1c6ca95abc3bb.jpg">
+       </p>
+      </div>
+     </div>
+    </div>
     <div class="sp-no-result-found">
      <p>
       검색 결과가 없습니다.
@@ -1342,6 +1743,39 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
    <!--//여기까지-->
    <!--페이지-->
    <div layout="sp-layout-fixed">
+    <div class="xans-element- xans-search xans-search-paging sp-pagination mgt3 mgb5">
+     <ul class="sp-pagination-arrow sp-left">
+      <li>
+       <a class="first" href="#none">
+        FIRST
+       </a>
+      </li>
+      <li>
+       <a class="prev" href="#none">
+        PREV
+       </a>
+      </li>
+     </ul>
+     <ul class="sp-pagination-page">
+      <li class="xans-record-">
+       <a class="this" href="?keyword=%EC%BF%A0%EC%85%98&amp;page=1&amp;CategoryUrl=%2Fproduct%2Flist.html&amp;ProductUrl=%2Fproduct%2Fdetail.html&amp;SearchUrl=%2Fproduct%2Fsearch.html">
+        1
+       </a>
+      </li>
+     </ul>
+     <ul class="sp-pagination-arrow sp-right">
+      <li>
+       <a class="next" href="#none">
+        NEXT
+       </a>
+      </li>
+      <li>
+       <a class="last" href="#none">
+        LAST
+       </a>
+      </li>
+     </ul>
+    </div>
    </div>
   </div>
   <!--푸터-->
@@ -1632,7 +2066,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
   <span itemscope="" itemtype="https://schema.org/Organization">
    <link href="https://s-houz.com" itemprop="url"/>
   </span>
-  <script src="/app/Eclog/js/cid.generate.js?vs=70d63eafe7e8090808107a45c1e95826&amp;u=shouzshouz.1" type="text/javascript">
+  <script src="/app/Eclog/js/cid.generate.js?vs=e7785abec1d58facfd3eda0d34fd25ad&amp;u=shouzshouz.1" type="text/javascript">
   </script>
   <script>
    (function (i, s, o, g) {
@@ -1851,12 +2285,33 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
    </noscript>
   </div>
   <!-- CMC3 script -->
+  <!-- CMC3 script -->
+  <div id="fbe_search_script" style="display:none;">
+   <script type="text/javascript">
+    !function() {
+  try {
+    let event_key = 'Search';
+    let event_data = {
+      content_ids : ['7327','7326','7325'],
+      content_type : 'product_group',
+      search_string : '쿠션'
+    };
+    if (typeof facebookChannel !== 'undefined') {
+      facebookChannel.pixelEvent(event_key, function () {
+        fbq('trackSingle', '282286017386196', event_key, event_data);
+      });
+    }
+  } catch (e) { console.error(e); }
+}();
+   </script>
+  </div>
+  <!-- CMC3 script -->
   <!-- External Script End -->
   <script charset="utf-8" src="//t1.kakaocdn.net/kakao_js_sdk/v1/kakao.min.js" type="text/javascript">
   </script>
   <script charset="utf-8" src="/ind-script/i18n.php?lang=ko_KR&amp;domain=front&amp;v=2504091394" type="text/javascript">
   </script>
-  <script src="/ind-script/optimizer.php?filename=zVhNc9s2EL3bvPZ30G7TTq82XbeZWI3GcSbnJbgU1wSxKABaZn59lxSTRnFE8UOe6WiGpMh9DwtgF2-BuOAK48ufXZw7qHDLrowdeq6dwvjRx3T5u4ke_U_xkF1NFlQZP_5To2v62y_Rb9HFRCQ-B3QGtO9fRIq5JFzKUjs9qwsRqig3s6GGFZtckwqzKC6jN_Kb1bh8Dey-GzfreCP4vdnNIGAgMajEyoQY1ap7-EShePh8AwGiiswEHk2poPBBno-jvHVkQj6CnlXdunXLrkrYBMdaozuOW-vaX1l77SjbjPCnDqSPW-WOu5E686wFweYssD3TZPAsBWPG-LWjUFxVbMZaP4ORbDQS2tZhGN9KhwtYWS3z8mMQWBuvOCWN8f03-J1_A6NyAFdxVssrvyU7rcG8Nqod0NYuqyVtqoNBPJZhwAkJ1fjjLnu-pdDwudEM2SRQVQdo232fenRPhybnANiybnLSo0MvwxxqHdoh8BW4cD0Qda3Rh4LtXoO3Hc07KIHjsr2u6Rn1UJYM0CRdlHwcDJID0BtM681k1N-4je-oxPja8VaGOwFV4HyWZCALx-MTSa4Ny9I7h-cenwi3AXTZPyZcmzCZ6h5zdGgUJrVr783akZo-Mh7BqWJSBAfI8-alUkxX6nRDHej_UTdkomLGS1r7pUwInsxmKUuFAbJWk6fxWF1vSETgCTQJnN0Xvq8vInkAv5i2ddhk_iW9MFgZRXy9FgrUFl-9HwWY7EXhccoGRDoob16PX2QmnGyYNCsQ_S35uHD958GUZSURepOBi99Ev0YXcS4VjCVVziTRlxfmoLMD6-GHbj1sP4i0dyr_hXK6VvYqcUd-YHlfgYHNfl2zxVTzZlq_exGIvfhybg9LwSi86v-d51KCQ1jqyaloxlXsRahkwgIFQn_cOnGNDfwOm0kzBL4xanedjauwSocKuSPw9y5Dp0yYTXANvsSwnMEO1x2jONZ9AT-XRUookZwlfVnJ5gI28_txg5Y9zW__E_li8kLxPYEariSPMDhUuAB-38FLbERXsoUsDyz1cbKoN11-zA9LNJjT0tS4g2aBD386yOYH5FUdWBZdUh2NSNR2fm7I_pPWbGs7P0FrL-6gk0R_oiUTs2rafVi_XiyLkD2qRbnXxdpf1B7DNSeI2p7pAdKT8LwNWC3v3o1sR0i_NTnPDwINVEGqcYFHFkLhWOP5kSJzhDt3B899DoDtDJXaqfy51HNkJgH9NpKCWw-lyh_9lnH_UKyrPeWzV45smIhuT3biq7amtai688cchtT9hyR7y5C1yciTT8d1wFt6Fst_AQ&amp;type=js&amp;k=e4de3a2cb867ef93f8a6816549a69c2fb3b3571d&amp;t=1744071412">
+  <script src="/ind-script/optimizer.php?filename=zVnbUuQ2EH0Hv-Y7DMkmlVfGLAm1EChgw7NGbs8IS2pFFwbv16ftMbtMBt_koSpF4fFF56gld-t0W-kaFaSnP9u0sEzBBm2ZWnAYLIf0yaXi9HedPLmf0r52QRjGy_TpnwC2an9-SX5LTiYi4cWD1Uy69kbCEUsBc1mClVFDSIAnhY6GauSoCym4j6I4TT7RX1Tn9NSj_c-8GYsrwu-83Zx58IIaKGqlfQr8ujl5FH798O2ceZYooSfwSLEkFDzQ-TDKGSu0L0bQIw-1WRdoVYbaW5QS7DDuVgZ3ZszCinw1wp7ghRxuVVhsZurIoSQE6iOP5kgKDUdLpvUYu7YUHJVCPbb1C9MUjZpc21jw43tpcB6UkfRe3gcxY9JrXAoJ6d0b_Na-nlnpwCnMA91yG2GmdVgEzesJrdvlgcJGdTrxWIYeI8hV06_b6HlLIdm3SiLLJ4FU8Kzu92bpwD53vZwOsEFZFUKOdr0cChakr6fAKWb9osfr6kb3azQ7HV40NF9YyTAt6-OteAHZFyU9NFnjJV97naQDeg7LsJqM-gs26ZUoIV1Y3NB0Z4yvIZ4l64nC8fiMgmuFtPTG8NzBs4CNZ7JsTzMM2k-muoMCLGgOWbD1b3VrBZ8-Mw6Y5etJHuxZUVT7SjFdqZcr0YD-H3lDTiqmHYW1m8sEzAm9msuiwLO81uRpPEaGlSAReGZSEBztK9_3GwmdMDebtjZY526fnhgMzSJ8XA9rkAY-fBxrpvO9xOOQHZB0iKL6OH6SGX-waZLIGelvicPC9cOCKctKRvQ6Zzb9lPyanKQFZTBG8DKSRJ6e6E5je9bD-2Y9rB-QtDcq_0o5XStblbgSzkcpBf3fbjObG1Nbcg8S-FyqaGta93pykfr5Fv-OS44fyI3UZRT2NU3cKJdQycRLOjIf4gzZvpL084u3rLGquW4u71HmGPyhaeMEfoD0UrHVwUnPhaMCpBJUiByQ-pLo7klYJWwDQUQ6Yq_hlogXzJVw8Nd3EXS-lxbMp31Us_z3O9mMzHifSh_GpoXQ-UGIzvfyqEiiv7fS1ul6XbLU5uipo66OTXcgj8Lz9uq4QKuYn2vJoWhCTFW4K05n8VH9g-S-Wdpnlngt12SaFkfVrmdCpotQ55B0U2H_yK6ZpoV4h3ADS4mr4XRr7RVlKF54AW64dWYr4_ELVJNsYa7SfHuMxilQy74vFwPwG5uD5X2V8gDBdlmfz2D6dXgUx6B7DbBkGKjGmjOWayGhV_oH8Odg0In4_h-FW_fnoiMIeP-nkwEG0nqYAb9r4CVUVEjlM1ke0DOZzRpNEx_xbgkaCjE3NK5YNcOGPyzL4x3yLHgkGRO8oaHleRMfG0F6cYsmmPgADVRhKLAU6M9izou5rmpVateLeR6yQzUr9hpf-1PU-07VAby2ZXpgy4Pw1IXC_OFtFfxSFxjvBJIJxZYSZlhkmF9blHA88FVlhDlXnRsdHWAToVJblT-mzEVMS3fcJuGse6evRn1uv5Hu7gI1eRc9dtwK4yei662M9KzO5wzwZsOtYH3q_i7JzjJkTDZyq89i8HAhXqjlvw&amp;type=js&amp;k=301a32baf8528275b7d17e1df571d78e03e8abfa&amp;t=1744071412">
   </script>
   <script src="/ind-script/optimizer_user.php?filename=rZUxcsQgDEX7OG3OwWQyk4vkBFhgW2tABEEy3tOHWWO2SIka_V_AQyAEaiNvlYWpsE2seKNyfwQVy-wQpi17p9jYyVjGNSjeMXyqiaPSMbLSxlBQQGGpg3M3rzd-U4NoT6Y4q9jqBFsTQW4mo48zSlCdPqhkFVOlQ9eX98sNrNHQs2YEdePTDPAqAsh7CmOMdo4tu--CsE8_aH8Fa4Q-Uso65KeToJ-Xdi45dxnEss0ljjIgYXyU2cqQlhIg4_jeThoUzuTxbuUqAEQ7Wr5UDsx15H5Gwd4Gne1K6eimdvdlBXOHRM7NOj2dYEf924Nc4jfCULiJYMr-iHq9RLCcC1G2qcnLRzOC74sOu8OwdyOL9sjcjWBP6mQwLNSN5Cfhi8tYJ8avDWPEsApekzuRf4TK_AM&amp;type=js&amp;k=f6e7127c21797bbb90f6921e2f063b2626942c9f&amp;t=1728285581&amp;user=T">
   </script>
@@ -2045,12 +2500,17 @@ if (typeof CAFE24.SHOP_FRONT_NEW_LIKE_COMMON !== "undefined") {CAFE24.SHOP_FRONT
 if (typeof CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT !== "undefined") {CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT.bIsReviewTalk = 'F';}
 var bUseElastic = false;
 var sSearchBannerUseFlag = 'F';
+CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"","tail":"\uc6d0"},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_COMMON !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_COMMON.initObject();}
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_BIND !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_BIND.initChooseBox();}
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_DATA !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_DATA.initData();}
+var basket_result = '/product/add_basket.html';
+var basket_option = '/product/basket_option.html';
 var aLogData = {"log_server1":"eclog2-260.cafe24.com","log_server2":"elg-db-svcm-171.cafe24.com","mid":"shouzshouz","stype":"e","domain":"","shop_no":1,"lang":"ko_KR","ver":2,"hash":"","ca":"cfa-js.cafe24.com\/cfa.js","etc":"","mobile_flag":"F"};
 var sMileageName = '적립금';
 var sMileageUnit = '[:PRICE:]원';
 var sDepositName = '예치금';
 var sDepositUnit = '원';
-CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"","tail":"\uc6d0"},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
 CAFE24.APPSCRIPT_ASSIGN_DATA = CAFE24.APPSCRIPT_ASSIGN_DATA || [{'src':'https://cax.channel.io/cafe24/plugins/1107f20a-90c9-4699-b65f-186dc09001ec.js?vs=20220404153319.1&client_id=QKWiDNLcK9koJO0swpfnuE'},{'src':'https://asset.dpromotion.io/public/integration/cafe24.js?vs=20221201222840.1&client_id=liBjZkLuAxKmMmRu4CLrgA'},{'src':'https://instagram-widget.wehost24.com/js/instagram-widget.js?vs=20210422115926.1&client_id=pOawpY4gJZ0oBnihDmiReG'}];
 CAFE24.APPSCRIPT_SDK_DATA = CAFE24.APPSCRIPT_SDK_DATA || ['application','store','supply','category','collection','customer','order','personal','privacy','product','promotion','mileage','design'];
 var EC_APPSCRIPT_ASSIGN_DATA = CAFE24.getDeprecatedNamespace('EC_APPSCRIPT_ASSIGN_DATA');

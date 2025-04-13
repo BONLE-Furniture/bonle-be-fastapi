@@ -582,7 +582,7 @@ CAFE24.FRONT_JS_CONFIG_MANAGE = {"sSmartBannerScriptUrl":"https:\/\/app4you.cafe
 var EC_FRONT_JS_CONFIG_MANAGE = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MANAGE');
 CAFE24.FRONT_JS_CONFIG_MEMBER = {"sAuthUrl":"https:\/\/ipin-ec.cafe24.com\/certify\/v1\/?action=auth"};
 var EC_FRONT_JS_CONFIG_MEMBER = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MEMBER');
-CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-12","locale":"ko"}};
+CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-13","locale":"ko"},"aProductPurchaseInfo_2690":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2689":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2688":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2687":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2686":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2685":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2684":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2683":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2582":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2581":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_1465":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_1389":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_1386":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true}};
 var EC_FRONT_JS_CONFIG_SHOP = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_SHOP');
 typeof window.CAFE24 === "undefined" && (window.CAFE24 = {});
 CAFE24.BOARD = {"config_1":{"board_no":1,"use_block":"F","use_report":"F"}};
@@ -592,6 +592,8 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
   <link charset="utf-8" href="//img.echosting.cafe24.com/editors/froala/css/froala_style_ec.min.css?vs=2504091394" rel="stylesheet" type="text/css"/>
   <link href="/ind-script/optimizer.php?filename=ndIxDgIxDATAPrqWd1jwBAoeAC9IfIY7kWQjx5Hg9xw0QAGCtCvPbmOakITWG6WiOKlPpFLRlIW4VjoqshEjJeRhCVb0y72wq4jNZmQXcOmEzax3NPqraB81H6J0UhQX5ywu-Jw_7vtS6DCh0P61bfdoW27GxtYhq3jl6Qvcwuv4Lpd4CPd4CBF87sUqBWr_6edH3QA&amp;type=css&amp;k=78c73b16768d35cbe1865827b16ad1c835ea5d67&amp;t=1681776733" rel="stylesheet" type="text/css"/>
   <link href="/ind-script/optimizer_user.php?filename=tZBBDgMhCEUPYLc9B-mm93GQUVMRA9pkbl8z0xvUrkg-5PHyIQkTELphpAbFR-EzamMrGV3qXMACuUCWYwV75fp4ApoBSxhlHuqc2MHIKya3i_Jtru-wmqxko_T_sJuPucZf2MUfMjps3jKej1CYpS5FXsGiBr50lPqehCy14VLZRD6QLpb1naLosVR0F-mX6Ac&amp;type=css&amp;k=6b619fecc0bad5cdd65a80187bb186391e3ec379&amp;t=1724993323&amp;user=T" rel="stylesheet" type="text/css"/>
+  <style type="text/css">
+  </style>
   <title>
    ARKI Store (아키스토어)
   </title>
@@ -982,7 +984,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
 <option value="prd_brand">브랜드명</option>
 <option value="prd_trand">트랜드명</option>
 </select> -->
-          <input class="inputTypeText" fw-filter="" fw-label="상품명/제조사" fw-msg="" id="keyword" name="keyword" placeholder="" size="15" type="text" value="넬슨"/>
+          <input class="inputTypeText" fw-filter="" fw-label="상품명/제조사" fw-msg="" id="keyword" name="keyword" placeholder="" size="15" type="text" value="쿠션"/>
           <p class="button">
            <input alt="검색" src="/Pruduct_upload/icons/btn_search.png" style="width:30px; height:30px;" type="image"/>
           </p>
@@ -1011,7 +1013,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
         <p class="record">
          총
          <strong>
-          0
+          13
          </strong>
          개 검색결과
         </p>
@@ -1033,10 +1035,841 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
          </li>
         </ul>
        </div>
-       <!--  <p class="noData ">검색결과가 없습니다.</p> -->
+       <!--  <p class="noData displaynone">검색결과가 없습니다.</p> -->
       </div>
      </form>
      <!-- //참고 -->
+     <div class="xans-element- xans-search xans-search-result">
+      <!--
+        $count = 16
+    -->
+      <ul class="prdList column4">
+       <li class="item xans-record-" id="anchorBoxId_2690">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=2690&amp;cate_no=312&amp;display_group=1" name="anchorBoxName_2690">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202501/3f2fa51f581bf65ef7abe7288fd08aef.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=2690&amp;cate_no=312&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [&amp;Tradition] Collect Cushion SC48 /Weave(Coco)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           &amp;Tradition
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Collect Cushion SC48 /Weave(Coco)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;">
+           210,000
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain2690" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_2689">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=2689&amp;cate_no=312&amp;display_group=1" name="anchorBoxName_2689">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202501/0e27375dff462abf436d7545468e0f4d.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=2689&amp;cate_no=312&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [&amp;Tradition] Collect Cushion SC48 /Weave(Almond)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           &amp;Tradition
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Collect Cushion SC48 /Weave(Almond)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;">
+           210,000
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain2689" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_2688">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=2688&amp;cate_no=312&amp;display_group=1" name="anchorBoxName_2688">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202501/a7ef181ecb868b990ca6fe0935664d96.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=2688&amp;cate_no=312&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [&amp;Tradition] Collect Cushion SC28 /Weave(Coco)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           &amp;Tradition
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Collect Cushion SC28 /Weave(Coco)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;">
+           210,000
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain2688" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_2687">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=2687&amp;cate_no=312&amp;display_group=1" name="anchorBoxName_2687">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202501/bbd691794e8c2d71bf76060f97f5a65e.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=2687&amp;cate_no=312&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [&amp;Tradition] Collect Cushion SC28 /Weave(Almond)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           &amp;Tradition
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Collect Cushion SC28 /Weave(Almond)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;">
+           210,000
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain2687" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_2686">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=2686&amp;cate_no=312&amp;display_group=1" name="anchorBoxName_2686">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202501/7f1aeb95bc6499d7177463665e9b5bd7.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=2686&amp;cate_no=312&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [&amp;Tradition] Collect Cushion SC28 /Boucle(Ivory &amp; Sand)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           &amp;Tradition
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Collect Cushion SC28 /Boucle(Ivory &amp; Sand)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;text-decoration:line-through;">
+           190,000
+          </span>
+          <span id="span_product_tax_type_text" style="text-decoration:line-through;">
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#555555;font-weight:bold;">
+            할인판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#555555;font-weight:bold;">
+           171,000
+           <span style="font-size:12px;color:#8accff;font-weight:bold;">
+            10%
+           </span>
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain2686" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_2685">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=2685&amp;cate_no=312&amp;display_group=1" name="anchorBoxName_2685">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202501/c864b345ea4a18d23c536560a92e9c2f.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=2685&amp;cate_no=312&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [&amp;Tradition] Collect Cushion SC28 /Boucle(ivory)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           &amp;Tradition
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Collect Cushion SC28 /Boucle(ivory)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;text-decoration:line-through;">
+           190,000
+          </span>
+          <span id="span_product_tax_type_text" style="text-decoration:line-through;">
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#555555;font-weight:bold;">
+            할인판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#555555;font-weight:bold;">
+           171,000
+           <span style="font-size:12px;color:#8accff;font-weight:bold;">
+            10%
+           </span>
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain2685" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_2684">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=2684&amp;cate_no=312&amp;display_group=1" name="anchorBoxName_2684">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202501/28f1eaf6ce87c0e3213f8cd7b32d20a6.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=2684&amp;cate_no=312&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [&amp;Tradition] Collect Cushion SC48 /Soft Boucle(Moss)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           &amp;Tradition
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Collect Cushion SC48 /Soft Boucle(Moss)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;">
+           190,000
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain2684" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_2683">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=2683&amp;cate_no=312&amp;display_group=1" name="anchorBoxName_2683">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202501/cde7db675e497b3c2c19bf14305fd5d1.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=2683&amp;cate_no=312&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [&amp;Tradition] Collect Cushion SC28 /Soft Boucle(Moss)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           &amp;Tradition
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Collect Cushion SC28 /Soft Boucle(Moss)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;">
+           190,000
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain2683" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_2582">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=2582&amp;cate_no=312&amp;display_group=1" name="anchorBoxName_2582">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202407/73ff71bfe55a1b2df30c15b0f413cbc1.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=2582&amp;cate_no=312&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [&amp;Tradition] Collect Cushion SC48 /Soft Boucle (Cloud)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           &amp;Tradition
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Collect Cushion SC48 /Soft Boucle (Cloud)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;">
+           190,000
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain2582" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_2581">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=2581&amp;cate_no=312&amp;display_group=1" name="anchorBoxName_2581">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202407/1179514a155c14923c513fbad2a6b03e.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=2581&amp;cate_no=312&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [&amp;Tradition] Collect Cushion SC28 /Soft Boucle (Cloud)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           &amp;Tradition
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Collect Cushion SC28 /Soft Boucle (Cloud)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;">
+           190,000
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain2581" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_1465">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=1465&amp;cate_no=260&amp;display_group=1" name="anchorBoxName_1465">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202208/7c1d612d195962e4aae4f9b3306a19e2.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=1465&amp;cate_no=260&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [HIMLA] Sunset Cushion / Woods (60x40)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           HIMLA
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Sunset Cushion / Woods (60x40)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;">
+           110,000
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain1465" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_1389">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=1389&amp;cate_no=260&amp;display_group=1" name="anchorBoxName_1389">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202206/35d61abbe767f6495ce251e5605ba0a8.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=1389&amp;cate_no=260&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [HIMLA] Hannelin Cushion / Mauve (70x50)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           HIMLA
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Hannelin Cushion / Mauve (70x50)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;">
+           94,000
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain1389" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+       <li class="item xans-record-" id="anchorBoxId_1386">
+        <span class="icon">
+        </span>
+        <a href="/product/detail.html?product_no=1386&amp;cate_no=260&amp;display_group=1" name="anchorBoxName_1386">
+         <img alt="" class="thumb" src="//arkistore.com/web/product/medium/202206/3a978fcb9681b5701c54821e7242ef3d.jpg"/>
+        </a>
+        <p class="name displaynone">
+         <a href="/product/detail.html?product_no=1386&amp;cate_no=260&amp;display_group=1">
+          <span style="font-size:11px;color:#1a1a1a;">
+           [HIMLA] Hannelin Cushion / Charcoal (70x50)
+          </span>
+         </a>
+        </p>
+        <ul class="xans-element- xans-search xans-search-listitem xans-product-listitem">
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:11px;color:#a3a3a3;">
+            브랜드
+           </span>
+           :
+          </strong>
+          <span style="font-size:11px;color:#a3a3a3;">
+           HIMLA
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#262626;">
+            영문상품명
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#262626;">
+           Hannelin Cushion / Charcoal (70x50)
+          </span>
+         </li>
+         <li class="xans-record-">
+          <strong class="title displaynone">
+           <span style="font-size:12px;color:#616161;">
+            판매가
+           </span>
+           :
+          </strong>
+          <span style="font-size:12px;color:#616161;">
+           94,000
+          </span>
+          <span id="span_product_tax_type_text" style="">
+          </span>
+         </li>
+        </ul>
+        <p class="button">
+         <span class="bag">
+          <img alt="장바구니넣기" class="displaynone" onclick="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_cart.gif"/>
+         </span>
+         <span class="option">
+          <img alt="옵션보기" class="displaynone" id="btn_preview_listmain1386" onclick="" onmouseout="" src="http://img.echosting.cafe24.com/design/skin/default/product/btn_list_option.gif"/>
+         </span>
+        </p>
+       </li>
+      </ul>
+     </div>
+     <div class="xans-element- xans-search xans-search-paging">
+      <p class="first">
+       <a href="#none">
+        <img alt="첫 페이지" src="http://img.echosting.cafe24.com/skin/base_ko_KR/common/btn_page_first.gif"/>
+       </a>
+      </p>
+      <p>
+       <a href="#none">
+        <img alt="이전 페이지" src="http://img.echosting.cafe24.com/skin/base_ko_KR/common/btn_page_prev.gif"/>
+       </a>
+      </p>
+      <ol>
+       <li class="xans-record-">
+        <a class="this" href="?keyword=%EC%BF%A0%EC%85%98&amp;page=1">
+         1
+        </a>
+       </li>
+      </ol>
+      <p>
+       <a href="#none">
+        <img alt="다음 페이지" src="http://img.echosting.cafe24.com/skin/base_ko_KR/common/btn_page_next.gif"/>
+       </a>
+      </p>
+      <p class="last">
+       <a href="#none">
+        <img alt="마지막 페이지" src="http://img.echosting.cafe24.com/skin/base_ko_KR/common/btn_page_last.gif"/>
+       </a>
+      </p>
+     </div>
     </div>
    </div>
    <div id="footer">
@@ -1277,7 +2110,7 @@ if(window.wcs) {
    <a href="https://www.instagram.com/arki.store_kr/" itemprop="sameAs">
    </a>
   </span>
-  <script src="/app/Eclog/js/cid.generate.js?vs=70d63eafe7e8090808107a45c1e95826&amp;u=lagomhome.1" type="text/javascript">
+  <script src="/app/Eclog/js/cid.generate.js?vs=e7785abec1d58facfd3eda0d34fd25ad&amp;u=lagomhome.1" type="text/javascript">
   </script>
   <script>
    (function (i, s, o, g) {
@@ -1496,6 +2329,27 @@ if(window.wcs) {
    </noscript>
   </div>
   <!-- CMC3 script -->
+  <!-- CMC3 script -->
+  <div id="fbe_search_script" style="display:none;">
+   <script type="text/javascript">
+    !function() {
+  try {
+    let event_key = 'Search';
+    let event_data = {
+      content_ids : ['2690','2689','2688','2687','2686','2685','2684','2683','2582','2581','1465','1389','1386'],
+      content_type : 'product_group',
+      search_string : '쿠션'
+    };
+    if (typeof facebookChannel !== 'undefined') {
+      facebookChannel.pixelEvent(event_key, function () {
+        fbq('trackSingle', '2051911894943563', event_key, event_data);
+      });
+    }
+  } catch (e) { console.error(e); }
+}();
+   </script>
+  </div>
+  <!-- CMC3 script -->
   <!-- kmp -->
   <!-- CMC3 script -->
   <div id="kmp_common_top_script" style="display:none;">
@@ -1507,6 +2361,15 @@ if(window.wcs) {
    </script>
   </div>
   <!-- CMC3 script -->
+  <!-- CMC3 script -->
+  <div id="kmp_search_script" style="display:none;">
+   <script type="text/javascript">
+    kakaoPixel('5520224730489572147').search({
+    keyword: '쿠션'
+  });
+   </script>
+  </div>
+  <!-- CMC3 script -->
   <!-- External Script End -->
   <script charset="utf-8" src="//t1.daumcdn.net/adfit/static/kp.js" type="text/javascript">
   </script>
@@ -1514,7 +2377,7 @@ if(window.wcs) {
   </script>
   <script charset="utf-8" src="/ind-script/i18n.php?lang=ko_KR&amp;domain=front&amp;v=2504091394" type="text/javascript">
   </script>
-  <script src="/ind-script/optimizer.php?filename=zVjbbuM2EH1P9NrvULMtir4mzqZdbII10iz2eUSNbEYkh-UljvbrO5K97bqNZIlMgMKALNNzDodzJVluSWN58c6VjQONO3Jt6dBTdALLR1_Ki19N8eh_KKfkorQg2vLxz4iuO3z9VPxS_LgQic8BnQHlDwOFIGol5rJEp5KWUKAoGpMMNSTINEqKkERxUfzMn6TJ-d9A7l92s442jD_ybg0Bg2QBzVImlCjuhpcvMmwfvl5DgEJLs4BHyYpR-MDvp1HeOmlCM4OeROzVuiGnV2SCI6XQncatVfSX1l45WW9m6BODVKelGkeDpc48KUaQOQtkz5Q0eFaBMXP02lMI0prMXOlnMJyNhkPbOgzzZxlwAbVV7JeXQWBteUeVVFjef4ff6zdhlRGcpjrykN9Ju2zCJhrRG7SXqyOnjR4N4rkME0pwqJaf99nzPYWCr50iqBeBdAzQz_up8uiexpwzArakukaq2aFXYwNRhd4EXoMLVy9E3fIiWW3kAPp_lOyaC4jxbFGfy4TgpdnksmgMUPflcDQa_9iSPXLrzeCsj9AClW3_XMtnVFO1aIJmNeTi58lUHIFeYxWXrt-quJFcN55ASV42uW92-Hug4Bfw2bS9oU3t_0vPDJa9j283wxaVxTdfxxZMrRZn54IJuNrIpns7fq5M4dXMpEgAl-yWTte6fzRYGvAewYntYtg9NujQCFxF1393ayfFRKZeEbj6iIdHi6ofTQN1FEOsEmeMQqQBK_ZJmwZ1aMmFNKySvu_vfQef6PBgYHPc4XfICm8W9ddv_iw9O_7cjnt1Fl4cfp03vBmFkKvJa9HM27tug1a8j5ZBoj8tvXKdDfQRu0UeAt8ZsX8m4zTqCl0y_JOr0QkTkgmuwLcY8hnsdAmZxbE-bGVTWVYUuZPmrOWOkxQ26eu45jrhZfr8X6Tf3vb1IodAUMwwgUOBGfD7Ad5ix-2yzmR5oABqlbWaIT_SwxINNjI3NW6hy9DhNwd1ekBexkBcdKUYaHg_sEvPDT6JyTXZaNMTNHpWBx0n-pPMccxddytbPNSLvAg5osrKvSHWfpf9hVT3ClF7YHqA6lV4PgTU-cu75tOhVB9MQ-lBoEBqqBRmaGQhbB0pPJ-xdz6hzu3oDcgI2CZ0qX2XP-f93Ngd4wjQ7wo-R6ipVHl_OMEfXw8NG33-2wsnbViI7k_f5WV_gLAohpu4Bqa6-4skR2XI2tXMO0DHZwO8kc8s-Rc&amp;type=js&amp;k=ea90a58fff2c039464ba7b819133b4a4bac54224&amp;t=1744071412">
+  <script src="/ind-script/optimizer.php?filename=zVlbU-M2FH4Hv_Z3uHQ7nb6SsGyZhZIBdnk-lo8TYd2qC4n31_fYCbuki2-ymekwJLaj79ORdC6frHSjJaZnv9m0sCBxq22ZWnQ6WIbpk0v52Z8qeXK_pF3tAjfAyvTpn4C2Onx9SP5Ifh2JxJ1Hq0C4w4OEaV1ynMoSrIgaQoIsKVQ0VGmmVSE481EUZ8nv9BfVOf3qtf3PvBmr14Q_Wt0cPHpODSS1Uj5FdtNcPHK_efh2AR4SydUIHsEzQuEDXfejnLFc-WIAvWahNutSW7nUylstBNp-3EoEd27MwvJ8PcCe4Lnob1VY3czUidOCEFqdeG1OBFd4koFSQ-zaUzAtpVZDW-9AUTQqcm1j0Q_vpcF5lEbQurwNAmPSG51xgendK_zevo5ZacFJnQd65LbcjOuwCIrVE1q3ywOFjWx14qEMHUaQq6Zf9tHzmkLAt0poyEeBZPBQ93ubObTPbYvTAjZaVAUXg10vxwKC8PUUOAnWL97wuvFJMlvzBvT_SNk5JRDlaEbdVCYEx9V6KotED3mdDlu98X6jzdGyXjaL9RlK0GlZf674DkVXLuqgWTax-KUzFFugF5iFseM3Iqw55Y1nEJyGre3LPHx_kNAFuMm09USr3P1MTwyGVh_fr4cNCoPvPo4NqFyMjs4RHVC24UX1fvyUmfxs0yQ0A0rZpe7PdT8sGOvwDsGyzWjYHRZoUTFcBlt_VyvL2fhI_Ru39f9qX4CuufNRFId1eHJtCmEE_o21Gz6QW6HKKOxLCd5Kl5AcZSV9gg9xhtyapqx_3HkLjVXNfXN7r0Wug5-bNn71O0ivJKxnJ73gjsRdxUnkzUh9RXT3VDkF3qPARlXNb7gl4gW4Emdfvsug8p_q_nTaRznJf7-TLTu0_2gqNY9NC67yWYguYoTSW0Rf9zWg1fVaBPVLAk8ddXVq2gN5EJ4d7k4L2n2Cn2rJXDQhRgseF6fz-Kj-QXLfpPYYjmteYrqwekt7piWwDcazTAinV_jDiEbTHHCktD1wkS5CLfnoodTR83uHzxy3HkR5uFzqoDosW2iw-REXPU2y-mkcqKKSGjKMAwfG4oCZ6HSmLqhFo23kDIlapcnmdULH6wZQVLyPGLZIBq_7tezGS4HKc8_R9bde2sp4_RmrUbaAqxTbf0bjJMoMbTT81uZoWZeb9hDspcB0BtOt3QZx9CaDHhYKWNrAThnLDbljp1zswV9QRDge3_8jd5vu_csAAtadt3oYSB_iBPhdAy-xol1qPpHlQVM2Xk4aTRMf8W6JCgs-NTSuoZpgwycLebxDngevSfpw1tBQ9dvGx0YQnq-0CSY-QAPtSiVaCvRnPmVhbqpaQxzyxTQPOaKaFHuNr_3F63OgagavPTA9QDYLT725nD68vd66UoWOdwIBXEImcIJFBvzGaoGnA15Z9Zhz3Xrw0AI2EVVqX-VPSblwNQrotgmD9pO3GvXx8OL8-FSmkbX0s2OWGz8SXb_0Ts9ruWyQNQdgBXRV9zdJjtKQMcuBR2-WVDBe8h21_Bc&amp;type=js&amp;k=5118f60ca0a554556ea1196cd9e23a2da07384a9&amp;t=1744071412">
   </script>
   <script src="/ind-script/optimizer_user.php?filename=pc1BDsMgDATAB9Br37HKJf8hxgJSjKMYDvy-JOoL0ttqpZ1FUmEwuW58GoqPKnd19K1kcqlJgQV2gS3HCvvkuqzYDaKhF56Lob2BfOOo53jt9sYz8ydt3jJdB3f4w5sEqYjWaXwB&amp;type=js&amp;k=9b18e29d70e5a7b98b07b24602dc4af0d19db12c&amp;t=1722405301&amp;user=T">
   </script>
@@ -1700,6 +2563,14 @@ isUseLoginKeeping();
 } catch(e) {
 }
 CAFE24.KAKAO_PIXEL_BRIDGE.init("5520224730489572147");
+CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"","tail":""},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_COMMON !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_COMMON.initObject();}
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_BIND !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_BIND.initChooseBox();}
+if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_DATA !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_DATA.initData();}
+if (typeof CAFE24.SHOP_FRONT_NEW_LIKE_COMMON !== "undefined") {CAFE24.SHOP_FRONT_NEW_LIKE_COMMON.init({"bIsUseLikeProduct":false,"bIsUseLikeCategory":false});}
+if (typeof CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT !== "undefined") {CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT.bIsReviewTalk = 'F';}
+var basket_result = '/product/add_basket.html';
+var basket_option = '/product/basket_option.html';
 var bIsUseSpread = false;
 var sIsSecret = false;
 var iBoardNo = "1";
@@ -1708,7 +2579,6 @@ var sMileageName = '적립금';
 var sMileageUnit = '[:PRICE:]원';
 var sDepositName = '예치금';
 var sDepositUnit = '원';
-CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"","tail":""},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
 CAFE24.APPSCRIPT_ASSIGN_DATA = CAFE24.APPSCRIPT_ASSIGN_DATA || [{'src':'https://simpletalk-static.happytalkio.com/storage/NAS/cafe24_shop/la/lagomhome/1/kakao_plus_friend.js?v=1690360588&vs=20230726173627.1&client_id=gdc7WwhtIx4htbBH2iGjuB', 'integrity': 'sha384-E4ykS2QOTb6Jq0phzE5zPN0wUfEFPIPohlQzk1JJ+uJD6cfO59S+y2Df7m/I1yW1'},{'src':'https://calendar-app.cafe24.com/openapi/inject.js?vs=20240826183821.1&client_id=A8RQp67UIt9nBlqvThz2jC'},{'src':'https://instagram-widget.wehost24.com/scripttag/instagram-widget.js?vs=20221118163126.1&client_id=pOawpY4gJZ0oBnihDmiReG'},{'src':'https://cax.channel.io/cafe24/plugins/cbc2432a-f1d2-4552-b794-4ed63722b892.js?vs=20230412132008.1&client_id=QKWiDNLcK9koJO0swpfnuE'}];
 CAFE24.APPSCRIPT_SDK_DATA = CAFE24.APPSCRIPT_SDK_DATA || ['application','product','store','category','collection','supply','design','order','customer','personal','privacy','promotion'];
 var EC_APPSCRIPT_ASSIGN_DATA = CAFE24.getDeprecatedNamespace('EC_APPSCRIPT_ASSIGN_DATA');

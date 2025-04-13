@@ -1388,6 +1388,10 @@ async def search(keyword: str = Query("놀", description="검색어"), number: i
     
     # 2. DB에서 모든 제품의 shop_urls 가져오기
     products = await db["bonre_products"].find({
+        "$or": [
+            {"name_kr": {"$regex": keyword, "$options": "i"}},
+            {"name_kr": {"$regex": ".*" + keyword + ".*", "$options": "i"}}
+        ],
         "upload": True
     }).to_list(1000)
     
@@ -1395,16 +1399,13 @@ async def search(keyword: str = Query("놀", description="검색어"), number: i
     existing_urls = set()
     for product in products:
         if "shop_urls" in product:
-            print("제품 shop_urls:", product["shop_urls"])
             for shop_url in product["shop_urls"]:
                 if shop_url.get("url"):
                     existing_urls.add(shop_url["url"])
-    
     # 4. 검색 결과 처리
     processed_results = []
     for result in search_results:
         product_url = result.get("product_url", "")
-        
         # URL 직접 비교
         already_exist = product_url in existing_urls if product_url else False
         

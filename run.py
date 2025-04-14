@@ -26,6 +26,7 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from urllib.parse import unquote
 
 app = FastAPI()
 kst = timezone('Asia/Seoul')
@@ -1423,8 +1424,8 @@ async def search(keyword: str = Query("놀", description="검색어"), number: i
     
     return {"results": processed_results}
 
-@app.get("/products/{product_name}", tags=["product CRUD"])
-async def check_product_duplicate(product_name: str, product_sub_name: str = None):
+@app.get("/duplicate-check", tags=["product CRUD"])
+async def check_product_duplicate(product_name: str = Query(..., description="제품명"), product_sub_name: str = Query(None, description="제품 서브네임")):
     """
     제품명과 서브네임으로 중복 검사를 수행하는 API
     

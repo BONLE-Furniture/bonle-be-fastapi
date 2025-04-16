@@ -227,8 +227,8 @@ async def read_users_token(current_user: dict = Depends(get_current_user)):
 ### Total ###
 #############
 
+# @app.get("/product-all", tags=["Detail Page"])
 @app.get("/product-all", tags=["Detail Page"])
-# @app.get("/product-all", tags=["Detail Page"], dependencies=[Depends(allow_admin)])
 async def get_total(product_id: str):
     """
     product_id, designer_id, brand_id, shop_id를 받아서 해당 정보를 반환하는 API
@@ -457,7 +457,7 @@ async def get_products_list_in_page(page: int = 1, limit: int = 20):
         "total_pages": ceil(total_count / limit)
     }
 
-@app.post("/product/create-product", tags=["product CRUD"])
+@app.post("/product/create-product", tags=["product CRUD"], dependencies=[Depends(allow_admin)])
 async def create_product(product: Product):
     """
     product 생성 API
@@ -496,7 +496,7 @@ async def create_product(product: Product):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@app.post("/product/upload-image/{product_id}", tags=["product CRUD"])
+@app.post("/product/upload-image/{product_id}", tags=["product CRUD"], dependencies=[Depends(allow_admin)])
 async def upload_product_image(
     product_id: str,
     image: UploadFile = File(...),
@@ -541,7 +541,7 @@ async def upload_product_image(
         raise HTTPException(status_code=500, detail=f"Error uploading image: {str(e)}")
     
 # 북마크 수 업데이트 API
-@app.post("/product/{product_id}/bookmark", tags=["product CRUD"])
+@app.post("/product/{product_id}/bookmark", tags=["product CRUD"], dependencies=[Depends(allow_admin)])
 async def add_bookmark(product_id: str):
     """
     특정 상품의 bookmark_counts를 1 증가시키는 엔드포인트.
@@ -574,7 +574,7 @@ async def add_bookmark(product_id: str):
     return {"product_id": product_id, "bookmark_counts": current_count + 1}
 
 
-@app.patch("/product/update-product/{product_id}", tags=["product CRUD"])
+@app.patch("/product/update-product/{product_id}", tags=["product CRUD"], dependencies=[Depends(allow_admin)])
 async def update_product(product_id: str, productUpdate: ProductUpdate):
     """
     input : product_id{object_id}, 수정할 필드 정보 key : value 형식으로 request body에 입력
@@ -603,7 +603,7 @@ async def update_product(product_id: str, productUpdate: ProductUpdate):
 
 
 # product 삭제 API
-@app.delete("/product/delete-product/{product_id}", tags=["product CRUD"])
+@app.delete("/product/delete-product/{product_id}", tags=["product CRUD"], dependencies=[Depends(allow_admin)])
 async def delete_product(product_id: str):
     product_item = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
     # 기존 이미지 삭제
@@ -682,7 +682,7 @@ async def get_products_info_by_brand_id(brand_id: str):
     raise HTTPException(status_code=404, detail="Items not found")
 
 # brand 생성 API
-@app.post("/brand/create-brand", tags=["brand CRUD"])
+@app.post("/brand/create-brand", tags=["brand CRUD"], dependencies=[Depends(allow_admin)])
 async def create_brand(brand: Brand):
     brand_dict = brand.dict(by_alias=True)
     try:
@@ -692,7 +692,7 @@ async def create_brand(brand: Brand):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/brand/upload-image/{brand_id}", tags=["brand CRUD"])
+@app.post("/brand/upload-image/{brand_id}", tags=["brand CRUD"], dependencies=[Depends(allow_admin)])
 async def upload_brand_image(
     brand_id: str,
     image: UploadFile = File(...),
@@ -736,7 +736,7 @@ async def upload_brand_image(
         raise HTTPException(status_code=500, detail=f"Error uploading image: {str(e)}")
 
 # brand 수정 API
-@app.patch("/brand/update-brand/{brand_id}", tags=["brand CRUD"])
+@app.patch("/brand/update-brand/{brand_id}", tags=["brand CRUD"], dependencies=[Depends(allow_admin)])
 async def update_brand(brand_id: str, brand: BrandUpdate):
     brand_item = await db["bonre_brands"].find_one({"_id": brand_id})
     if brand_item:
@@ -756,7 +756,7 @@ async def update_brand(brand_id: str, brand: BrandUpdate):
 
 
 # brand 삭제 API
-@app.delete("/brand/delete-brand/{brand_id}", tags=["brand CRUD"])
+@app.delete("/brand/delete-brand/{brand_id}", tags=["brand CRUD"], dependencies=[Depends(allow_admin)])
 async def delete_brand(brand_id: str):
     brand_item = await db["bonre_brands"].find_one({"_id": brand_id})
     if brand_item and brand_item.get("brand_image_url"):
@@ -826,7 +826,7 @@ async def get_prices_per_shops_today(product_id: str):
     return filtered_items
 
 
-@app.post("/update_prices/one", tags=["price CRUD"])
+@app.post("/update_prices/one", tags=["price CRUD"], dependencies=[Depends(allow_admin)])
 async def update_prices_with_id(product_id: str):
 
     # 제품 정보 가져오기
@@ -884,7 +884,7 @@ async def update_prices_with_id(product_id: str):
     return {"message": "Prices updated successfully"}
 
 # 수정
-@app.post("/update_prices/all", tags=["price CRUD"])
+@app.post("/update_prices/all", tags=["price CRUD"], dependencies=[Depends(allow_admin)])
 async def update_prices_all():
     # 제품 정보 가져오기
     product_cursor = db["bonre_products"].find({"upload": True})
@@ -982,7 +982,7 @@ async def get_shop_info_by_shop_id(shop_id: str):
 
 
 # shop 생성 API
-@app.post("/shop/create-shop", tags=["shop CRUD"])
+@app.post("/shop/create-shop", tags=["shop CRUD"], dependencies=[Depends(allow_admin)])
 async def create_shop(shop: Shop):
     shop_dict = shop.dict(by_alias=True)
     try:
@@ -992,7 +992,7 @@ async def create_shop(shop: Shop):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@app.post("/shop/upload-image/{shop_id}", tags=["shop CRUD"])
+@app.post("/shop/upload-image/{shop_id}", tags=["shop CRUD"], dependencies=[Depends(allow_admin)])
 async def upload_shop_image(
     shop_id: str,
     image: UploadFile = File(...),
@@ -1037,7 +1037,7 @@ async def upload_shop_image(
         raise HTTPException(status_code=500, detail=f"Error uploading image: {str(e)}")
 
 # shop 수정 API
-@app.patch("/shop/update-shop/{shop_id}", tags=["shop CRUD"])
+@app.patch("/shop/update-shop/{shop_id}", tags=["shop CRUD"], dependencies=[Depends(allow_admin)])
 async def update_shop(shop_id: str, shop: ShopUpdate):
     shop_item = await db["bonre_shops"].find_one({"_id": shop_id})
     if shop_item:
@@ -1057,7 +1057,7 @@ async def update_shop(shop_id: str, shop: ShopUpdate):
 
 
 # shop 삭제 API
-@app.delete("/shop/delete-shop/{shop_id}", tags=["shop CRUD"])
+@app.delete("/shop/delete-shop/{shop_id}", tags=["shop CRUD"], dependencies=[Depends(allow_admin)])
 async def delete_shop(shop_id: str):
     shop_item = await db["bonre_shops"].find_one({"_id": shop_id})
     if shop_item and shop_item.get("shop_image_url"):
@@ -1105,7 +1105,7 @@ async def get_designer_info_by_designer_id(designer_id: str):
 
 
 # designer 생성 API
-@app.post("/designer/create-designer", tags=["designer CRUD"])
+@app.post("/designer/create-designer", tags=["designer CRUD"], dependencies=[Depends(allow_admin)])
 async def create_desginer(designer: Designer):
     designer_dict = designer.dict(by_alias=True)
     try:
@@ -1116,7 +1116,7 @@ async def create_desginer(designer: Designer):
 
 
 # designer 수정 API
-@app.patch("/designer/update-designer/{designer_id}", tags=["designer CRUD"])
+@app.patch("/designer/update-designer/{designer_id}", tags=["designer CRUD"], dependencies=[Depends(allow_admin)])
 async def update_designer(designer_id: str, designer: DesignerUpdate):
     designer_item = await db["bonre_designers"].find_one({"_id": designer_id})
     if designer_item:
@@ -1136,7 +1136,7 @@ async def update_designer(designer_id: str, designer: DesignerUpdate):
 
 
 # designer 삭제 API
-@app.delete("/designer/delete-designer/{designer_id}", tags=["designer CRUD"])
+@app.delete("/designer/delete-designer/{designer_id}", tags=["designer CRUD"], dependencies=[Depends(allow_admin)])
 async def delete_designer(designer_id: str):
     result = await db["bonre_designers"].delete_one({"_id": designer_id})
     if result.deleted_count == 1:
@@ -1173,7 +1173,7 @@ async def get_filter_info_by_filter_id(filter_id: str):
         return item
     raise HTTPException(status_code=404, detail="Item not found")
 
-@app.post("/filter/create-filter", tags=["filter CRUD"])
+@app.post("/filter/create-filter", tags=["filter CRUD"], dependencies=[Depends(allow_admin)])
 async def create_filter(filter: Filter):
     filter_dict = filter.dict(by_alias=True)
     try:
@@ -1182,7 +1182,7 @@ async def create_filter(filter: Filter):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     
-@app.patch("/filter/update-filter/{filter_id}", tags=["filter CRUD"])
+@app.patch("/filter/update-filter/{filter_id}", tags=["filter CRUD"], dependencies=[Depends(allow_admin)])
 async def update_filter(filter_id: str, filterUpdate: FilterUpdate):
     """
     변경되는 필드만 업데이트
@@ -1213,7 +1213,7 @@ async def update_filter(filter_id: str, filterUpdate: FilterUpdate):
     except Exception as e:
         return {"message": "Error updating filter"}
     
-@app.delete("/filter/delete-filter/{filter_id}", tags=["filter CRUD"])
+@app.delete("/filter/delete-filter/{filter_id}", tags=["filter CRUD"], dependencies=[Depends(allow_admin)])
 async def delete_filter(filter_id: str):
     try:
         result = await db["bonre_filters"].delete_one({"_id": filter_id})
@@ -1251,7 +1251,7 @@ async def get_category_info_by_category_id(category_id: str):
         return item
     raise HTTPException(status_code=404, detail="Item not found")
 
-@app.post("/category/create-category", tags=["category CRUD"])
+@app.post("/category/create-category", tags=["category CRUD"], dependencies=[Depends(allow_admin)])
 async def create_category(category: Category):
     category_dict = category.dict(by_alias=True)
     try:
@@ -1260,7 +1260,7 @@ async def create_category(category: Category):
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     
-@app.patch("/category/update-category/{category_id}", tags=["category CRUD"])
+@app.patch("/category/update-category/{category_id}", tags=["category CRUD"], dependencies=[Depends(allow_admin)])
 async def update_category(category_id: str, category: CategoryUpdate):
     """
     변경되는 필드만 업데이트
@@ -1292,7 +1292,7 @@ async def update_category(category_id: str, category: CategoryUpdate):
         return {"message": "Error updating filter"}
             
             
-@app.delete("/category/delete-category/{category_id}", tags=["category CRUD"])
+@app.delete("/category/delete-category/{category_id}", tags=["category CRUD"], dependencies=[Depends(allow_admin)])
 async def delete_category(category_id: str):
     try:
         result = await db["bonre_categories"].delete_one({"_id": category_id})
@@ -1356,7 +1356,7 @@ def schedule_price_updates():
         logger.error(f"Failed to initialize scheduler: {e}", exc_info=True)
         
 # 스케줄러 상태 확인을 위한 엔드포인트 추가
-@app.get("/scheduler/status", tags=["scheduler"])
+@app.get("/scheduler/status", tags=["scheduler"], dependencies=[Depends(allow_admin)])
 async def get_scheduler_status():
     jobs = scheduler.get_jobs()
     return {
@@ -1382,7 +1382,7 @@ def shutdown_scheduler():
     except Exception as e:
         logger.error(f"Error shutting down scheduler: {e}", exc_info=True)
 
-@app.get("/admin-search")
+@app.get("/admin-search", tags=["crawling"], dependencies=[Depends(allow_admin)])
 async def search(keyword: str = Query("놀", description="검색어"), number: int = Query(2, description="사이트당 결과 수")):
     # 1. 여러 사이트에서 검색 결과 가져오기
     search_results = run_search(keyword, number)

@@ -227,7 +227,7 @@ async def read_users_token(current_user: dict = Depends(get_current_user)):
 #############
 
 # @app.get("/product-all", tags=["Detail Page"])
-@app.get("/product-all", tags=["Detail Page"], dependencies=[Depends(allow_admin)])
+@app.get("/product-all", tags=["Detail Page"])
 async def get_total(product_id: str):
     """
     product_id, designer_id, brand_id, shop_id를 받아서 해당 정보를 반환하는 API
@@ -301,7 +301,7 @@ async def get_total(product_id: str):
 #############
 
 # bonre_brands 컬렉션에 있는 모든 상품 정보를 반환하는 API
-@app.get("/product", tags=["product CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/product", tags=["product CRUD"])
 async def get_all_products():
     collections = await db.list_collection_names()
     if "bonre_products" not in collections:
@@ -313,7 +313,7 @@ async def get_all_products():
 
 
 # product 조회 API
-@app.get("/product/{product_id}", tags=["product CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/product/{product_id}", tags=["product CRUD"])
 async def get_product(product_id: str):
     product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
     if product:
@@ -323,7 +323,7 @@ async def get_product(product_id: str):
 
 
 # 판매처 링크 조회 API
-@app.get("/product/{product_id}/shop-urls", tags=["product CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/product/{product_id}/shop-urls", tags=["product CRUD"])
 async def get_shop_urls(product_id: str):
     product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
     if not product:
@@ -340,7 +340,7 @@ async def get_shop_urls(product_id: str):
 
 
 # 제품 내 가장 최근 최저가 정보 조회 API
-@app.get("/product/{product_id}/cheapest", tags=["product CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/product/{product_id}/cheapest", tags=["product CRUD"])
 async def get_cheapest(product_id: str):
     product = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
     if not product:
@@ -357,7 +357,7 @@ async def get_cheapest(product_id: str):
 
 
 # 최저가 그래프 조회 API
-@app.get("/product/{product_id}/cheapest-graph", tags=["product CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/product/{product_id}/cheapest-graph", tags=["product CRUD"])
 async def get_cheapest_prices(product_id: str, period: Product_Period):
     """
     기간별 최저가 데이터를 반환하는 엔드포인트.
@@ -422,7 +422,7 @@ async def get_cheapest_prices(product_id: str, period: Product_Period):
 
 # home 화면에 페이징 처리된 상품 리스트를 반환하는 API
 # test : /home/products/?page=3&limit=2
-@app.get("/home/products/", tags=["product CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/home/products/", tags=["product CRUD"])
 async def get_products_list_in_page(page: int = 1, limit: int = 20):
     skip = (page - 1) * limit
     total_count = await db["bonre_products"].count_documents({})
@@ -622,7 +622,7 @@ async def delete_product(product_id: str):
 ## brand ####
 #############
 
-@app.get("/brand", tags=["brand CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/brand", tags=["brand CRUD"])
 async def get_all_brands():
     """
     bonre_brands 컬렉션에 있는 모든 브랜드 정보를 반환하는 API
@@ -637,7 +637,7 @@ async def get_all_brands():
 
 # brand_id를 받아서 해당 브랜드 정보를 반환하는 API
 # test : /brands/get_bonre_brand_by_id/brand_andtrandition
-@app.get("/brand/{brand_id}", tags=["brand CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/brand/{brand_id}", tags=["brand CRUD"])
 async def get_brand_info_by_brand_id(brand_id: str):
     """
     brand_id를 받아서 해당 브랜드 정보를 반환하는 API
@@ -654,7 +654,7 @@ async def get_brand_info_by_brand_id(brand_id: str):
 
 # brand_id를 받아서 해당 브랜드의 상품 정보를 반환하는 API
 # test : http://127.0.0.1:8000/brands/get_bonre_products_by_brandId/brand_andtrandition
-@app.get('/brand/{brand_id}/products', tags=["brand CRUD"], dependencies=[Depends(allow_admin)])
+@app.get('/brand/{brand_id}/products', tags=["brand CRUD"])
 async def get_products_info_by_brand_id(brand_id: str):
     """
     brand_id를 받아서 해당 브랜드의 상품 정보를 반환하는 API
@@ -775,7 +775,7 @@ async def delete_brand(brand_id: str):
 ############
 
 # 특정 shop & product의 날짜별 price 조회 API
-@app.get("/price/{product_id}/{shop_sld}/", tags=["price CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/price/{product_id}/{shop_sld}/", tags=["price CRUD"])
 async def get_price_specific_shop_wholeday(product_id: str, shop_sld: str):
     """
     특정 shop & product의 날짜별 price 조회 API
@@ -799,7 +799,7 @@ async def get_price_specific_shop_wholeday(product_id: str, shop_sld: str):
 
 
 # 특정 product의 모든 shop price 출력 (오늘)
-@app.get("/price/{product_id}/", tags=["price CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/price/{product_id}/", tags=["price CRUD"])
 async def get_prices_per_shops_today(product_id: str):
     """
     특정 product의 모든 shop price 출력 (오늘 날짜만)
@@ -951,7 +951,7 @@ async def update_prices_all():
 ##########
 ## shop ##
 ##########
-@app.get("/shop", tags=["shop CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/shop", tags=["shop CRUD"])
 async def get_all_shops():
     """
     bonre_shops 컬렉션에 있는 모든 샵 정보를 반환하는 API
@@ -965,7 +965,7 @@ async def get_all_shops():
 
 # brand_id를 받아서 해당 브랜드 정보를 반환하는 API
 # test : /brands/get_bonre_brand_by_id/brand_andtrandition
-@app.get("/shop/{shop_id}", tags=["shop CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/shop/{shop_id}", tags=["shop CRUD"])
 async def get_shop_info_by_shop_id(shop_id: str):
     """
     shop_id를 받아서 해당 샵 정보를 반환하는 API
@@ -1076,7 +1076,7 @@ async def delete_shop(shop_id: str):
 # designer #
 ############
 
-@app.get("/designer", tags=["designer CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/designer", tags=["designer CRUD"])
 async def get_all_designers():
     """
     bonre_designers 컬렉션에 있는 모든 디자이너 정보를 반환하는 API
@@ -1088,7 +1088,7 @@ async def get_all_designers():
     return items
 
 
-@app.get("/designer/{designer_id}", tags=["designer CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/designer/{designer_id}", tags=["designer CRUD"])
 async def get_designer_info_by_designer_id(designer_id: str):
     """
     designer_id를 받아서 해당 디자이너 정보를 반환하는 API
@@ -1147,7 +1147,7 @@ async def delete_designer(designer_id: str):
 ## Filter ##
 ############
 
-@app.get("/filter", tags=["filter CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/filter", tags=["filter CRUD"])
 async def get_all_filters():
     """
     bonre_filters 컬렉션에 있는 모든 필터 정보를 반환하는 API
@@ -1158,7 +1158,7 @@ async def get_all_filters():
     items = await db["bonre_filters"].find().to_list(1000)
     return items
 
-@app.get("/filter/{filter_id}", tags=["filter CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/filter/{filter_id}", tags=["filter CRUD"])
 async def get_filter_info_by_filter_id(filter_id: str):
     """
     filter_id를 받아서 해당 필터 정보를 반환하는 API
@@ -1225,7 +1225,7 @@ async def delete_filter(filter_id: str):
 # Category #
 ############
 
-@app.get("/category", tags=["category CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/category", tags=["category CRUD"])
 async def get_all_categories():
     """
     bonre_categories 컬렉션에 있는 모든 필터 정보를 반환하는 API
@@ -1236,7 +1236,7 @@ async def get_all_categories():
     items = await db["bonre_categories"].find().to_list(1000)
     return items
 
-@app.get("/category/{category_id}", tags=["category CRUD"], dependencies=[Depends(allow_admin)])
+@app.get("/category/{category_id}", tags=["category CRUD"])
 async def get_category_info_by_category_id(category_id: str):
     """
     category_id를 받아서 해당 카테고리 정보를 반환하는 API
@@ -1382,6 +1382,44 @@ def shutdown_scheduler():
         logger.error(f"Error shutting down scheduler: {e}", exc_info=True)
 
 @app.get("/admin-search", tags=["crawling"], dependencies=[Depends(allow_admin)])
-def search(keyword: str = Query("놀", description="검색어"), number: int = Query(2, description="사이트당 결과 수")):
-    result = run_search(keyword, number)
-    return {"results": result}
+async def search(keyword: str = Query("놀", description="검색어"), number: int = Query(2, description="사이트당 결과 수")):
+    # 1. 여러 사이트에서 검색 결과 가져오기
+    search_results = run_search(keyword, number)
+    
+    # 2. DB에서 모든 제품의 shop_urls 가져오기
+    products = await db["bonre_products"].find({
+        "$or": [
+            {"name_kr": {"$regex": keyword, "$options": "i"}},
+            {"name_kr": {"$regex": ".*" + keyword + ".*", "$options": "i"}}
+        ],
+        "upload": True
+    }).to_list(1000)
+    
+    # 3. DB에 있는 URL 목록 생성
+    existing_urls = set()
+    for product in products:
+        if "shop_urls" in product:
+            for shop_url in product["shop_urls"]:
+                if shop_url.get("url"):
+                    existing_urls.add(shop_url["url"])
+    # 4. 검색 결과 처리
+    processed_results = []
+    for result in search_results:
+        product_url = result.get("product_url", "")
+        # URL 직접 비교
+        already_exist = product_url in existing_urls if product_url else False
+        
+        # 결과 데이터 구성
+        processed_result = {
+            "image_url": result.get("image_url"),
+            "product_url": result.get("product_url"),
+            "name": result.get("name"),
+            "price": result.get("price"),
+            "brand": result.get("brand"),
+            "site": result.get("site"),
+            "already_exist": already_exist
+        }
+        processed_results.append(processed_result)
+    
+    return {"results": processed_results}
+

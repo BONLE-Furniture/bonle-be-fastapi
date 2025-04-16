@@ -26,6 +26,7 @@ from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from urllib.parse import unquote
 
 app = FastAPI()
 kst = timezone('Asia/Seoul')
@@ -1422,4 +1423,48 @@ async def search(keyword: str = Query("놀", description="검색어"), number: i
         processed_results.append(processed_result)
     
     return {"results": processed_results}
+
+@app.get("/duplicate-check", tags=["product CRUD"])
+async def check_product_duplicate(product_name: str = Query(..., description="제품명"), product_sub_name: str = Query(None, description="제품 서브네임")):
+    """
+    제품명과 서브네임으로 중복 검사를 수행하는 API
+    
+    Args:
+        product_name (str): 제품명
+        product_sub_name (str, optional): 제품 서브네임
+        
+    Returns:
+        dict: 중복 여부와 중복된 제품 정보
+    """
+    # 검색 조건 구성
+    query = {
+        "name_kr": product_name,
+        "upload": True
+    }
+    
+    # 서브네임이 제공된 경우에만 조건에 추가
+    if product_sub_name:
+        query["subname_kr"] = product_sub_name
+    
+    # DB에서 제품 검색
+    products = await db["bonre_products"].find(query).to_list(1000)
+    
+    if products:
+        formatted_products = []
+        for product in products:
+            formatted_product = {
+                "name_kr": product["name_kr"],
+                "subname_kr": product.get("subname_kr"),
+            }
+            formatted_products.append(formatted_product)
+        
+        return {
+            "is_duplicate": True,
+            "products": formatted_products
+        }
+    else:
+        return {
+            "is_duplicate": False,
+            "products": []
+        }
 

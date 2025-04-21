@@ -1356,7 +1356,7 @@ def schedule_price_updates():
         logger.error(f"Failed to initialize scheduler: {e}", exc_info=True)
         
 # 스케줄러 상태 확인을 위한 엔드포인트 추가
-@app.get("/scheduler/status", tags=["scheduler"], dependencies=[Depends(allow_admin)])
+@app.get("/scheduler/status", tags=["scheduler"])
 async def get_scheduler_status():
     jobs = scheduler.get_jobs()
     return {

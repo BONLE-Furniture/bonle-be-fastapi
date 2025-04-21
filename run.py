@@ -884,7 +884,7 @@ async def update_prices_with_id(product_id: str):
     return {"message": "Prices updated successfully"}
 
 # 수정
-@app.post("/update_prices/all", tags=["price CRUD"], dependencies=[Depends(allow_admin)])
+@app.post("/update_prices/all", tags=["price CRUD"])
 async def update_prices_all():
     # 제품 정보 가져오기
     product_cursor = db["bonre_products"].find({"upload": True})

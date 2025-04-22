@@ -360,11 +360,13 @@ async def upload_product_image(
         img_content = await image.read()
         original_filename = image.filename
         
+        name, ext = os.path.splitext(original_filename)
         if auto_set_name:
-            name, ext = os.path.splitext(original_filename)
-            img_name = f"product/{product_item['brand']}/{name}_{product_item['subname']}{ext}"
+            product_name = product_item["name"].replace(" ", "_")
+            product_subname = product_item["subname"].replace(" ", "_") if product_item["subname"] else ""
+            img_name = f"product/{product_item['brand']}/{product_name}_{product_subname}{ext}"
         else:
-            img_name = f"product/{product_item['brand']}/{original_filename}"
+            img_name = f"product/{product_item['brand']}/{name}_{product_item['subname']}{ext}"
 
         # 기존 이미지 삭제
         if product_item.get("main_image_url"):

@@ -1,4 +1,5 @@
 import os
+import re
 
 from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form, FastAPI, Query
 
@@ -65,12 +66,37 @@ async def search(keyword: str = Query("놀", description="검색어"), number: i
             "name": result.get("name"),
             "price": result.get("price"),
             "brand": result.get("brand"),
-            "site": result.get("site"),
+            "site": process_site_name(result.get("site", "")),
             "already_exist": already_exist
         }
         processed_results.append(processed_result)
     
     return {"results": processed_results}
+
+def process_site_name(site: str) -> str:
+    """
+    site 이름을 처리하는 함수
+    1. 숫자를 영어로 변환
+    2. 특수문자 제거
+    3. 대문자를 소문자로 변환
+    """
+    # 숫자를 영어로 변환
+    number_map = {
+        '0': 'zero', '1': 'one', '2': 'two', '3': 'three', '4': 'four',
+        '5': 'five', '6': 'six', '7': 'seven', '8': 'eight', '9': 'nine'
+    }
+    
+    # 숫자를 영어로 변환
+    for num, word in number_map.items():
+        site = site.replace(num, word)
+    
+    # 특수문자 제거
+    site = re.sub(r'[^a-zA-Z0-9]', '', site)
+    
+    # 대문자를 소문자로 변환
+    site = site.lower()
+    
+    return f"shop_{site}"
 
 # brand_id를 받아서 해당 브랜드 정보를 반환하는 API
 # test : /brands/get_bonre_brand_by_id/brand_andtrandition

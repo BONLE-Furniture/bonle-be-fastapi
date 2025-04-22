@@ -387,12 +387,14 @@ ga('require', 'displayfeatures');
   <meta content="INNOHOME" property="og:site_name"/>
   <meta content="website" property="og:type"/>
   <meta content="No" http-equiv="ImageToolbar"/>
+  <script src="//wcs.naver.net/wcslog.js" type="text/javascript">
+  </script>
   <script type="text/javascript">
    var CAFE24API = { instance : [], MALL_ID : 'innofeel60', SHOP_NO : 1, init : function (appInfo) { if (typeof appInfo == 'object') { if (appInfo.hasOwnProperty('client_id')) { var appKey = appInfo.client_id; } } else { var appKey = appInfo; } if (appKey) { if (!this.instance[appKey]) { CAFE24API.clientId = appKey; if (appInfo.hasOwnProperty('version')) { CAFE24API.version = appInfo.version; } else { if (CAFE24API.hasOwnProperty('version')) { delete CAFE24API.version; } } var copyObject = CAFE24API.constructor(); for (var attr in CAFE24API) { if (CAFE24API.hasOwnProperty(attr)) { copyObject[attr] = CAFE24API[attr]; } } this.instance[appKey] = copyObject; } return this.instance[appKey]; } }, initializeXhr : function () { try { return new XMLHttpRequest(); } catch (error) { return new window.ActiveXObject('Microsoft.XMLHTTP'); } }, fullPath: function (url) { return 'https://innofeel60.cafe24api.com' + url; }, getLoginProvider: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'login': CAPP_ASYNC_METHODS.AppCommon.getLoginProvider()}); }, getCustomerProvider: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'login': CAPP_ASYNC_METHODS.AppCommon.getCustomerProvider()}); }, getMemberID: function (callback) { if (!CAPP_ASYNC_METHODS.IS_LOGIN) { callback(null); } else { callback(CAPP_ASYNC_METHODS.AppCommon.getMemberID()); } }, getEncryptedMemberId: function (client_id, callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, CAPP_ASYNC_METHODS.AppCommon.getEncryptedMemberId(client_id)); }, getMemberInfo: function (callback) { callback({'id': CAPP_ASYNC_METHODS.AppCommon.getMemberInfo()}); }, getCustomerIDInfo: function (callback) { if (!CAFE24API.__scopeErr(callback, 'application')) { return; } callback(null, {'id': CAPP_ASYNC_METHODS.AppCommon.getCustomerIDInfo()}); }, getCustomerInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'customer': CAPP_ASYNC_METHODS.AppCommon.getCustomerInfo()}); }, getMileageInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'mileage': CAPP_ASYNC_METHODS.AppCommon.getMileageInfo()}); }, getPointInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'point': CAPP_ASYNC_METHODS.AppCommon.getPointInfo()}); }, getDepositInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'deposit': CAPP_ASYNC_METHODS.AppCommon.getDepositInfo()}); }, getCreditInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'customer')) { return; } callback(null, {'credit': CAPP_ASYNC_METHODS.AppCommon.getCreditInfo()}); }, getCartList: function (callback) { if (!CAFE24API.__scopeErr(callback, 'personal')) { return; } CAPP_ASYNC_METHODS.AppCommon.getCartList().then(function(data){ callback(null, {'carts': data}); }); }, getCartInfo: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'personal')) { return; } callback(null, {'cart': CAPP_ASYNC_METHODS.AppCommon.getCartInfo()}); }, getCartItemList: function (callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } callback(null, {'items': CAPP_ASYNC_METHODS.AppCommon.getCartItemList()}); }, getCartCount: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'personal')) { return; } callback(null, CAPP_ASYNC_METHODS.AppCommon.getCartCount()); }, getCouponCount: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'promotion')) { return; } callback(null, CAPP_ASYNC_METHODS.AppCommon.getCouponCount()); }, getWishCount: function (callback) { if (!CAFE24API.__chkValidSessionScope(callback, 'personal')) { return; } callback(null, CAPP_ASYNC_METHODS.AppCommon.getWishCount()); }, getShopInfo: function (callback) { if (!CAFE24API.__scopeErr(callback, 'store')) { return; } callback(null, {'shop': CAPP_ASYNC_METHODS.AppCommon.getShopInfo()}); }, addCurrentProductToCart: function (mall_id, time, app_key, member_id, hmac, callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } CAPP_ASYNC_METHODS.AppCommon.addCurrentProductToCart(mall_id, time, app_key, member_id, hmac).then(function(data){ callback(null, {'cart': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error('422'), {'error': {code: 422, message: 'This sdk is not available on the current page'}}); } }); }, precreateOrder: function (mall_id, time, app_key, member_id, hmac, callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } CAPP_ASYNC_METHODS.AppCommon.precreateOrder(mall_id, time, app_key, member_id, hmac).then(function(data){ callback(null, {'order': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error('422'), {'error': {code: 422, message: 'This sdk is not available on the current page'}}); } }); }, getOrderItemList: function (start_date, end_date, order_status, page, count, order_id, callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } CAPP_ASYNC_METHODS.AppCommon.getOrderItemList(start_date, end_date, order_status, page, count, order_id).then(function(data){ callback(null, {'items': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }); }, getOrderDetailInfo: function (shop_no, order_id, callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } CAPP_ASYNC_METHODS.AppCommon.getOrderDetailInfo(shop_no, order_id).then(function(data){ callback(null, {'orders': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }); }, getClaimableItemList: function (order_id, customer_service_type, callback) { if (!CAFE24API.__scopeErr(callback, 'order')) { return; } CAPP_ASYNC_METHODS.AppCommon.getClaimableItemList(order_id, customer_service_type).then(function(data){ callback(null, {'items': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }); }, emptyCart: function (basket_shipping_type, callback) { if (!CAFE24API.__scopeErr(callback, 'personal')) { return; } CAPP_ASYNC_METHODS.AppCommon.emptyCart(basket_shipping_type).then(function (data) { callback(null, {'result': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }) ; }, deleteCartItems: function (basket_shipping_type, product_list, callback) { if (!CAFE24API.__scopeErr(callback, 'personal')) { return; } CAPP_ASYNC_METHODS.AppCommon.deleteCartItems(basket_shipping_type, product_list).then(function (data) { callback(null, {'result': data}); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }) ; }, addCart: function (basket_type, prepaid_shipping_fee, product_list, callback) { if (!CAFE24API.__scopeErr(callback, 'personal')) { return; } CAPP_ASYNC_METHODS.AppCommon.addCart(basket_type, prepaid_shipping_fee, product_list).then(function (data) { callback(null, data); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }) }, addBundleProductsCart: function (basket_type, prepaid_shipping_fee, product_list, callback) { if (!CAFE24API.__scopeErr(callback, 'personal')) { return; } CAPP_ASYNC_METHODS.AppCommon.addBundleProductsCart(basket_type, prepaid_shipping_fee, product_list).then(function (data) { callback(null, data); }).catch(function (data) { if (data) { callback(new Error('422'), {'error': {code: data.code, message: data.message}}); } else { callback(new Error(422), { 'error': { code: 422, message: 'This sdk is not available on the current page' } }); } }) }, get : function(url, callback) { return CAFE24API.complete('GET', url, this, null, callback); }, post : function(url, params, callback) { return CAFE24API.complete('POST', url, this, params, callback); }, put : function(url, params, callback) { return CAFE24API.complete('PUT', url, this, params, callback); }, delete : function(url, callback) { return CAFE24API.complete('DELETE', url, this, null, callback); }, complete : function(method, url, obj, params, callback) { var xhr = CAFE24API.sendXhr(method, url, obj, params, callback); xhr.onreadystatechange = function () { if (xhr.readyState === XMLHttpRequest.DONE) { if (xhr.status >= 200 && xhr.status <= 208) { callback(null, JSON.parse(xhr.responseText)); } else { callback(new Error(xhr.status), JSON.parse(xhr.responseText)); } } }; }, sendXhr : function (method, url, obj, params, callback) { if (method !== 'POST') { var url = obj.fullPath(url); } var xhr = obj.initializeXhr(); var queryVars = {}; if (obj.clientId) queryVars['cafe24_app_key'] = obj.clientId; if (obj.version) queryVars['cafe24_api_version'] = obj.version; if (params === null) { var seperator = url.indexOf('?') == -1 ? '?' : '&'; var queryString = []; for (var key in queryVars) { queryString.push(key + '=' + queryVars[key]); } if (queryString.length > 0) { url = url + seperator + queryString.join('&'); } } xhr.open(method, url, true); if (typeof params == 'object' && params !== null) { xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded; charset=utf-8'); for (var key in queryVars) { params[key] = queryVars[key]; } params = 'formData=' + JSON.stringify(params); } xhr.send(params || null); return xhr; }, __sessionErr: function (callback) { callback(new Error(403), {'error': {code: 403, message: 'Failed to get session. Only available when log in.'}}); }, __scopeErr: function (callback, scope) { if (typeof CAFE24.APPSCRIPT_SDK_DATA != "undefined" && jQuery.inArray(scope, CAFE24.APPSCRIPT_SDK_DATA ) > -1 ) { return true; } callback(new Error(403), {'error': {code: 403, message: 'You do not have the necessary authority(scope) to use the SDK.'}}); }, __chkValidSessionScope: function (callback, scope) { if (!CAPP_ASYNC_METHODS.IS_LOGIN) { CAFE24API.__sessionErr(callback); return false; } if (!CAFE24API.__scopeErr(callback, scope)) { return false; } return true; } };
   </script>
   <script type="text/javascript">
    window.CAFE24 = window.CAFE24 || {};
-CAFE24.MANIFEST_CACHE_REVISION = '2504091394';
+CAFE24.MANIFEST_CACHE_REVISION = '2504211398';
 CAFE24.getDeprecatedNamespace = function(sDeprecatedNamespace, sSupersededNamespace) {
 var sNamespace = sSupersededNamespace 
 ? sSupersededNamespace 
@@ -598,7 +600,7 @@ var EC_GLOBAL_MALL_LANGUAGE_CODES = CAFE24.getDeprecatedNamespace('EC_GLOBAL_MAL
 CAFE24.GLOBAL_DATETIME_INFO = {
 oConstants: {"STANDARD_DATE_REGEX":"\/([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))\/","IN_ZONE":"inZone","OUT_ZONE":"outZone","IN_FORMAT":"inFormat","OUT_FORMAT":"outFormat","IN_DATE_FORMAT":"inDateFormat","IN_TIME_FORMAT":"inTimeFormat","OUT_DATE_FORMAT":"outDateFormat","OUT_TIME_FORMAT":"outTimeFormat","IN_FORMAT_DATE_ONLY":1,"IN_FORMAT_TIME_ONLY":2,"IN_FORMAT_ALL":3,"OUT_FORMAT_DATE_ONLY":1,"OUT_FORMAT_TIME_ONLY":2,"OUT_FORMAT_ALL":3,"DATE_ONLY":"YYYY-MM-DD","TIME_ONLY":"HH:mm:ss","FULL_TIME":"YYYY-MM-DD HH:mm:ss","ISO_8601":"YYYY-MM-DD[T]HH:mm:ssZ","YEAR_ONLY":"YYYY","MONTH_ONLY":"MM","DAY_ONLY":"DD","WEEK_ONLY":"e","TIME_H_I_ONLY":"HH:mm","TIME_HOUR_ONLY":"HH","TIME_MINUTE_ONLY":"mm","POSTGRE_FULL_TIME":"YYYY-MM-DD HH24:MI:SS","POSTGRE_TIME_ONLY":" HH24:MI:SS","MICRO_SECOND_ONLY":"u","SEOUL":"Asia\/Seoul","TOKYO":"Asia\/Tokyo","SHANGHAI":"Asia\/Shanghai","TAIPEI":"Asia\/Taipei","HANOI":"Asia\/Bangkok","LOS_ANGELES":"America\/Los_Angeles","LISBON":"Europe\/Lisbon","MADRID":"Europe\/Madrid","SINGAPORE":"Asia\/Singapore","UTC":"Etc\/UTC","MAX_DATETIME":"9999-12-31 23:59:59"},
 oOptions: {"inZone":"Asia\/Seoul","inFormat":"YYYY-MM-DD HH:mm:ss","inDateFormat":"YYYY-MM-DD","inTimeFormat":"HH:mm:ss","outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"},
-oPolicies: {"shop":{"outZone":"Asia\/Seoul","outFormat":"YYYY-MM-DD HH:mm:ss","outDateFormat":"YYYY-MM-DD","outTimeFormat":"HH:mm:ss"}},
+oPolicies: [],
 sOverrideTimezone: '',
 sMomentNamespace: 'EC_GLOBAL_MOMENT'
 };
@@ -606,16 +608,14 @@ CAFE24.FRONT_JS_CONFIG_MANAGE = {"sSmartBannerScriptUrl":"https:\/\/app4you.cafe
 var EC_FRONT_JS_CONFIG_MANAGE = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MANAGE');
 CAFE24.FRONT_JS_CONFIG_MEMBER = {"sAuthUrl":"https:\/\/ipin-ec.cafe24.com\/certify\/v1\/?action=auth"};
 var EC_FRONT_JS_CONFIG_MEMBER = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_MEMBER');
-CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-13","locale":"ko"},"aProductPurchaseInfo_2547":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2327":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_2326":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true},"aProductPurchaseInfo_1730":{"bIsSuccess":true,"sMessage":"","bReplaceLoginPage":false,"bIsDisplayPurchaseButton":true}};
+CAFE24.FRONT_JS_CONFIG_SHOP = {"search_period":[],"calendar_config":{"maxDate":"2027-04-22","locale":"ko"}};
 var EC_FRONT_JS_CONFIG_SHOP = CAFE24.getDeprecatedNamespace('EC_FRONT_JS_CONFIG_SHOP');
 typeof window.CAFE24 === "undefined" && (window.CAFE24 = {});
-CAFE24.FRONTEND = {"FW_MANIFEST_CACHE_REVISION":2504091394,"IS_WEB_VIEW":"F"};
+CAFE24.FRONTEND = {"FW_MANIFEST_CACHE_REVISION":2504211398,"IS_WEB_VIEW":"F"};
 CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","path":{"origin":"\/product\/search.html","result":"\/product\/search.html","prefix":""},"shop_no":0,"skin_code":"default","support_language_list":{"ar":"ar_EG","ar-EG":"ar_EG","de":"de_DE","de-DE":"de_DE","en":"en_US","en-IN":"en_IN","en-PH":"en_PH","en-US":"en_US","es":"es_ES","es-ES":"es_ES","hi":"hi_IN","hi-IN":"hi_IN","id":"id_ID","id-ID":"id_ID","it":"it_IT","it-IT":"it_IT","ja":"ja_JP","ja-JP":"ja_JP","ko":"ko_KR","ko-KR":"ko_KR","ms":"ms_MY","ms-MY":"ms_MY","pt":"pt_PT","pt-PT":"pt_PT","ru":"ru_RU","ru-RU":"ru_RU","th":"th_TH","th-TH":"th_TH","tr":"tr_TR","tr-TR":"tr_TR","vi":"vi_VN","vi-VN":"vi_VN","zh":"zh_CN","zh-CN":"zh_CN","zh-HK":"zh_HK","zh-MO":"zh_MO","zh-SG":"zh_SG","zh-TW":"zh_TW"}};
   </script>
   <link href="/ind-script/optimizer.php?filename=nY5BCgIxEATvYa--Y1T0BYIPUHzAZHbWhE0yYZKA_t7Vkx4WJNemq7rBSWTY7RWyyl0xgnKRpsRApcCkkiqQxChpWIIN_NNnMkVCq16SsfLoBFutvaMBn6x9aEUbuBOVbIJPbCymtLofvIWbz0gzXL59JwycRlQ4DMdhC1PAmj3NaxrMGa5O8q_k_Dm1dMZGtYMsjEruDb4A&amp;type=css&amp;k=dfc749202ee4f0e29186b4d8083aa2c4d8e6bdeb&amp;t=1726130154" rel="stylesheet" type="text/css"/>
   <link href="/ind-script/optimizer_user.php?filename=tdRLTgMxDAbgfadbzmE2IHECdmw4QeJxJ6aJHY0dWm5PANELNNnlYX2RLOeHpIWAcGlGuwGL6IkoPz9CbTEzLslLBltpWcl4E7Azy8sT5PClzSEGYwQ0A9RSVI59-QCjzL-DsSbhoW_o0HiO66rZuc7BE-VJct11bTip1zVsLMFpUsdDnAPH5j56pG-2Xqd1I09qdC_Du-Sq5ie-KlxO8BaklVf1xOPMXaO6juEGZdrN-zCwXncep1240n4sPGlC-0Xn76F_tNJjJdP_K6X1bLSk9T1xrSzbYB9VPjvBKhVHj8FiLfYg-_1b3w&amp;type=css&amp;k=66924bde6b52afda0accd42f921a9c2382315626&amp;t=1687925425&amp;user=T" rel="stylesheet" type="text/css"/>
-  <style type="text/css">
-  </style>
   <title>
    INNOHOME 이노홈
   </title>
@@ -678,11 +678,6 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
               <li>
                <div class="catelist category-menu">
                 <ul class="xans-element- xans-layout xans-layout-category depth-1">
-                 <li class="xans-record-">
-                  <a href="/product/list.html?cate_no=195">
-                   밀키유x이노홈
-                  </a>
-                 </li>
                  <li class="xans-record-">
                   <a href="/product/list.html?cate_no=183">
                    FOOD
@@ -810,8 +805,8 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
         <!-- /box-allmenu -->
         <div class="box-signin">
          <div class="box-scroll">
-          <form action="/exec/front/Member/login/" enctype="multipart/form-data" id="member_form_2554774175" method="post" name="" target="_self">
-           <input id="returnUrl" name="returnUrl" type="hidden" value="/product/search.html?keyword=%EC%BF%A0%EC%85%98"/>
+          <form action="/exec/front/Member/login/" enctype="multipart/form-data" id="member_form_0342557417" method="post" name="" target="_self">
+           <input id="returnUrl" name="returnUrl" type="hidden" value="/product/search.html?keyword=%EB%86%80"/>
            <input id="forbidIpUrl" name="forbidIpUrl" type="hidden" value="/index.html"/>
            <input id="certificationUrl" name="certificationUrl" type="hidden" value="/intro/adult_certification.html"/>
            <input id="sIsSnsCheckid" name="sIsSnsCheckid" type="hidden" value=""/>
@@ -846,7 +841,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
                  Find password
                 </a>
                </div>
-               <a class="box-btn" href="#none" onclick="MemberAction.login('member_form_2554774175'); return false;">
+               <a class="box-btn" href="#none" onclick="MemberAction.login('member_form_0342557417'); return false;">
                 LOG IN
                </a>
                <a class="box-btn" href="/member/join.html">
@@ -857,12 +852,12 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
              <ul class="snsArea">
               <!--세팅후 모듈값에 띄어스기삭제(활성화) -->
               <li class="{ $display_naver|display}">
-               <a href="#none" onclick="MemberAction.snsLogin('naver', '%2Fproduct%2Fsearch.html%3Fkeyword%3D%25EC%25BF%25A0%25EC%2585%2598')">
+               <a href="#none" onclick="MemberAction.snsLogin('naver', '%2Fproduct%2Fsearch.html%3Fkeyword%3D%25EB%2586%2580')">
                 <img alt="네이버 로그인" src="/postfixo/images/renewal/login-naver.png"/>
                </a>
               </li>
               <li class="{ $display_kakao|display}">
-               <a href="#none" onclick="MemberAction.snsLogin('kakao', '%2Fproduct%2Fsearch.html%3Fkeyword%3D%25EC%25BF%25A0%25EC%2585%2598')">
+               <a href="#none" onclick="MemberAction.snsLogin('kakao', '%2Fproduct%2Fsearch.html%3Fkeyword%3D%25EB%2586%2580')">
                 <img alt="카카오 로그인" src="/postfixo/images/renewal/login-kakao.png"/>
                </a>
               </li>
@@ -972,7 +967,6 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
             <legend>상품 검색</legend>
             <div class="item"><strong>상품분류</strong> <select id="category_no" name="category_no" fw-filter="" fw-label="" fw-msg=""  >
 <option value="">상품분류 선택</option>
-<option value="195">밀키유x이노홈</option>
 <option value="183">FOOD</option>
 <option value="7">Decor</option>
 <option value="51">Decor &gt; Accessories</option>
@@ -1015,7 +1009,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
 <option value="prd_model">모델명</option>
 <option value="prd_brand">브랜드명</option>
 <option value="prd_trand">트랜드명</option>
-</select>                <input id="keyword" name="keyword" fw-filter="" fw-label="상품명/제조사" fw-msg="" class="inputTypeText" placeholder="" size="15" value="쿠션" type="text"  />            </div>
+</select>                <input id="keyword" name="keyword" fw-filter="" fw-label="상품명/제조사" fw-msg="" class="inputTypeText" placeholder="" size="15" value="놀" type="text"  />            </div>
             <div class="popular" id="except_keyword_wrap_id" style="display:none">
                 <strong>제외검색어</strong>
                 <input id="exceptkeyword" name="exceptkeyword" fw-filter="" fw-label="제외검색어" fw-msg="" class="inputTypeText" placeholder="" size="15" value="" type="text"  />            </div>
@@ -1046,7 +1040,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
          <p class="record">
           총
           <strong>
-           4
+           0
           </strong>
           개 의 상품이 검색되었습니다.
          </p>
@@ -1074,7 +1068,7 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
           </li>
          </ul>
         </div>
-        <div class="noData displaynone">
+        <div class="noData">
          <strong class="warning">
           검색결과가 없습니다.
          </strong>
@@ -1096,361 +1090,6 @@ CAFE24.ROUTE = {"is_mobile":false,"is_need_route":false,"language_code":"ZZ","pa
        </div>
       </form>
       <!-- //참고 -->
-      <div class="xans-element- xans-search xans-search-result">
-       <!--
-        $count = 24
-    -->
-       <ul class="prdList column5 none_blank">
-        <!--
-	상품검색결과 상품진열 페이지 입니다
--->
-        <div class="item xans-record-">
-         <div class="box">
-          <div class="box_inner">
-           <div class="prdImg">
-            <a href="/product/2024-코듀로이-핸들-쿠션-골-02cm/2547/category/7/display/1/" name="anchorBoxName_2547">
-             <img alt="2024 코듀로이 핸들 쿠션 (골 0.2cm)" class="thumb" id="eListPrdImage2547_" src="//innohome.kr/web/product/medium/202212/fe1e0720a24a7a16d54e604e25828f8f.jpg"/>
-            </a>
-            <div class="icon_box none_blank">
-             <div class="box-iconbox">
-              <div class="summary">
-              </div>
-              <div class="cart">
-               <img alt="장바구니 담기" class="ec-admin-icon cart" onclick="CAPP_SHOP_NEW_PRODUCT_OPTIONSELECT.selectOptionCommon(2547,  7, 'basket', '')" src="/web/upload/icon_201608121117175400.png"/>
-              </div>
-              <div class="wishIcon">
-               <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="T" productno="2547" src="/web/upload/icon_201801121655231300.png"/>
-              </div>
-             </div>
-            </div>
-            <div class="status">
-             <div class="icon">
-             </div>
-            </div>
-           </div>
-           <div class="likeButton displaynone">
-            <button type="button">
-             <span class="title">
-              Like
-             </span>
-             <span class="count">
-             </span>
-            </button>
-           </div>
-           <div class="status">
-            <div class="icon">
-            </div>
-           </div>
-          </div>
-          <p class="name">
-           <a class="" href="/product/2024-코듀로이-핸들-쿠션-골-02cm/2547/category/7/display/1/">
-            <span class="title displaynone">
-             <span style="font-size:12px;color:#414042;font-weight:bold;">
-              상품명
-             </span>
-             :
-            </span>
-            <span style="font-size:12px;color:#414042;font-weight:bold;">
-             2024 코듀로이 핸들 쿠션 (골 0.2cm)
-            </span>
-           </a>
-          </p>
-          <div class="xans-element- xans-search xans-search-listitem">
-           <div class="xans-record-">
-            <strong class="title displaynone">
-             <span style="font-size:12px;color:#414042;">
-              판매가
-             </span>
-             :
-            </strong>
-            <span style="font-size:12px;color:#414042;">
-             ₩98,000
-            </span>
-            <span id="span_product_tax_type_text" style="">
-            </span>
-           </div>
-          </div>
-          <div class="info-wrap">
-           <div class="box-price">
-            ₩98,000
-           </div>
-           <div class="box-price-sale">
-           </div>
-          </div>
-          <div class="sale-percent">
-          </div>
-          <div class="button">
-           <div class="option">
-           </div>
-          </div>
-         </div>
-        </div>
-        <div class="item xans-record-">
-         <div class="box">
-          <div class="box_inner">
-           <div class="prdImg">
-            <a href="/product/푸들-공-쿠션/2327/category/7/display/1/" name="anchorBoxName_2327">
-             <img alt="푸들 공 쿠션" class="thumb" id="eListPrdImage2327_" src="//innohome.kr/web/product/medium/202109/37fe8fe519835cd4d4bd0beb108b42ea.jpg"/>
-            </a>
-            <div class="icon_box none_blank">
-             <div class="box-iconbox">
-              <div class="summary">
-              </div>
-              <div class="cart">
-               <img alt="장바구니 담기" class="ec-admin-icon cart" onclick="CAPP_SHOP_NEW_PRODUCT_OPTIONSELECT.selectOptionCommon(2327,  7, 'basket', '')" src="/web/upload/icon_201608121117175400.png"/>
-              </div>
-              <div class="wishIcon">
-               <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="T" productno="2327" src="/web/upload/icon_201801121655231300.png"/>
-              </div>
-             </div>
-            </div>
-            <div class="status">
-             <div class="icon">
-             </div>
-            </div>
-           </div>
-           <div class="likeButton displaynone">
-            <button type="button">
-             <span class="title">
-              Like
-             </span>
-             <span class="count">
-             </span>
-            </button>
-           </div>
-           <div class="status">
-            <div class="icon">
-            </div>
-           </div>
-          </div>
-          <p class="name">
-           <a class="" href="/product/푸들-공-쿠션/2327/category/7/display/1/">
-            <span class="title displaynone">
-             <span style="font-size:12px;color:#414042;font-weight:bold;">
-              상품명
-             </span>
-             :
-            </span>
-            <span style="font-size:12px;color:#414042;font-weight:bold;">
-             푸들 공 쿠션
-            </span>
-           </a>
-          </p>
-          <div class="xans-element- xans-search xans-search-listitem">
-           <div class="xans-record-">
-            <strong class="title displaynone">
-             <span style="font-size:12px;color:#414042;">
-              판매가
-             </span>
-             :
-            </strong>
-            <span style="font-size:12px;color:#414042;">
-             ₩48,000
-            </span>
-            <span id="span_product_tax_type_text" style="">
-            </span>
-           </div>
-          </div>
-          <div class="info-wrap">
-           <div class="box-price">
-            ₩48,000
-           </div>
-           <div class="box-price-sale">
-           </div>
-          </div>
-          <div class="sale-percent">
-          </div>
-          <div class="button">
-           <div class="option">
-           </div>
-          </div>
-         </div>
-        </div>
-        <div class="item xans-record-">
-         <div class="box">
-          <div class="box_inner">
-           <div class="prdImg">
-            <a href="/product/벨벳-턱-쿠션/2326/category/7/display/1/" name="anchorBoxName_2326">
-             <img alt="벨벳 턱 쿠션" class="thumb" id="eListPrdImage2326_" src="//innohome.kr/web/product/medium/202109/88cde3bdc9766c3e46d5c2b52712ce61.jpg"/>
-            </a>
-            <div class="icon_box none_blank">
-             <div class="box-iconbox">
-              <div class="summary">
-              </div>
-              <div class="cart">
-               <img alt="장바구니 담기" class="ec-admin-icon cart" onclick="CAPP_SHOP_NEW_PRODUCT_OPTIONSELECT.selectOptionCommon(2326,  7, 'basket', '')" src="/web/upload/icon_201608121117175400.png"/>
-              </div>
-              <div class="wishIcon">
-               <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="T" productno="2326" src="/web/upload/icon_201801121655231300.png"/>
-              </div>
-             </div>
-            </div>
-            <div class="status">
-             <div class="icon">
-             </div>
-            </div>
-           </div>
-           <div class="likeButton displaynone">
-            <button type="button">
-             <span class="title">
-              Like
-             </span>
-             <span class="count">
-             </span>
-            </button>
-           </div>
-           <div class="status">
-            <div class="icon">
-            </div>
-           </div>
-          </div>
-          <p class="name">
-           <a class="" href="/product/벨벳-턱-쿠션/2326/category/7/display/1/">
-            <span class="title displaynone">
-             <span style="font-size:12px;color:#414042;font-weight:bold;">
-              상품명
-             </span>
-             :
-            </span>
-            <span style="font-size:12px;color:#414042;font-weight:bold;">
-             벨벳 턱 쿠션
-            </span>
-           </a>
-          </p>
-          <div class="xans-element- xans-search xans-search-listitem">
-           <div class="xans-record-">
-            <strong class="title displaynone">
-             <span style="font-size:12px;color:#414042;">
-              판매가
-             </span>
-             :
-            </strong>
-            <span style="font-size:12px;color:#414042;">
-             ₩98,000
-            </span>
-            <span id="span_product_tax_type_text" style="">
-            </span>
-           </div>
-          </div>
-          <div class="info-wrap">
-           <div class="box-price">
-            ₩98,000
-           </div>
-           <div class="box-price-sale">
-           </div>
-          </div>
-          <div class="sale-percent">
-          </div>
-          <div class="button">
-           <div class="option">
-           </div>
-          </div>
-         </div>
-        </div>
-        <div class="item xans-record-">
-         <div class="box">
-          <div class="box_inner">
-           <div class="prdImg">
-            <a href="/product/코듀로이-핸들쿠션골-05cm/1730/category/7/display/1/" name="anchorBoxName_1730">
-             <img alt="코듀로이 핸들쿠션(골 0.5cm)" class="thumb" id="eListPrdImage1730_" src="//innohome.kr/web/product/medium/201910/4ac926c1019de5c37b4af76ad6e1e03a.jpg"/>
-            </a>
-            <div class="icon_box none_blank">
-             <div class="box-iconbox">
-              <div class="summary">
-              </div>
-              <div class="cart">
-               <img alt="장바구니 담기" class="ec-admin-icon cart" onclick="CAPP_SHOP_NEW_PRODUCT_OPTIONSELECT.selectOptionCommon(1730,  7, 'basket', '')" src="/web/upload/icon_201608121117175400.png"/>
-              </div>
-              <div class="wishIcon">
-               <img alt="관심상품 등록 전" categoryno="1" class="icon_img ec-product-listwishicon" icon_status="off" individual-set="F" login_status="T" productno="1730" src="/web/upload/icon_201801121655231300.png"/>
-              </div>
-             </div>
-            </div>
-            <div class="status">
-             <div class="icon">
-             </div>
-            </div>
-           </div>
-           <div class="likeButton displaynone">
-            <button type="button">
-             <span class="title">
-              Like
-             </span>
-             <span class="count">
-             </span>
-            </button>
-           </div>
-           <div class="status">
-            <div class="icon">
-            </div>
-           </div>
-          </div>
-          <p class="name">
-           <a class="" href="/product/코듀로이-핸들쿠션골-05cm/1730/category/7/display/1/">
-            <span class="title displaynone">
-             <span style="font-size:12px;color:#414042;font-weight:bold;">
-              상품명
-             </span>
-             :
-            </span>
-            <span style="font-size:12px;color:#414042;font-weight:bold;">
-             코듀로이 핸들쿠션(골 0.5cm)
-            </span>
-           </a>
-          </p>
-          <div class="xans-element- xans-search xans-search-listitem">
-           <div class="xans-record-">
-            <strong class="title displaynone">
-             <span style="font-size:12px;color:#414042;">
-              판매가
-             </span>
-             :
-            </strong>
-            <span style="font-size:12px;color:#414042;">
-             ₩98,000
-            </span>
-            <span id="span_product_tax_type_text" style="">
-            </span>
-           </div>
-          </div>
-          <div class="info-wrap">
-           <div class="box-price">
-            ₩98,000
-           </div>
-           <div class="box-price-sale">
-           </div>
-          </div>
-          <div class="sale-percent">
-          </div>
-          <div class="button">
-           <div class="option">
-           </div>
-          </div>
-         </div>
-        </div>
-       </ul>
-      </div>
-      <div class="xans-element- xans-search xans-search-paging ec-base-paginate">
-       <a class="first" href="#none">
-        <img alt="첫 페이지" src="http://img.echosting.cafe24.com/skin/base/common/btn_page_first.gif"/>
-       </a>
-       <a href="#none">
-        <img alt="이전 페이지" src="http://img.echosting.cafe24.com/skin/base/common/btn_page_prev.gif"/>
-       </a>
-       <ol>
-        <li class="xans-record-">
-         <a class="this" href="?keyword=%EC%BF%A0%EC%85%98&amp;page=1&amp;CategoryUrl=%2Fproduct%2Flist.html&amp;ProductUrl=%2Fproduct%2Fdetail.html&amp;SearchUrl=%2Fproduct%2Fsearch.html">
-          1
-         </a>
-        </li>
-       </ol>
-       <a href="#none">
-        <img alt="다음 페이지" src="http://img.echosting.cafe24.com/skin/base/common/btn_page_next.gif"/>
-       </a>
-       <a class="last" href="#none">
-        <img alt="마지막 페이지" src="http://img.echosting.cafe24.com/skin/base/common/btn_page_last.gif"/>
-       </a>
-      </div>
      </div>
     </div>
    </div>
@@ -2344,7 +1983,7 @@ document.write('<script src="/web/upload/appfiles/ZaReJam3QiELznoZeGGkMG/7b032af
   <span itemscope="" itemtype="https://schema.org/Organization">
    <link href="https://innohome.kr" itemprop="url"/>
   </span>
-  <script src="/app/Eclog/js/cid.generate.js?vs=e7785abec1d58facfd3eda0d34fd25ad&amp;u=innofeel60.1" type="text/javascript">
+  <script src="/app/Eclog/js/cid.generate.js?vs=a5cb653329cd679e5eb4b3a707edbf89&amp;u=innofeel60.1" type="text/javascript">
   </script>
   <script>
    (function (i, s, o, g) {
@@ -2359,6 +1998,25 @@ document.write('<script src="/web/upload/appfiles/ZaReJam3QiELznoZeGGkMG/7b032af
                 }
             };
         })(window, document, 'script', '//optimizer.poxo.com/ca2/analytics.js');
+  </script>
+  <script>
+   try {
+                    // Account ID 적용
+                    if (!wcs_add) var wcs_add = {};
+                    wcs_add["wa"] = "s_3c2a8cdc2e34";
+            
+                    // 네이버 페이 White list가 있을 경우
+                    wcs.checkoutWhitelist = ["innofeel60.cafe24.com", "www.innofeel60.cafe24.com", "m.innofeel60.cafe24.com", "innohome.kr", "www.innohome.kr", "m.innohome.kr"];
+                
+                    // 레퍼러 
+                    wcs.setReferer("");
+
+                    // 유입 추적 함수 호출
+                    wcs.inflow("innohome.kr");
+
+                    // 로그수집
+                    wcs_do();
+                } catch (e) {};
   </script>
   <!-- External Script Start -->
   <!-- fbe -->
@@ -2544,31 +2202,10 @@ document.write('<script src="/web/upload/appfiles/ZaReJam3QiELznoZeGGkMG/7b032af
    </noscript>
   </div>
   <!-- CMC3 script -->
-  <!-- CMC3 script -->
-  <div id="fbe_search_script" style="display:none;">
-   <script type="text/javascript">
-    !function() {
-  try {
-    let event_key = 'Search';
-    let event_data = {
-      content_ids : ['2547','2327','2326','1730'],
-      content_type : 'product_group',
-      search_string : '쿠션'
-    };
-    if (typeof facebookChannel !== 'undefined') {
-      facebookChannel.pixelEvent(event_key, function () {
-        fbq('trackSingle', '206104563079047', event_key, event_data);
-      });
-    }
-  } catch (e) { console.error(e); }
-}();
-   </script>
-  </div>
-  <!-- CMC3 script -->
   <!-- External Script End -->
-  <script charset="utf-8" src="/ind-script/i18n.php?lang=ko_KR&amp;domain=front&amp;v=2504091394" type="text/javascript">
+  <script charset="utf-8" src="/ind-script/i18n.php?lang=ko_KR&amp;domain=front&amp;v=2504211398" type="text/javascript">
   </script>
-  <script src="/ind-script/optimizer.php?filename=zVlbU-M2FH4Hv_Z3GNptp68kLF2GUBgCy7MiHyfCulWXBO-v77EddpMlvklhZofBkW19n46kc7XSlRKQnv9u0twQARtlitSAVd5QSF9sys7_lsmL_S3t6ueZJrRIX_7zYMrtzx_JX8nZSCS8OjCScLt9kFClCgaxLN7woCkkQJNcBkOlokrmnFEXRHGefMK_oMHxrVPmp3XTRi0Rv7e7GXHgGHYQ2Eu6FOht3XhmbvX47ZI4kggmR_BwtkAUPGK7H2W1YdLlA-gV9ZVYV8qIqZLOKM7B9OPuubcXWk8My5YD5PGO8f5euVH1Sp1YxRGh5IlT-oQzCScLIuUQuRoKqoRQcmjvVyLRGiWqtjbgho9S4xwIzXFfDoOI1umtWjAO6cMOvpGvY1VacEJlHh_ZDdPjBsy9pNWCVv0yj2YjWpV4KEOHEKiq6VNjPbsUnHwruSLZKJDwjlTj3i0smHXb5rSAteJlzvhg1csgJ567agmsIMZNDmjdeCe5WLIa9Gu47AwdiLS4ojaWCYhlchnLIsCRrHKHrdo4Xym9t61X9WbdkIKotKiu9-wVeJcv6qCZ1rb41GmKLdBLWPjl-AHRWyyVKWfMutHgB8jBgKQw9ab6Le8No8cP44dMhJpSO3XyYtsDV-07QCzA7IlObClpKuoXF1V7TtZwnY3iaNAztRw59g7uBkAHYL-CYXnZuMQA-PxnQxuEegDnjXwanV5p7nGmNl0TztCqlHnb4u8PEmwQG01b6ZDM7Ht6ZNDoXODjRlgB1_Dh81gRmfHRzn_EAOtarz6OHwOfO9oycUUJZgSF6vcTPyTo7Xrh3Wo-n432ghaIoatRqYAjOS52q-dqQU1x0jIjJv2U_JmcpTlmeprRwoSR8PMz2bqEHdOd19OtXmAKVGdDb5Sjqf6FTfV_3yRxd7oimwMH6iKpgqJZRbHV2xerZDT-gK4Pn8gdl0UQ9i0j3gibYHVIC7wS58MEabYk_fzqDKmlqu_r27nimfLu2LQHMoh40mtBlkcnvWQWa62SYc11ROprpJtjIsuhMQQWqIidghsknhBbwNG378rL7F0aHk_7LKL09zvZtKMUH00ljyPThMnsKESXIXXLIaKvTcxsVb22yLItAlKLQ53qdkMehKfbu9NcGUFcrCTHovEhpdl-cLoIt-ofJPPatYdwzFgB6cSoDcbvKaErCGeJMKcd_HZGo2m2OCx8HWE8nfgqRcaHQgWv7wOsGWwc4cW2OVVedkh2SyRGlj2yDSy4WvZnmysnMGtyzDGw_b2ndbl7A-UoWZpSt74G45oKMBh-ZzIwdOQa7hI0cSqeQXcnFoM4ejW1hwW1CavRmLncYtnfmcv04C9BK8vCx39mdtWdXA8goKONapcBkxeIgD_U8AJKLDmzSJZHha5iGjWb2j7C1RIk5CzWNGakjJDhH0OycIXEolthXGa0pkHXvAm3Dc8du1fa63AD9VgyCTBo6GsWszG3ZRXgtv4iTkP2qKJsr9a1L6w6MyyPoLVbpkeyOApPVfnET69JBq5lrsKVgBMmyIJDhESauJVRHE57vj8NEGfWekjVAtYBUaqJ8qe854v2e6DdJJS0n9JWqM_bD_z7J3h1zoWvLTVMu5Ho6oAkvahyOQ20PizNSVd0P0iy54a0ng48pjXKO7hir9jzfw&amp;type=js&amp;k=c74d6db4fe13505ac7157ff20ba3ebb8ca94d113&amp;t=1744071412">
+  <script src="/ind-script/optimizer.php?filename=zVjbbuM2EH139NrvUNJui74mTtMGcbBGnOw-j6mRxIjisLzY0X59R7K3jTeRrIsDFAYkWeI5nBnOjYxzKjG--NnGqYUSt2SL2KKjYAXGzy6WF7_r6Nn9FHeNC9KAKOLnvwPaan_7JfotOh-IxBePVoNy-xeRICokTmUJVo1SIUIRpXo0VJMgnSop_CiKi-gT_0ZNzl892R_sZixljD9Y3QQ8eskDSh6lfYzivnn4Kn3--O0aPESl1AN4lFwzCh_5-TjKGSu1T3vQkwi1WDdkyzlpb0kptMdxSxXcpTFXViZZD3mCl-r4qNRSY6mZI8UI0jNPZqakxtkatO4j145CUFmS7jv6BTRHo2bXNhZ9_1kanMfSKF6X90FgTHxPa6kwfniF38nXYZUWXElJ4FduK82wCdOgRW3QelwSOGzKVifuy9AhBLtq_LSLntcUCr5ViiAZBCqDh3rez2uHdtO2OC1gQ6pKpertegmmEJSvTeBKsP7qHa8bniTXmWxA_4-UnXAC0Y4t6qYyITips6ksJXpI6nTY6o2rnMzBst40i3UHBVBc1NelfEHVlYs6aOZNLD51hmIL9BrXIRs-IWeLjGy1kM4PBj9giha1wHmw9b1aWilOX8bfCxFhK-Np9uzaC1eTO7Bcoz0QHVylRVw2Hy7r5xVs8DYZxLFDLygbOPcr3B2iGYH9glam1S4ljoCvfgy0XqgH9MHqp8HtlVGBNXXxBpTkqCL7fYn_fRHxA7jJtLUP6cS9pWcGw8kFP26GHJXBD9cjB52owcl_wASbxq8-jp8Lnz-ZmRQJ4I6goON54j8Jjg69DD5frRaDs6BDsCIf1Ap4SNnYrZmrBTVnpXUCNv4U_Rqdxyl3ekaKwo4jURfnutWEHequGnXrD9wCNd3Qd8qOzAIassMWbotrRdkw0fdVJnYs2Zl5W2sG4cX-31nKuw3wUyU5FU2_zUnuS7a5l16iOz563hTLO6wGrdCuUDbX0bhd_RgN_2wTtEL70QRX4Ar00xk6nK03x3K_VxnLMqfAtWyKLvfcNEA2Xo9rNOTk-Pm_Spd3N5o9CASFCSawKHAC_KGBF1hxwUomsjySBzWfpE0TH-PdEjWmcmpoLKCaIMOfFpLxDsklmzjpStHQcMHajo8N3mrLJZlgxgdocCwOWg70jZyyMPe8HStwny-mecgB1aTYa3ztL1mfOFYn8No90yOsT8Jz67Gcrt41b_-lutUpjXcCBbKEtcIJEhnwuSWFZ0e61x7iLFqPuFrAZkSV2lX5M3VkP_wW6LYRd_KqK1T-2B8PHJ7_NZ0of3bCSuMHouvjlfiy7nANiuaoNYWu6v4uyUEaMmbe85DXUvB4I1945D8&amp;type=js&amp;k=9e7f191e25927f1caa8e502c7bb9c722391f5a7b&amp;t=1744071412">
   </script>
   <script src="/ind-script/optimizer_user.php?filename=tdNLbsMgEAbgvc0255hWUSr1CFl01RNgPNhjA0MYiJPbByvqBRqy-xfoYzQPmNkjoOmLYBKgENgiuq8PiGVwZPo5ewcyYj-i0BRAVgrfJ3D6ziXDoIUMLPIMapED_BOshmHvObyIeB6Lw7_6LoXM2l8Jt1fYyJIt3Xj3Y8IabUJUnkIr1XLIVhvkoRpXTK3c5VIw3RXW6YRJfapjy6KfeKcDeZ2xMyJd4rxHMdphq2-kvlubYRvF2t7mXVBpG89eT_ijo7Tk33AUvrhMMnP8nSnGfTEWeQA&amp;type=js&amp;k=2b521f0907a0fa8ad75c5ddb65724d5555080090&amp;t=1637718061&amp;user=T">
   </script>
@@ -2754,8 +2391,8 @@ isUseLoginKeeping();
 } catch(e) {
 }
 var login_id_type_text = '아이디'; 
-var sFormId = 'member_form_2554774175'
-var sEleId = ["member_form_2554774175::member_id","member_form_2554774175::member_passwd","member_form_2554774175::returnUrl","member_form_2554774175::forbidIpUrl","member_form_2554774175::certificationUrl","member_form_2554774175::sIsSnsCheckid","member_form_2554774175::sProvider","member_form_2554774175::check_save_id","member_form_2554774175::use_login_keeping","member_form_2554774175::sLoginKey","member_form_2554774175::use_login_keeping_no","member_form_2554774175::is_use_login_keeping_ip"]
+var sFormId = 'member_form_0342557417'
+var sEleId = ["member_form_0342557417::member_id","member_form_0342557417::member_passwd","member_form_0342557417::returnUrl","member_form_0342557417::forbidIpUrl","member_form_0342557417::certificationUrl","member_form_0342557417::sIsSnsCheckid","member_form_0342557417::sProvider","member_form_0342557417::check_save_id","member_form_0342557417::use_login_keeping","member_form_0342557417::sLoginKey","member_form_0342557417::use_login_keeping_no","member_form_0342557417::is_use_login_keeping_ip"]
 AuthSSL.Bind(sFormId, sEleId);
 var getParams = new URLSearchParams(window.location.search);
 var sProvider = getParams.get('provider');
@@ -2770,20 +2407,13 @@ cacheOpenAgreementLayer();
 }
 var bUseElastic = false;
 var sSearchBannerUseFlag = 'F';
-CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"&#8361;","tail":""},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
-if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_COMMON !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_COMMON.initObject();}
-if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_BIND !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_BIND.initChooseBox();}
-if (typeof CAFE24.SHOP_FRONT_NEW_OPTION_DATA !== "undefined") {CAFE24.SHOP_FRONT_NEW_OPTION_DATA.initData();}
-if (typeof CAFE24.SHOP_FRONT_NEW_LIKE_COMMON !== "undefined") {CAFE24.SHOP_FRONT_NEW_LIKE_COMMON.init({"bIsUseLikeProduct":false,"bIsUseLikeCategory":false});}
-if (typeof CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT !== "undefined") {CAFE24.SHOP_FRONT_REVIEW_TALK_REVIEW_COUNT.bIsReviewTalk = 'F';}
-var basket_result = '/product/add_basket.html';
-var basket_option = '/product/basket_option.html';
 var EC_SHOP_MULTISHOP_SHIPPING = {"bMultishopShipping":false,"bMultishopShippingCountrySelection":false,"bMultishopShippingLanguageSelection":false};
 var aLogData = {"log_server1":"eclog2-259.cafe24.com","log_server2":"elg-db-svcm-115.cafe24.com","mid":"innofeel60","stype":"e","domain":"","shop_no":1,"lang":"ko_KR","ver":2,"hash":"","ca":"cfa-js.cafe24.com\/cfa.js","etc":"","mobile_flag":"F"};
 var sMileageName = '적립금';
 var sMileageUnit = '[:PRICE:]원';
 var sDepositName = '예치금';
 var sDepositUnit = '원';
+CAFE24.SHOP_CURRENCY_INFO = {"1":{"aShopCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"aShopSubCurrencyInfo":null,"aBaseCurrencyInfo":{"currency_code":"KRW","currency_no":"410","currency_symbol":"\uffe6","currency_name":"South Korean won","currency_desc":"\uffe6 \uc6d0 (\ud55c\uad6d)","decimal_place":0,"round_method_type":"F"},"fExchangeRate":1,"fExchangeSubRate":null,"aFrontCurrencyFormat":{"head":"&#8361;","tail":""},"aFrontSubCurrencyFormat":{"head":"","tail":""}}}; var SHOP_CURRENCY_INFO = CAFE24.SHOP_CURRENCY_INFO;
 CAFE24.APPSCRIPT_ASSIGN_DATA = CAFE24.APPSCRIPT_ASSIGN_DATA || [{'src':'https://calendar-app.cafe24.com/openapi/inject.js?vs=20240813173302.1&client_id=A8RQp67UIt9nBlqvThz2jC'},{'src':'https://apps.hyapps.com/BannerManagerApp/view/HY.js?vs=20230608194814.1&client_id=gSOPn7dNJxAp8cu31kDDtD'}];
 CAFE24.APPSCRIPT_SDK_DATA = CAFE24.APPSCRIPT_SDK_DATA || ['application','category','collection','customer','order','personal','product','promotion','store','supply','community','notification','design','mileage','privacy','shipping','salesreport'];
 var EC_APPSCRIPT_ASSIGN_DATA = CAFE24.getDeprecatedNamespace('EC_APPSCRIPT_ASSIGN_DATA');

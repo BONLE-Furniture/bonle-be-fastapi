@@ -1,5 +1,4 @@
 # from logging import Logger
-# import json
 import os
 from datetime import  timedelta
 
@@ -19,6 +18,13 @@ router = APIRouter(
     prefix="/user",
     tags=["user CRUD"]
 )
+
+@router.get("/token", tags=["user CRUD"])
+async def read_users_token(current_user: dict = Depends(get_current_user)):
+    """
+    token 존재한다면 사용자 정보를 출력함
+    """
+    return current_user
 
 @router.get("/{user_id}", tags=["user CRUD"])
 async def get_users(user_id):
@@ -142,13 +148,4 @@ async def delete_user(current_user: dict = Depends(get_current_user)):
     # 사용자 삭제
     await db["bonre_users"].delete_one({"_id": current_user["_id"]})
     return {"message": "User deleted successfully"}
-
-
-#front API 수정해야됌
-@router.get("/token", tags=["user CRUD"])
-async def read_users_token(current_user: dict = Depends(get_current_user)):
-    """
-    token 존재한다면 사용자 정보를 출력함
-    """
-    return current_user
 

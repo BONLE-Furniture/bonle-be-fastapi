@@ -26,28 +26,10 @@ async def get_all_shops():
     items = await db["bonre_shops"].find().to_list(1000)
     return items
 
-
-# brand_id를 받아서 해당 브랜드 정보를 반환하는 API
-# test : /brands/get_bonre_brand_by_id/brand_andtrandition
-@router.get("/shop/{shop_id}")
-async def get_shop_info_by_shop_id(shop_id: str):
-    """
-    shop_id를 받아서 해당 샵 정보를 반환하는 API
-
-    input : shop_id {str} ex) shop_andtrandition
-
-    output : shop info {all fields}
-    """
-    item = await db["bonre_shops"].find_one({"_id": shop_id})
-    if item is not None:
-        return item
-    raise HTTPException(status_code=404, detail="Item not found")
-
 ##############
 ## Crawling ##
 ##############
 
-#API 이름 수정
 @router.get("/admin-search", dependencies=[Depends(allow_admin)])
 async def search(keyword: str = Query("놀", description="검색어"), number: int = Query(2, description="사이트당 결과 수")):
     # 1. 여러 사이트에서 검색 결과 가져오기
@@ -89,6 +71,22 @@ async def search(keyword: str = Query("놀", description="검색어"), number: i
         processed_results.append(processed_result)
     
     return {"results": processed_results}
+
+# brand_id를 받아서 해당 브랜드 정보를 반환하는 API
+# test : /brands/get_bonre_brand_by_id/brand_andtrandition
+@router.get("/shop/{shop_id}")
+async def get_shop_info_by_shop_id(shop_id: str):
+    """
+    shop_id를 받아서 해당 샵 정보를 반환하는 API
+
+    input : shop_id {str} ex) shop_andtrandition
+
+    output : shop info {all fields}
+    """
+    item = await db["bonre_shops"].find_one({"_id": shop_id})
+    if item is not None:
+        return item
+    raise HTTPException(status_code=404, detail="Item not found")
 
 # shop 생성 API
 @router.post("/shop/create-shop", dependencies=[Depends(allow_admin)])

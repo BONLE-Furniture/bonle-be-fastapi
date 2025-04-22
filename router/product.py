@@ -111,6 +111,85 @@ async def get_all_products():
     sanitized_items = sanitize_data(items)
     return sanitized_items
 
+# home 화면에 페이징 처리된 상품 리스트를 반환하는 API
+# test : /home/products/?page=3&limit=2
+@router.get("/home")
+async def get_products_list_in_page(page: int = 1, limit: int = 20):
+    skip = (page - 1) * limit
+    total_count = await db["bonre_products"].count_documents({})
+
+    cursor = db["bonre_products"].find({"upload": True}).sort({"brand":1,"name":1,"subname":1}).skip(skip).limit(limit)
+    items = await cursor.to_list(length=limit)
+
+    sanitized_items = sanitize_data(items)
+    if sanitized_items:
+        filtered_items = [
+            {
+                "_id": str(item["_id"]),  # ObjectId -> str 변환
+                "name_kr": item["name_kr"],
+                "name": item["name"],
+                "subname": item["subname"],
+                "subname_kr": item["subname_kr"],
+                "brand": item["brand_kr"],
+                "main_image_url": item["main_image_url"],
+                "bookmark_counts": item["bookmark_counts"],
+                "cheapest": item["cheapest"][-1]["price"] if item.get("cheapest") and len(item["cheapest"]) > 0 else None
+            }
+            for item in sanitized_items
+        ]
+
+    return {
+        "items": filtered_items,
+        "item-total-number": total_count,
+        "selected-item-number": len(filtered_items),
+        "page": page,
+        "limit": limit,
+        "total_pages": ceil(total_count / limit)
+    }
+    
+@router.get("/duplicate-check")
+async def check_product_duplicate(product_name: str = Query(..., description="제품명"), product_sub_name: str = Query(None, description="제품 서브네임")):
+    """
+    제품명과 서브네임으로 중복 검사를 수행하는 API
+    
+    Args:
+        product_name (str): 제품명
+        product_sub_name (str, optional): 제품 서브네임
+        
+    Returns:
+        dict: 중복 여부와 중복된 제품 정보
+    """
+    # 검색 조건 구성
+    query = {
+        "name_kr": product_name,
+        "upload": True
+    }
+    
+    # 서브네임이 제공된 경우에만 조건에 추가
+    if product_sub_name:
+        query["subname_kr"] = product_sub_name
+    
+    # DB에서 제품 검색
+    products = await db["bonre_products"].find(query).to_list(1000)
+    
+    if products:
+        formatted_products = []
+        for product in products:
+            formatted_product = {
+                "name_kr": product["name_kr"],
+                "subname_kr": product.get("subname_kr"),
+            }
+            formatted_products.append(formatted_product)
+        
+        return {
+            "is_duplicate": True,
+            "products": formatted_products
+        }
+    else:
+        return {
+            "is_duplicate": False,
+            "products": []
+        }
 
 # product 조회 API
 @router.get("/{product_id}")
@@ -218,89 +297,6 @@ async def get_cheapest_prices(product_id: str, period: Product_Period):
     # 결과 정렬 및 반환
     sorted_prices = [{"date": date, "price": price} for date, price in sorted(daily_prices.items())]
     return {"period": period.value, "data": sorted_prices}
-
-
-# home 화면에 페이징 처리된 상품 리스트를 반환하는 API
-# test : /home/products/?page=3&limit=2
-# front API 수정 /home/products/ -> product/home
-@router.get("/home")
-async def get_products_list_in_page(page: int = 1, limit: int = 20):
-    skip = (page - 1) * limit
-    total_count = await db["bonre_products"].count_documents({})
-
-    cursor = db["bonre_products"].find({"upload": True}).sort({"brand":1,"name":1,"subname":1}).skip(skip).limit(limit)
-    items = await cursor.to_list(length=limit)
-
-    sanitized_items = sanitize_data(items)
-    if sanitized_items:
-        filtered_items = [
-            {
-                "_id": str(item["_id"]),  # ObjectId -> str 변환
-                "name_kr": item["name_kr"],
-                "name": item["name"],
-                "subname": item["subname"],
-                "subname_kr": item["subname_kr"],
-                "brand": item["brand_kr"],
-                "main_image_url": item["main_image_url"],
-                "bookmark_counts": item["bookmark_counts"],
-                "cheapest": item["cheapest"][-1]["price"] if item.get("cheapest") and len(item["cheapest"]) > 0 else None
-            }
-            for item in sanitized_items
-        ]
-
-    return {
-        "items": filtered_items,
-        "item-total-number": total_count,
-        "selected-item-number": len(filtered_items),
-        "page": page,
-        "limit": limit,
-        "total_pages": ceil(total_count / limit)
-    }
-
-#API 이름 수정
-@router.get("/duplicate-check")
-async def check_product_duplicate(product_name: str = Query(..., description="제품명"), product_sub_name: str = Query(None, description="제품 서브네임")):
-    """
-    제품명과 서브네임으로 중복 검사를 수행하는 API
-    
-    Args:
-        product_name (str): 제품명
-        product_sub_name (str, optional): 제품 서브네임
-        
-    Returns:
-        dict: 중복 여부와 중복된 제품 정보
-    """
-    # 검색 조건 구성
-    query = {
-        "name_kr": product_name,
-        "upload": True
-    }
-    
-    # 서브네임이 제공된 경우에만 조건에 추가
-    if product_sub_name:
-        query["subname_kr"] = product_sub_name
-    
-    # DB에서 제품 검색
-    products = await db["bonre_products"].find(query).to_list(1000)
-    
-    if products:
-        formatted_products = []
-        for product in products:
-            formatted_product = {
-                "name_kr": product["name_kr"],
-                "subname_kr": product.get("subname_kr"),
-            }
-            formatted_products.append(formatted_product)
-        
-        return {
-            "is_duplicate": True,
-            "products": formatted_products
-        }
-    else:
-        return {
-            "is_duplicate": False,
-            "products": []
-        }
 
 
 @router.post("/create-product", dependencies=[Depends(allow_admin)])

@@ -136,7 +136,7 @@ async def update_prices_with_id(product_id: str):
 @router.post("/update_prices/all", tags=["price CRUD"])
 async def update_prices_all():
     # 제품 정보 가져오기
-    product_cursor = db["bonre_products"].find({"upload": True})
+    product_cursor = db["bonre_products"].find({"shop_urls": {"$exists": True, "$ne": []}})
     products = await product_cursor.to_list(length=None)
     if not products:
         raise HTTPException(status_code=404, detail="No products found")

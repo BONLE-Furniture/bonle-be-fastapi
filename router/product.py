@@ -100,7 +100,7 @@ async def get_total(product_id: str):
 ## product ##
 #############
 
-# bonre_brands 컬렉션에 있는 모든 상품 정보를 반환하는 API
+# bonre_products 컬렉션에 있는 모든 상품 정보를 반환하는 API
 @router.get("")
 async def get_all_products():
     collections = await db.list_collection_names()

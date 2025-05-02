@@ -15,7 +15,7 @@ router = APIRouter(
     tags=["shop CRUD"]
 )
 
-@router.get("/shop")
+@router.get("")
 async def get_all_shops():
     """
     bonre_shops 컬렉션에 있는 모든 샵 정보를 반환하는 API

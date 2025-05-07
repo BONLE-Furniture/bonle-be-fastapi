@@ -77,7 +77,6 @@ class Product_Size(BaseModel):
     width: Optional[float] = None
     height: Optional[float] = None
     depth: Optional[float] = None
-    length: Optional[float] = None
 
 
 # ShopUrl 모델 (상점 URL)

@@ -1,6 +1,10 @@
 import logging
 import os
+
 from urllib.parse import urlparse
+
+import re
+
 
 from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form, FastAPI, Query
 import httpx
@@ -33,6 +37,31 @@ async def get_all_shops():
 ##############
 ## Crawling ##
 ##############
+
+def process_site_name(site: str) -> str:
+    """
+    site 이름을 처리하는 함수
+    1. 숫자를 영어로 변환
+    2. 특수문자 제거
+    3. 대문자를 소문자로 변환
+    """
+    # 숫자를 영어로 변환
+    number_map = {
+        '0': 'zero', '1': 'one', '2': 'two', '3': 'three', '4': 'four',
+        '5': 'five', '6': 'six', '7': 'seven', '8': 'eight', '9': 'nine'
+    }
+    
+    # 숫자를 영어로 변환
+    for num, word in number_map.items():
+        site = site.replace(num, word)
+    
+    # 특수문자 제거
+    site = re.sub(r'[^a-zA-Z0-9]', '', site)
+    
+    # 대문자를 소문자로 변환
+    site = site.lower()
+    
+    return f"shop_{site}"
 
 @router.get("/admin-search", dependencies=[Depends(allow_admin)])
 async def search(keyword: str = Query("놀", description="검색어"), number: int = Query(2, description="사이트당 결과 수")):
@@ -69,88 +98,87 @@ async def search(keyword: str = Query("놀", description="검색어"), number: i
             "name": result.get("name"),
             "price": result.get("price"),
             "brand": result.get("brand"),
-            "site": result.get("site"),
+            "site": process_site_name(result.get("site", "")),
             "already_exist": already_exist
         }
         processed_results.append(processed_result)
     
     return {"results": processed_results}
 
-# @router.get("/brave-shop-search", dependencies=[Depends(allow_admin)])
-# async def search(
-#     q: str,
-#     brand_id: str = Query(..., description="필터링할 브랜드 ID (예: brand_louispoulsen)")
-# ):
-#     url = os.getenv("BRAVE_SEARCH_URL")
-#     x_subscription_token = os.getenv("BRAVE_SEARCH_API_KEY")
+@router.get("/brave-shop-search", dependencies=[Depends(allow_admin)])
+async def search(
+    q: str,
+    brand_id: str = Query(..., description="필터링할 브랜드 ID (예: brand_louispoulsen)")
+):
+    url = os.getenv("BRAVE_SEARCH_URL")
+    x_subscription_token = os.getenv("BRAVE_SEARCH_API_KEY")
     
-#     # 1. 브랜드 ID로 샵 필터링
-#     filtered_shops = [
-#         shop for shop in shop_list 
-#         if brand_id in shop.get("brand_list", [])
-#     ]
-#     logging.info(f"filtered_shops: {filtered_shops}")
+    # 1. 브랜드 ID로 샵 필터링
+    filtered_shops = [
+        shop for shop in shop_list 
+        if brand_id in shop.get("brand_list", [])
+    ]
+    logging.info(f"filtered_shops: {filtered_shops}")
     
-#     if not filtered_shops:
-#         raise HTTPException(
-#             status_code=404,
-#             detail=f"해당 브랜드({brand_id})를 보유한 리테일 샵이 없습니다"
-#         )
+    if not filtered_shops:
+        raise HTTPException(
+            status_code=404,
+            detail=f"해당 브랜드({brand_id})를 보유한 리테일 샵이 없습니다"
+        )
 
-#     # 2. 도메인 추출 (중복 제거)
-#     domains = []
-#     for shop in filtered_shops:
-#         parsed = urlparse(shop["product_id"])
-#         domain = parsed.netloc.replace("www.", "").lower()
-#         if domain.count(".") >= 1:  # 유효 도메인 검증
-#             domains.append(domain)
-#     domains = list(set(domains))
-#     logging.info(f"domains: {domains}")
+    # 2. 도메인 추출 (중복 제거)
+    domains = []
+    for shop in filtered_shops:
+        parsed = urlparse(shop["product_id"])
+        domain = parsed.netloc.replace("www.", "").lower()
+        if domain.count(".") >= 1:  # 유효 도메인 검증
+            domains.append(domain)
+    domains = list(set(domains))
+    logging.info(f"domains: {domains}")
 
-#     # 3. 쿼리 생성 (최대 400자)
-#     domain_query = " OR ".join([f"site:{d}" for d in domains])
-#     final_query = f"{q} ({domain_query})"
+    # 3. 쿼리 생성 (최대 400자)
+    domain_query = " OR ".join([f"site:{d}" for d in domains])
+    final_query = f"{q} ({domain_query})"
     
-#     if len(final_query) > 400:
-#         final_query = final_query[:400]
+    if len(final_query) > 400:
+        final_query = final_query[:400]
 
-#     # 4. Brave API 호출
-#     async with httpx.AsyncClient() as client:
-#         try:
-#             response = await client.get(
-#                 url,
-#                 params={
-#                     "q": final_query,
-#                     "country": "KR",
-#                     "ui_lang": "ko-KR"
-#                 },
-#                 headers={
-#                     "Accept": "application/json",
-#                     "X-Subscription-Token": x_subscription_token
-#                 }
-#             )
-#             response.raise_for_status()
+    # 4. Brave API 호출
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(
+                url,
+                params={
+                    "q": final_query,
+                    "country": "KR",
+                    "ui_lang": "ko-KR"
+                },
+                headers={
+                    "Accept": "application/json",
+                    "X-Subscription-Token": x_subscription_token
+                }
+            )
+            response.raise_for_status()
             
-#             # 5. 실제 도메인과 일치하는 결과만 필터링
-#             results = [
-#                 r for r in response.json().get("web", {}).get("results", [])
-#                 if any(d in r["url"] for d in domains)
-#             ]
+            # 5. 실제 도메인과 일치하는 결과만 필터링
+            results = [
+                r for r in response.json().get("web", {}).get("results", [])
+                if any(d in r["url"] for d in domains)
+            ]
             
-#             if results
-            
-#             return {"results": results}
+            return {"results": results}
 
-#         except httpx.HTTPStatusError as e:
-#             raise HTTPException(
-#                 status_code=e.response.status_code,
-#                 detail=f"Brave API 오류: {e.response.text}"
-#             )
-#         except httpx.RequestError as e:
-#             raise HTTPException(
-#                 status_code=500,
-#                 detail=f"Brave API 연결 실패: {str(e)}"
-#             )
+        except httpx.HTTPStatusError as e:
+            raise HTTPException(
+                status_code=e.response.status_code,
+                detail=f"Brave API 오류: {e.response.text}"
+            )
+        except httpx.RequestError as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Brave API 연결 실패: {str(e)}"
+            )
+
 
 # brand_id를 받아서 해당 브랜드 정보를 반환하는 API
 # test : /brands/get_bonre_brand_by_id/brand_andtrandition

@@ -966,3 +966,272 @@ def parse_arkistore(soup, items_per_site):
         product_details.append(details)
 
     return product_details
+
+
+shop_list = [  {
+    "shop": "8COLORS",
+    "product_id": "https://www.ssfshop.com/8Seconds",
+    "brand_list": [
+      "brand_louispoulsen",
+      "brand_stringfurniture",
+      "brand_gubi"
+    ]
+  },
+  {
+    "shop": "EDITORI",
+    "product_id": "https://www.editori.kr/",
+    "brand_list": [
+      "brand_louispoulsen"
+    ]
+  },
+  {
+    "shop": "HPIX",
+    "product_id": "https://hpix.co.kr",
+    "brand_list": [
+      "brand_louispoulsen",
+      "brand_agolighting",
+      "brand_tecta"
+    ]
+  },
+  {
+    "shop": "J.GALLERY",
+    "product_id": "https://j-gallery.co.kr",
+    "brand_list": [
+      "brand_karimoku60",
+      "brand_karimoku",
+      "brand_agolighting"
+    ]
+  },
+  {
+    "shop": "COLLECTION B",
+    "product_id": "https://www.collectionb.cc/main/index.php",
+    "brand_list": [
+      "brand_louispoulsen",
+      "brand_agolighting"
+    ]
+  },
+  {
+    "shop": "JAIME BLANC",
+    "product_id": "https://jaimeblanc.com/index.html",
+    "brand_list": [
+      "brand_louispoulsen",
+      "brand_magis",
+      "brand_stringfurniture"
+    ]
+  },
+  {
+    "shop": "S.HOUZ",
+    "product_id": "https://s-houz.com/",
+    "brand_list": [
+      "brand_louispoulsen"
+    ]
+  },
+  {
+    "shop": "DANSK",
+    "product_id": "https://www.dansk.co.kr/",
+    "brand_list": [
+      "brand_louispoulsen",
+      "brand_carlhansen&son"
+    ]
+  },
+  {
+    "shop": "BENUFE",
+    "product_id": "https://benufe.com/",
+    "brand_list": [
+      "brand_louispoulsen",
+      "brand_magis",
+      "brand_agolighting"
+    ]
+  },
+  {
+    "shop": "INNOMETSA",
+    "product_id": "https://innometsa.com/",
+    "brand_list": [
+      "brand_louispoulsen",
+      "brand_hayfur",
+      "brand_hayacc",
+      "brand_andtrandition",
+      "brand_agolighting",
+      "brand_stringfurniture",
+      "brand_gubi",
+      "brand_wildespieth"
+    ]
+  },
+  {
+    "shop": "BIBLIOTHEQUE",
+    "product_id": "https://www.bibliotheque.co.kr/",
+    "brand_list": [
+      "brand_louispoulsen",
+      "brand_karimoku60",
+      "brand_karimoku",
+      "brand_cassina",
+      "brand_carlhansen&son"
+    ]
+  },
+  {
+    "shop": "ROOMING",
+    "product_id": "https://www.rooming.co.kr/",
+    "brand_list": [
+      "brand_louispoulsen",
+      "brand_flos",
+      "brand_hayfur",
+      "brand_hayacc",
+      "brand_andtrandition",
+      "brand_magis",
+      "brand_agolighting",
+      "brand_stringfurniture"
+    ]
+  },
+  {
+    "shop": "REMOD",
+    "product_id": "https://www.remod.co.kr/",
+    "brand_list": [
+      "brand_karimoku60",
+      "brand_karimoku"
+    ]
+  },
+  {
+    "shop": "MMMG",
+    "product_id": "https://mmmg.kr/",
+    "brand_list": [
+      "brand_karimoku60",
+      "brand_karimoku"
+    ]
+  },
+  {
+    "shop": "Wonderaum",
+    "product_id": "https://www.wonderaum.com/",
+    "brand_list": [
+      "brand_karimoku60",
+      "brand_karimoku",
+      "brand_stringfurniture"
+    ]
+  },
+  {
+    "shop": "UNWIND",
+    "product_id": "https://unwind.kr/",
+    "brand_list": [
+      "brand_karimoku60",
+      "brand_karimoku",
+      "brand_agolighting"
+    ]
+  },
+  {
+    "shop": "Inscale",
+    "product_id": "https://inscale.co.kr/",
+    "brand_list": [
+      "brand_virtraacc",
+      "brand_vitrafur",
+      "brand_carlhansen&son"
+    ]
+  },
+  {
+    "shop": "Space+Logic",
+    "product_id": "https://spacelogic.co.kr/",
+    "brand_list": [
+      "brand_cassina",
+      "brand_usm",
+      "brand_magis"
+    ]
+  },
+  {
+    "shop": "The Conran shop",
+    "product_id": "https://www.lotteon.com/p/display/shop/seltDpShop/32848",
+    "brand_list": [
+      "brand_magis",
+      "brand_carlhansen&son",
+      "brand_agolighting",
+      "brand_verpan"
+    ]
+  },
+  {
+    "shop": "VORBLICK",
+    "product_id": "https://www.vorblick.co.kr/",
+    "brand_list": [
+      "brand_magis",
+      "brand_agolighting"
+    ]
+  },
+  {
+    "shop": "MIGNONDEJJOY",
+    "product_id": "https://mignondejjoy.com/index.html",
+    "brand_list": [
+      "brand_carlhansen&son"
+    ]
+  },
+  {
+    "shop": "Gareem",
+    "product_id": "https://www.gareem.com/",
+    "brand_list": [
+      "brand_hermanmiller"
+    ]
+  },
+  {
+    "shop": "Innovad",
+    "product_id": "https://www.innovad.co.kr/",
+    "brand_list": [
+      "brand_hermanmiller"
+    ]
+  },
+  {
+    "shop": "Chair Gallery",
+    "product_id": "https://www.chairgallery.co.kr/",
+    "brand_list": []
+  },
+  {
+    "shop": "nordicpark",
+    "product_id": "https://www.nordicpark.co.kr/",
+    "brand_list": [
+      "brand_stringfurniture"
+    ]
+  },
+  {
+    "shop": "Ton Store",
+    "product_id": "https://brand.naver.com/ton",
+    "brand_list": [
+      "brand_ton"
+    ]
+  },
+  {
+    "shop": "Innohome",
+    "product_id": "https://innohome.kr/",
+    "brand_list": [
+      "brand_astep"
+    ]
+  },
+  {
+    "shop": "ILVA Korea",
+    "product_id": "https://ilva.co.kr/",
+    "brand_list": []
+  },
+  {
+    "shop": "Kartell Korea",
+    "product_id": "https://kartellkorea.co.kr/",
+    "brand_list": []
+  },
+  {
+    "shop": "Stay H",
+    "product_id": "https://www.stayh.co.kr/",
+    "brand_list": [
+      "brand_carlhansen&son"
+    ]
+  },
+  {
+    "shop": "Segment",
+    "product_id": "https://segment.kr/",
+    "brand_list": [
+      "brand_fatboy"
+    ]
+  },
+  {
+    "shop": "Arki Store",
+    "product_id": "https://arkistore.com/",
+    "brand_list": []
+  },
+  {
+    "shop": "InART",
+    "product_id": "https://www.inartshop.com/main/index",
+    "brand_list": [
+      "brand_louispoulsen"
+    ]
+  }]

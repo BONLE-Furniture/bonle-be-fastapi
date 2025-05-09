@@ -87,7 +87,7 @@ def schedule_price_updates():
         try:
             scheduler.add_job(
                 run_update_prices_all, 
-                CronTrigger(hour=15, minute=20, timezone=utc),
+                CronTrigger(hour=16, minute=20, timezone=utc),
                 id='price_update_job',
                 name='Update all prices',
                 replace_existing=True

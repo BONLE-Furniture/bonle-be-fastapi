@@ -28,18 +28,7 @@ async def get_all_shops():
     if "bonre_shops" not in collections:
         raise HTTPException(status_code=404, detail="Collection not found")
     items = await db["bonre_shops"].find().to_list(1000)
-    if items:
-        filtered_items = [
-            {
-                "shop": item["shop"],
-                "product_id": item["link"],
-                "brand_list": item["brand_list"]
-            }
-            for item in items
-        ]   
-        return filtered_items
-    else:
-        return items
+    return items
 
 ##############
 ## Crawling ##

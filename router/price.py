@@ -75,62 +75,68 @@ async def get_prices_per_shops_today(product_id: str):
 ##############
 # front API 수정
 
-# @router.post("/update_prices/one", tags=["price CRUD"])
-# async def update_prices_with_id(product_id: str):
+@router.post("/update_prices/one", tags=["price CRUD"])
+async def update_prices_with_id(product_id: str):
+    # 제품 정보 가져오기
+    product_doc = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
+    if not product_doc:
+        raise HTTPException(status_code=404, detail="Product not found")
 
-#     # 제품 정보 가져오기
-#     product_doc = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
-#     if not product_doc:
-#         raise HTTPException(status_code=404, detail="Product not found")
+    shops_urls = product_doc.get("shop_urls", [])
+    if not shops_urls:
+        raise HTTPException(status_code=400, detail="No shops_url found for this product")
 
-#     shops_urls = product_doc.get("shop_urls", [])
-#     if not shops_urls:
-#         raise HTTPException(status_code=400, detail="No shops_url found for this product")
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    price_records = []
 
-#     current_date = datetime.now().strftime("%Y-%m-%d")
-#     price_records = []
+    for dict in shops_urls:
+        url = dict["url"]
+        shop_id = dict["shop_id"]
+        info = get_all_info(url)
 
-#     for dict in shops_urls:
-#         url = dict["url"]
-#         shop_id = dict["shop_id"]
-#         info = get_all_info(url)
+        if not info:
+            continue
 
-#         if not info:
-#             continue
+        shop_sld = info["site"]
+        price = info["price"]
 
-#         shop_sld = info["site"]
-#         price = info["price"]
+        if price is None:
+            continue
 
-#         if price is None:
-#             continue
+        price_records.append((shop_id, price))
 
-#         price_records.append((shop_id, price))
+        existing_price_doc = await db["bonre_prices"].find_one({"product_id": product_id, "shop_sld": shop_sld})
+        if existing_price_doc:
+            existing_price_date = existing_price_doc["prices"][-1]["date"]
+            if existing_price_date != current_date:
+                await db["bonre_prices"].update_one(
+                    {"product_id": product_id, "shop_sld": shop_sld},
+                    {"$push": {"prices": {"date": current_date, "price": price}}}
+                )
+                updated_count += 1
+                price_records.append((shop_id, price))
+            else: # 가격이 이미 업데이트된 경우
+                continue
+        else:
+            new_doc = {
+                "product_id": product_id,
+                "shop_sld": shop_sld,
+                "shop_id": shop_id,
+                "prices": [{"date": current_date, "price": price}]
+            }
+            await db["bonre_prices"].insert_one(new_doc)
 
-#         existing_price_doc = await db["bonre_prices"].find_one({"product_id": product_id, "shop_sld": shop_sld})
-#         if existing_price_doc:
-#             await db["bonre_prices"].update_one(
-#                 {"product_id": product_id, "shop_sld": shop_sld},
-#                 {"$push": {"prices": {"date": current_date, "price": price}}}
-#             )
-#         else:
-#             new_doc = {
-#                 "product_id": product_id,
-#                 "shop_sld": shop_sld,
-#                 "prices": [{"date": current_date, "price": price}]
-#             }
-#             await db["bonre_prices"].insert_one(new_doc)
+    # 최저가 업데이트
+    if price_records:
+        cheapest_shop = min(price_records, key=lambda x: int(str(x[1]).replace(",", "")))
+        cheapest_price = cheapest_shop[1]
+        cheapest_shop_id = cheapest_shop[0]
 
-#     # 최저가 업데이트
-#     if price_records:
-#         cheapest_shop = min(price_records, key=lambda x: x[1])
-#         cheapest_price = cheapest_shop[1]
-#         cheapest_shop_id = cheapest_shop[0]
-
-#         await db["bonre_products"].update_one(
-#             {"_id": ObjectId(product_id)},
-#             {"$push": {"cheapest": {"date": current_date, "price": cheapest_price, "shop_id": cheapest_shop_id}}}
-#         )
-#     return {"message": "Prices updated successfully"}
+        await db["bonre_products"].update_one(
+            {"_id": ObjectId(product_id)},
+            {"$push": {"cheapest": {"date": current_date, "price": cheapest_price, "shop_id": cheapest_shop_id}}}
+        )
+    return {"message": "Prices updated successfully"}
 
 # front API 수정
 @router.post("/update_prices/all", tags=["price CRUD"])

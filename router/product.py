@@ -60,6 +60,8 @@ async def get_total(product_id: str):
                 "_id": str(item["_id"]),
                 "name_kr": item["name_kr"],
                 "name": item["name"],
+                "subname": item["subname"],
+                "subname_kr": item["subname_kr"],
                 "brand": item["brand"],
                 "main_image_url": item["main_image_url"],
                 "cheapest": str(

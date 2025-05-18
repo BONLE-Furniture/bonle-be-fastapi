@@ -75,7 +75,7 @@ async def get_prices_per_shops_today(product_id: str):
 ##############
 # front API 수정
 
-@router.post("/update_prices/one", tags=["price CRUD"])
+@router.post("/update-prices/one", tags=["price CRUD"])
 async def update_prices_with_id(product_id: str):
     # 제품 정보 가져오기
     product_doc = await db["bonre_products"].find_one({"_id": ObjectId(product_id)})
@@ -139,7 +139,7 @@ async def update_prices_with_id(product_id: str):
     return {"message": "Prices updated successfully"}
 
 # front API 수정
-@router.post("/update_prices/all", tags=["price CRUD"])
+@router.post("/update-prices/all", tags=["price CRUD"])
 async def update_prices_all():
     # 제품 정보 가져오기
     product_cursor = db["bonre_products"].find({"shop_urls": {"$exists": True, "$ne": []}})

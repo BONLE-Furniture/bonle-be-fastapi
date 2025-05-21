@@ -238,7 +238,7 @@ def get_html_content(url, site_name):
         if site_name == 'innovad':  # 예외처리
             response = requests.get(url, headers=headers, verify=False)
         else:
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, verify=False)  # SSL 인증서 검증 비활성화
 
         # 인코딩 예외 처리
         if site_name in run_encoding:

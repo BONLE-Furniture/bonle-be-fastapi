@@ -1,5 +1,5 @@
 # models.py
-from pydantic import BaseModel, HttpUrl, Field, EmailStr, field_validator
+from pydantic import BaseModel, HttpUrl, Field, EmailStr, field_validator, ValidationInfo
 from typing import List, Optional, Literal
 from typing_extensions import Self
 from datetime import datetime
@@ -12,53 +12,75 @@ from fastapi import HTTPException
 user
 """
 
-class User(BaseModel):
-    id: str = Field(alias="_id") 
-    password: str = "password12"# 비밀번호 해시처리
-    name: str
-    email: EmailStr # 이메일 양식 확인
-    phone:str = "010-0000-0000"# 전화번호 양식 확인
-    role: Literal["member", "admin"] = "member" # member , admin
-    birthday: str = "2000-01-01"# 년-월-일
+class BaseUserModel(BaseModel):
+    email: EmailStr
+    password: str
+    role: Literal["member", "admin"] = "member"
+    service_terms_agreed: bool = False  # 서비스 이용약관 동의
+    privacy_terms_agreed: bool = False  # 개인정보 수집 및 이용 동의
 
-    @field_validator("name", "password", "phone", "birthday")
+    @field_validator("email")
     @classmethod
-    def validate_required_fields(cls, v:str) -> str:
+    def validate_email(cls, v: str) -> str:
         if not v or v.isspace():
-            raise HTTPException(status_code=422, detail="필수 항목을 입력해주세요.") 
+            raise HTTPException(status_code=422, detail="이메일을 입력해주세요.")
         return v
-    
-    @field_validator('password')
+
+    @field_validator("password")
     @classmethod
-    def validate_password(cls, v:str) -> str:
+    def validate_password(cls, v: str) -> str:
         if len(v) < 8:
-            raise HTTPException(status_code=422, detail="비밀번호는 8자 이상 영문과 숫자를 포함하여 작성해주세요.")
+            raise HTTPException(status_code=422, detail="비밀번호는 8자 이상이어야 합니다.")
         if not any(char.isdigit() for char in v):
-            raise HTTPException(status_code=422, detail="비밀번호는 8자 이상 영문과 숫자를 포함하여 작성해주세요.")
+            raise HTTPException(status_code=422, detail="비밀번호는 숫자를 포함해야 합니다.")
         if not any(char.isalpha() for char in v):
-            raise HTTPException(status_code=422, detail="비밀번호는 8자 이상 영문과 숫자를 포함하여 작성해주세요.")
+            raise HTTPException(status_code=422, detail="비밀번호는 영문을 포함해야 합니다.")
+        if not any(char in "!@#$%^&*()_+-=[]{}|;:,.<>?" for char in v):
+            raise HTTPException(status_code=422, detail="비밀번호는 특수문자를 포함해야 합니다.")
         return v
-        
-    @field_validator('phone')
+
+    @field_validator("service_terms_agreed", "privacy_terms_agreed")
     @classmethod
-    def validate_phone(cls, v:str)-> str:
-        if '-' not in v or len(v) != 13:
-            raise HTTPException(status_code=422, detail="전화번호는 '-'를 포함하여 작성해주세요.")
+    def validate_terms_agreed(cls, v: bool) -> bool:
+        if not v:
+            raise HTTPException(status_code=422, detail="필수 약관에 동의해주세요.")
         return v
-    
-    @field_validator('birthday')
+
+class CreateUser(BaseUserModel):
+    password_validation: str
+
+    @field_validator("password_validation")
     @classmethod
-    def validate_birthday(cls, v: str) -> str:
-        """생년월일 형식 검증 (YYYY-MM-DD)"""
-        try:
-            datetime.strptime(v, "%Y-%m-%d")  # 날짜 형식 확인
-        except ValueError:
-            raise HTTPException(status_code=422, detail="생년월일은 YYYY-MM-DD 형식이어야 합니다.")
+    def validate_password_validation(cls, v: str, info: ValidationInfo) -> str:
+        if "password" in info.data and v != info.data["password"]:
+            raise HTTPException(status_code=422, detail="비밀번호가 일치하지 않습니다.")
         return v
+
+class User(BaseUserModel):
+    pass
+
+class UserUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    password: Optional[str] = None
+    role: Optional[Literal["member", "admin"]] = None
+    service_terms_agreed: Optional[bool] = None
+    privacy_terms_agreed: Optional[bool] = None
 
 class UserPasswordUpdate(BaseModel):
     current_password: str
     new_password: str
+
+class EmailRequest(BaseModel):
+    email: str
+
+class EmailVerification(BaseModel):
+    email: EmailStr
+    token: str
+
+class EmailVerificationResponse(BaseModel):
+    message: str
+    verified: bool
+
 
 """
 Product
@@ -266,8 +288,7 @@ class bookmark(BaseModel):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     __v: Optional[int] = 0
 
-
-# Object Type to STR변환
+# Object Type to STR변환_ list 형식
 def sanitize_data(data):
     sanitized_data = []
     for item in data:

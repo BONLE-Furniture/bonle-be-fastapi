@@ -10,6 +10,7 @@ import time
 import router.crawling.shop_search.search_parsers as search_parsers
 import urllib3
 import os
+from urllib.parse import urlparse
 
 # 기본값 설정
 DEFAULT_KEYWORD = "놀"
@@ -42,6 +43,27 @@ def save_html(soup, site_name):
     with open(file_path, "w", encoding="utf-8") as file:
         file.write(soup.prettify())
 
+def is_product_page_gone(url, response):
+    """상품 페이지가 사라졌는지 확인"""
+    # 1. 404 에러 체크
+    if response.status_code == 404:
+        return True
+        
+    # 2. 리다이렉트 체크
+    if response.history:
+        original_path = urlparse(url).path
+        final_path = urlparse(response.url).path
+        
+        # 홈페이지나 메인 카테고리로 리다이렉트된 경우
+        if final_path in ['/', '/index.php', '/main/index.php']:
+            return True
+            
+        # 상품 페이지에서 다른 페이지로 리다이렉트된 경우
+        if 'goods_view.php' in original_path and 'goods_view.php' not in final_path:
+            return True
+            
+    return False
+
 def fetch_static_page(url, keyword):
     search_url = url.replace("키워드", keyword)
     headers = {
@@ -49,8 +71,14 @@ def fetch_static_page(url, keyword):
         'Accept-Language': 'en-US,en;q=0.9',
     }
     try:
-        response = requests.get(search_url, headers=headers, verify=False, timeout=4)
+        response = requests.get(search_url, headers=headers, verify=False, timeout=4, allow_redirects=True)
         response.raise_for_status()
+        
+        # 상품 페이지가 사라진 경우 체크
+        if is_product_page_gone(search_url, response):
+            print(f"Product page is gone or redirected: {search_url}")
+            return None
+            
         if "nordicpark.co.kr" in search_url:
             response.encoding = 'euc-kr'
         return BeautifulSoup(response.text, "html.parser")
@@ -62,16 +90,28 @@ def fetch_dynamic_page(driver, url, keyword):
     search_url = url.replace("키워드", keyword)
     driver.get(search_url)
     time.sleep(3)
+    
     try:
-        alert = driver.switch_to.alert
-        alert_text = alert.text
-        print(f"Alert: {alert_text}")
-        alert.accept()
-        if alert_text in ["검색결과가 없습니다.", "검색결과 없음."]:
-            return BeautifulSoup("<html><body></body></html>", "html.parser")
-    except:
-        pass
-    return BeautifulSoup(driver.page_source, "html.parser")
+        # 현재 URL 확인
+        current_url = driver.current_url
+        if is_product_page_gone(search_url, driver.execute_script("return window.performance.getEntries()[0].responseURL")):
+            print(f"Product page is gone or redirected: {search_url}")
+            return None
+            
+        try:
+            alert = driver.switch_to.alert
+            alert_text = alert.text
+            print(f"Alert: {alert_text}")
+            alert.accept()
+            if alert_text in ["검색결과가 없습니다.", "검색결과 없음."]:
+                return BeautifulSoup("<html><body></body></html>", "html.parser")
+        except:
+            pass
+            
+        return BeautifulSoup(driver.page_source, "html.parser")
+    except Exception as e:
+        print(f"Error in dynamic page fetch: {e}")
+        return None
 
 def run_search(keyword=DEFAULT_KEYWORD, number=DEFAULT_ITEMS_PER_SITE):
     all_results = []
@@ -94,6 +134,9 @@ def run_search(keyword=DEFAULT_KEYWORD, number=DEFAULT_ITEMS_PER_SITE):
                     soup = fetch_dynamic_page(driver, search_url, keyword)
                 else:
                     soup = fetch_static_page(search_url, keyword)
+
+                if soup is None:  # 상품 페이지가 사라진 경우
+                    continue
 
                 save_html(soup, site_name)
 

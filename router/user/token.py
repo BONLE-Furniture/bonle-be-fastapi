@@ -8,6 +8,7 @@ from passlib.context import CryptContext
 from jose import JWTError, jwt
 
 from db.database import db
+from db.models import sanitize_data
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
@@ -21,16 +22,16 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         payload = jwt.decode(token, secret_key, algorithms=[algorithm])
-        username: str = payload.get("sub")
-        if username is None:
+        email: str = payload.get("sub")
+        if email is None:
             raise credentials_exception
     except JWTError:
         raise credentials_exception
         
-    user = await db["bonre_users"].find_one({"_id": username})
+    user = await db["bonre_users"].find_one({"email": email})
     if user is None:
         raise credentials_exception
-    return user
+    return sanitize_data([user])[0]
 
 class RoleChecker:
     def __init__(self, allowed_roles: list):

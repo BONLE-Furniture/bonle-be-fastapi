@@ -123,3 +123,5 @@ websockets==10.4
 wheel==0.45.1
 wsproto==1.2.0
 zipp==3.21.0
+emails
+python-multipart

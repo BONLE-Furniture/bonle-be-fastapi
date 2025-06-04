@@ -122,7 +122,7 @@ class Product(BaseModel):
     description: Optional[str] = ""
     material: Optional[str] = ""
     filter: Optional[object]  # 색상과 재질 필터
-    category: Optional[str] = ""
+    category: Optional[List[str]] = []  # 카테고리 ID 배열
     bookmark_counts: Optional[int] = 0
     shop_urls: Optional[List[Product_ShopUrl]] = List[Product_ShopUrl]  # 각 상점 URL 정보
     main_image_url: Optional[str] = ""  # 이미지 URL
@@ -143,7 +143,7 @@ class ProductUpdate(BaseModel):
     description: Optional[str] = None
     material: Optional[str] = None
     filter: Optional[object] = None  # 색상과 재질 필터
-    category: Optional[str] = None
+    category: Optional[List[str]] = None  # 카테고리 ID 배열
     bookmark_counts: Optional[int] = None
     shop_urls: List[Product_ShopUrl] = None  # 각 상점 URL 정보
     main_image_url: Optional[str] = None  # 이미지 URL

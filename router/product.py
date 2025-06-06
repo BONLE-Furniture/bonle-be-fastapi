@@ -135,7 +135,8 @@ async def get_products_list_in_page(page: int = 1, limit: int = 20):
                 "brand": item["brand_kr"],
                 "main_image_url": item["main_image_url"],
                 "bookmark_counts": item["bookmark_counts"],
-                "cheapest": item["cheapest"][-1]["price"] if item.get("cheapest") and len(item["cheapest"]) > 0 else None
+                "cheapest": item["cheapest"][-1]["price"] if item.get("cheapest") and len(item["cheapest"]) > 0 else None,
+                "categories": item["category"] if item.get("category") else []
             }
             for item in sanitized_items
         ]

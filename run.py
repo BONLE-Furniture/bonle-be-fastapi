@@ -78,7 +78,14 @@ app.add_middleware(
 # 신뢰할 수 있는 호스트 설정
 app.add_middleware(
     TrustedHostMiddleware, 
-    allowed_hosts=["bonle.co.kr", "localhost", "127.0.0.1"]
+    allowed_hosts=[
+        "bonle.co.kr",
+        "localhost",
+        "127.0.0.1",
+        "bonle-be-gsaggggmdcb4dsas.koreacentral-01.azurewebsites.net",
+        "localhost:3000",
+        "127.0.0.1:3000"
+    ]
 )
 
 """

@@ -67,4 +67,5 @@ def define_crypt():
     return crypt
 
 def verify_password(plain_password, hashed_password, crypt: CryptContext = define_crypt()):
-    return crypt.verify(plain_password, hashed_password)
+    salt = os.getenv("SALT")
+    return crypt.verify(plain_password + salt, hashed_password)

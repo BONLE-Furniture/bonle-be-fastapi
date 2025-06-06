@@ -11,10 +11,18 @@ from fastapi.security import OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from urllib.parse import unquote
+from dotenv import load_dotenv
 
 from router.user.token import create_access_token, define_crypt, oauth2_scheme, verify_password, get_current_user
 from router.user.email_verification import create_verification_token, send_verification_email, verify_email
 from router.user.token import allow_admin
+
+# 환경 변수 로드
+load_dotenv()
+
+# 비밀번호 해시 컨텍스트 설정
+crypt = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
 router = APIRouter(
     prefix="/user",
     tags=["user CRUD"]
@@ -141,7 +149,7 @@ async def create_user(create_user_data: CreateUser, crypt: CryptContext = Depend
         raise HTTPException(status_code=400, detail=str(e))
 
     # 6. 비밀번호 해시 처리
-    user_dict["password"] = crypt.hash(user_dict["password"])
+    user_dict["password"] = crypt.hash(user_dict["password"]+os.getenv("SALT"))
     
     # 7. User 모델로 변환 및 검증
     try:
@@ -174,7 +182,7 @@ async def update_password(password: UserPasswordUpdate, current_user: dict = Dep
         raise HTTPException(status_code=401, detail="Current password is incorrect")
 
     # 새 비밀번호 해시 처리 후 업데이트
-    hashed_new_password = crypt.hash(password.new_password)
+    hashed_new_password = crypt.hash(password.new_password + os.getenv("SALT"))
     await db["bonre_users"].update_one({"email": current_user["email"]}, {"$set": {"password": hashed_new_password}})
     return {"message": "Password updated successfully"}
 

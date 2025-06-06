@@ -124,6 +124,7 @@ async def get_products_list_in_page(page: int = 1, limit: int = 20):
     items = await cursor.to_list(length=limit)
 
     sanitized_items = sanitize_data(items)
+    filtered_items = []
     if sanitized_items:
         filtered_items = [
             {

@@ -1,10 +1,15 @@
+import os
+
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from datetime import datetime
 from pytz import timezone
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import RedirectResponse
 
 # Import routers
 from router.price import router as price_router
@@ -21,15 +26,60 @@ app = FastAPI()
 utc = timezone('UTC')
 scheduler = AsyncIOScheduler(timezone=utc)
 
+# HTTPS 리다이렉션 미들웨어
+class HTTPSRedirectMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        if not request.url.scheme == "https" and os.getenv("ENVIRONMENT") == "production":
+            url = str(request.url).replace("http://", "https://", 1)
+            return RedirectResponse(url=url, status_code=301)
+        return await call_next(request)
+
+# 보안 헤더 미들웨어
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        
+        # HSTS 헤더 (1년 = 31536000초)
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+        
+        # CSP 헤더
+        response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self'"
+        
+        # XSS 보호
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        
+        # 클릭재킹 방지
+        response.headers["X-Frame-Options"] = "DENY"
+        
+        # MIME 타입 스니핑 방지
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        
+        # 리퍼러 정책
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        
+        return response
+
+# 미들웨어 추가
+app.add_middleware(HTTPSRedirectMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
+
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://bonle.co.kr",
+        "http://localhost:3000",  # 개발 환경
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# 신뢰할 수 있는 호스트 설정
+app.add_middleware(
+    TrustedHostMiddleware, 
+    allowed_hosts=["bonle.co.kr", "localhost", "127.0.0.1"]
+)
 
 """
 FAST API 연결, MongoDB 연결 테스트

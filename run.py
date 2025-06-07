@@ -76,17 +76,19 @@ app.add_middleware(
 )
 
 # 신뢰할 수 있는 호스트 설정
-app.add_middleware(
-    TrustedHostMiddleware, 
-    allowed_hosts=[
-        "bonle.co.kr",
-        "localhost",
-        "127.0.0.1",
-        "bonle-be-gsaggggmdcb4dsas.koreacentral-01.azurewebsites.net",
-        "localhost:3000",
-        "127.0.0.1:3000"
-    ]
-)
+if os.getenv("ENVIRONMENT") == "production":
+    app.add_middleware(
+        TrustedHostMiddleware, 
+        allowed_hosts=[
+            "bonle.co.kr",
+        ]
+    )
+else:
+    # 개발 환경에서는 호스트 검증 비활성화
+    app.add_middleware(
+        TrustedHostMiddleware, 
+        allowed_hosts=["*"]
+    )
 
 """
 FAST API 연결, MongoDB 연결 테스트

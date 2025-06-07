@@ -118,13 +118,55 @@ async def get_all_products():
 @router.get("/home")
 async def get_products_list_in_page(page: int = 1, limit: int = 20):
     skip = (page - 1) * limit
-    total_count = await db["bonre_products"].count_documents({})
+    total_count = await db["bonre_products"].count_documents({"upload": True})
 
     cursor = db["bonre_products"].find({"upload": True}).sort({"brand":1,"name":1,"subname":1}).skip(skip).limit(limit)
     items = await cursor.to_list(length=limit)
 
     sanitized_items = sanitize_data(items)
-    filtered_items = []
+    if sanitized_items:
+        filtered_items = [
+            {
+                "_id": str(item["_id"]),  # ObjectId -> str 변환
+                "name_kr": item["name_kr"],
+                "name": item["name"],
+                "subname": item["subname"],
+                "subname_kr": item["subname_kr"],
+                "brand": item["brand_kr"],
+                "main_image_url": item["main_image_url"],
+                "bookmark_counts": item["bookmark_counts"],
+                "cheapest": item["cheapest"][-1]["price"] if item.get("cheapest") and len(item["cheapest"]) > 0 else None,
+                "categories": item["category"] if item.get("category") else []
+            }
+            for item in sanitized_items
+        ]
+
+    return {
+        "items": filtered_items,
+        "item-total-number": total_count,
+        "selected-item-number": len(filtered_items),
+        "page": page,
+        "limit": limit,
+        "total_pages": ceil(total_count / limit)
+    }
+
+# 카테고리 필터링된 상품 리스트를 반환하는 API
+@router.get("/category")
+async def get_products_by_category(page: int = 1, limit: int = 20, category_id: str = Query(..., description="카테고리 ID")):
+    skip = (page - 1) * limit
+    
+    # 카테고리 필터링을 먼저 수행
+    filter_query = {
+        "upload": True,
+        "category": category_id
+    }
+    
+    total_count = await db["bonre_products"].count_documents(filter_query)
+
+    cursor = db["bonre_products"].find(filter_query).sort({"brand":1,"name":1,"subname":1}).skip(skip).limit(limit)
+    items = await cursor.to_list(length=limit)
+
+    sanitized_items = sanitize_data(items)
     if sanitized_items:
         filtered_items = [
             {

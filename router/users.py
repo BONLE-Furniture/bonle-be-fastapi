@@ -78,7 +78,7 @@ async def check_email(email: str):
 #         return {"exists": True}
 #     return {"exists": False}
     
-@router.post("/send-verification", tags=["user CRUD"])
+@router.post("/send-verification-for-register", tags=["user CRUD"])
 async def send_verification_email_endpoint(request: EmailRequest):
     """이메일 인증 요청 엔드포인트"""
     # 이미 가입된 이메일인지 확인
@@ -89,6 +89,18 @@ async def send_verification_email_endpoint(request: EmailRequest):
     # 인증 토큰 생성 및 이메일 발송
     verification_token = create_verification_token(request.email)
     await send_verification_email(request.email, verification_token)
+    
+    return {"message": "인증 이메일이 발송되었습니다."}
+
+@router.post("/send-verification-for-pw-update", tags=["user CRUD"])
+async def send_verification_email_endpoint(request: EmailRequest):
+    """이메일 인증 요청 엔드포인트"""
+    # 이미 가입된 이메일인지 확인
+    existing_user = await db["bonre_users"].find_one({"email": request.email})
+    if existing_user:
+        # 인증 토큰 생성 및 이메일 발송
+        verification_token = create_verification_token(request.email)
+        await send_verification_email(request.email, verification_token)
     
     return {"message": "인증 이메일이 발송되었습니다."}
 
@@ -165,26 +177,84 @@ async def create_user(create_user_data: CreateUser, crypt: CryptContext = Depend
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.post("/update-password", tags=["user CRUD"])
+@router.post("/update-password-token", tags=["user CRUD"])
 async def update_password(password: UserPasswordUpdate, current_user: dict = Depends(get_current_user), crypt: CryptContext = Depends(define_crypt)):
     """
-    비밀번호 변경 API
+    비밀번호 변경 API (로그인 상태)
 
-    input : current_password{str}, new_password{str}
+    input : 
+    - current_password: str
+    - new_password: str
+    - password_validation: str
     """
+    if not password.current_password:
+        raise HTTPException(status_code=422, detail="현재 비밀번호를 입력해주세요.")
+
+    # 사용자 존재 여부 확인
     user = await db["bonre_users"].find_one({"email": current_user["email"]})
-    
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="사용자를 찾을 수 없습니다.")
 
     # 현재 비밀번호 검증
     if not verify_password(password.current_password, user["password"]):
-        raise HTTPException(status_code=401, detail="Current password is incorrect")
+        raise HTTPException(status_code=401, detail="현재 비밀번호가 일치하지 않습니다.")
+
+    # 새 비밀번호와 확인 비밀번호 일치 여부 확인
+    if password.new_password != password.password_validation:
+        raise HTTPException(status_code=422, detail="새 비밀번호와 확인 비밀번호가 일치하지 않습니다.")
+
+    # 새 비밀번호가 현재 비밀번호와 동일한지 확인
+    if verify_password(password.new_password, user["password"]):
+        raise HTTPException(status_code=422, detail="새 비밀번호는 현재 비밀번호와 달라야 합니다.")
 
     # 새 비밀번호 해시 처리 후 업데이트
     hashed_new_password = crypt.hash(password.new_password + os.getenv("SALT"))
-    await db["bonre_users"].update_one({"email": current_user["email"]}, {"$set": {"password": hashed_new_password}})
-    return {"message": "Password updated successfully"}
+    await db["bonre_users"].update_one(
+        {"email": current_user["email"]}, 
+        {"$set": {"password": hashed_new_password}}
+    )
+    return {"message": "비밀번호가 성공적으로 변경되었습니다."}
+
+@router.post("/update-password-email-verification", tags=["user CRUD"])
+async def update_password_email_verification(password: UserPasswordUpdate, email: str, crypt: CryptContext = Depends(define_crypt)):
+    """
+    이메일 인증을 통한 비밀번호 변경 API (비밀번호 분실 시)
+
+    input : 
+    - email: str
+    - new_password: str
+    - password_validation: str
+    """
+    # 새 비밀번호와 확인 비밀번호 일치 여부 확인
+    if password.new_password != password.password_validation:
+        raise HTTPException(status_code=422, detail="새 비밀번호와 확인 비밀번호가 일치하지 않습니다.")
+
+    # 이메일 인증 상태 확인
+    user_verify = await db["email_verifications"].find_one({
+        "email": email,
+        "expires_at": {"$gt": datetime.utcnow()},  # 만료되지 않은 토큰만 확인
+        "verified": True  # 인증이 완료된 토큰만 확인
+    })
+    
+    if not user_verify:
+        raise HTTPException(status_code=401, detail="이메일 인증이 필요합니다.")
+
+    # 사용자 존재 여부 확인
+    user = await db["bonre_users"].find_one({"email": email})
+    if not user:
+        raise HTTPException(status_code=404, detail="사용자를 찾을 수 없습니다.")
+
+    # 새 비밀번호 해시 처리 후 업데이트
+    hashed_new_password = crypt.hash(password.new_password + os.getenv("SALT"))
+    await db["bonre_users"].update_one(
+        {"email": email}, 
+        {"$set": {"password": hashed_new_password}}
+    )
+    
+    # 인증 토큰 삭제
+    await db["email_verifications"].delete_one({"email": email})
+    
+    return {"message": "비밀번호가 성공적으로 변경되었습니다."}
 
 @router.post("/login", tags=["user CRUD"])
 async def login_user(login_form: OAuth2PasswordRequestForm = Depends()):

@@ -68,4 +68,9 @@ def define_crypt():
 
 def verify_password(plain_password, hashed_password, crypt: CryptContext = define_crypt()):
     salt = os.getenv("SALT")
+    if salt is None:
+        raise HTTPException(
+            status_code=500,
+            detail="서버 설정 오류: SALT 환경 변수가 설정되지 않았습니다."
+        )
     return crypt.verify(plain_password + salt, hashed_password)

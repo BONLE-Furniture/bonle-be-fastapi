@@ -16,6 +16,7 @@ class BaseUserModel(BaseModel):
     email: EmailStr
     password: str
     role: Literal["member", "admin"] = "member"
+    fourteen_over: bool = False # 14세 이상 여부
     service_terms_agreed: bool = False  # 서비스 이용약관 동의
     privacy_terms_agreed: bool = False  # 개인정보 수집 및 이용 동의
 
@@ -39,7 +40,7 @@ class BaseUserModel(BaseModel):
             raise HTTPException(status_code=422, detail="비밀번호는 특수문자를 포함해야 합니다.")
         return v
 
-    @field_validator("service_terms_agreed", "privacy_terms_agreed")
+    @field_validator("service_terms_agreed", "privacy_terms_agreed", "fourteen_over")
     @classmethod
     def validate_terms_agreed(cls, v: bool) -> bool:
         if not v:
@@ -67,8 +68,29 @@ class UserUpdate(BaseModel):
     privacy_terms_agreed: Optional[bool] = None
 
 class UserPasswordUpdate(BaseModel):
-    current_password: str
+    current_password: Optional[str] = None
     new_password: str
+    password_validation: str
+
+    @field_validator("password_validation")
+    @classmethod
+    def validate_password_validation(cls, v: str, info: ValidationInfo) -> str:
+        if "new_password" in info.data and v != info.data["new_password"]:
+            raise HTTPException(status_code=422, detail="비밀번호가 일치하지 않습니다.")
+        return v
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if len(v) < 8:
+            raise HTTPException(status_code=422, detail="비밀번호는 8자 이상이어야 합니다.")
+        if not any(char.isdigit() for char in v):
+            raise HTTPException(status_code=422, detail="비밀번호는 숫자를 포함해야 합니다.")
+        if not any(char.isalpha() for char in v):
+            raise HTTPException(status_code=422, detail="비밀번호는 영문을 포함해야 합니다.")
+        if not any(char in "!@#$%^&*()_+-=[]{}|;:,.<>?" for char in v):
+            raise HTTPException(status_code=422, detail="비밀번호는 특수문자를 포함해야 합니다.")
+        return v
 
 class EmailRequest(BaseModel):
     email: str

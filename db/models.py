@@ -180,6 +180,22 @@ class Product_Period(str, Enum):
     one_year = "1year"
     all_time = "all"
 
+class Bookmark(BaseModel):
+    email: EmailStr
+    product_id: str
+    created_at: datetime
+
+    @classmethod
+    def from_mongo(cls, doc):
+        return cls(
+            email=doc["_id"]["email"],
+            product_id=doc["_id"]["product_id"],
+            created_at=doc["created_at"]
+        )
+
+class BookmarkCreate(BaseModel):
+    product_id: str
+    
 """
 filter & category
 """
@@ -302,13 +318,6 @@ class Product_Price(BaseModel):
     prices: List[Price]
 
 
-class bookmark(BaseModel):
-    id: str = None
-    userId: str
-    product_id: str
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
-    __v: Optional[int] = 0
 
 # Object Type to STR변환_ list 형식
 def sanitize_data(data):

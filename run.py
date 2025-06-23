@@ -21,6 +21,7 @@ from router.filter import router as filter_router
 from router.designer import router as designer_router
 from router.category import router as category_router
 from router.brand import router as brand_router
+from router.bookmark import router as bookmark_router
 
 app = FastAPI()
 utc = timezone('UTC')
@@ -102,6 +103,7 @@ async def read_root():
 app.include_router(user_router)
 app.include_router(total_router)
 app.include_router(product_router)
+app.include_router(bookmark_router)
 app.include_router(price_router)
 app.include_router(brand_router)
 app.include_router(shop_router)

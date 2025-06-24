@@ -11,7 +11,7 @@ from db.models import Product, ProductUpdate, Product_Period, sanitize_data
 
 from db.storage import delete_blob_by_url, upload_imgFile_to_blob
 from router.user.token import allow_admin
-
+from utils.product_search import search_products
 
 router = APIRouter(
     prefix="/product",
@@ -114,7 +114,6 @@ async def get_all_products():
     sanitized_items = sanitize_data(items)
     return sanitized_items
 
-# home 화면에 페이징 처리된 상품 리스트를 반환하는 API
 @router.get("/home")
 async def get_products_list_in_page(
     page: int = 1,
@@ -122,62 +121,7 @@ async def get_products_list_in_page(
     category_id: Optional[str] = Query(None, description="카테고리 ID"),
     query: Optional[str] = Query(None, description="검색어")
 ):
-    skip = (page - 1) * limit
-    
-    # 기본 쿼리 생성
-    filter_query = {"upload": True}
-    
-    # 카테고리 ID가 제공된 경우 필터링 추가
-    if category_id:
-        filter_query["category"] = category_id
-    
-    # 검색어가 제공된 경우 검색 로직 추가
-    if query:
-        search_query = {
-            "$or": [
-                {"name": {"$regex": query, "$options": "i"}},
-                {"name_kr": {"$regex": query, "$options": "i"}},
-                {"subname": {"$regex": query, "$options": "i"}},
-                {"subname_kr": {"$regex": query, "$options": "i"}},
-                {"brand": {"$regex": query, "$options": "i"}},
-                {"brand_kr": {"$regex": query, "$options": "i"}}
-            ]
-        }
-        filter_query.update(search_query)
-    
-    total_count = await db["bonre_products"].count_documents(filter_query)
-
-    cursor = db["bonre_products"].find(filter_query)
-    cursor = cursor.sort({"brand":1,"name":1,"subname":1}).skip(skip).limit(limit)
-    items = await cursor.to_list(length=limit)
-
-    sanitized_items = sanitize_data(items)
-    if sanitized_items:
-        filtered_items = [
-            {
-                "_id": str(item["_id"]),  # ObjectId -> str 변환
-                "name_kr": item["name_kr"],
-                "name": item["name"],
-                "subname": item["subname"],
-                "subname_kr": item["subname_kr"],
-                "brand": item["brand_kr"],
-                "main_image_url": item["main_image_url"],
-                "bookmark_counts": item["bookmark_counts"],
-                "cheapest": item["cheapest"][-1]["price"] if item.get("cheapest") and len(item["cheapest"]) > 0 else None,
-                "categories": item["category"] if item.get("category") else []
-            }
-            for item in sanitized_items
-        ]
-
-    return {
-        "items": filtered_items,
-        "item-total-number": total_count,
-        "selected-item-number": len(filtered_items),
-        "page": page,
-        "limit": limit,
-        "total_pages": ceil(total_count / limit)
-    }
-
+    return await search_products(page, limit, category_id, query)
 
 @router.get("/duplicate-check")
 async def check_product_duplicate(product_name: str = Query(..., description="제품명"), product_sub_name: str = Query(None, description="제품 서브네임")):

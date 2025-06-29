@@ -1,7 +1,11 @@
-from typing import Optional
+from typing import Optional, List
 from math import ceil
 from db.database import db
 from db.models import sanitize_data
+import logging
+from fastapi import HTTPException
+
+logger = logging.getLogger(__name__)
 
 async def search_products(
     page: int = 1,
@@ -115,3 +119,173 @@ async def search_products(
         "limit": limit,
         "total_pages": ceil(total_count / limit)
     }
+
+async def get_search_suggestions_db(query: str) -> List[str]:
+    """
+    MongoDB에서 검색어를 기반으로 자동완성 제안을 생성합니다.
+    
+    Args:
+        query: 사용자가 입력한 검색어
+        
+    Returns:
+        List[str]: 자동완성 제안 목록 (최대 10개)
+    """
+    try:
+        # 검색어가 너무 짧으면 전체 검색을 시도
+        if len(query) < 2:
+            pipeline = [
+                {
+                    "$search": {
+                        "index": "product_index",
+                        "compound": {
+                            "should": [
+                                {
+                                    "wildcard": {
+                                        "query": f"*{query}*",
+                                        "path": "name"
+                                    }
+                                },
+                                {
+                                    "wildcard": {
+                                        "query": f"*{query}*",
+                                        "path": "name_kr"
+                                    }
+                                },
+                                {
+                                    "wildcard": {
+                                        "query": f"*{query}*",
+                                        "path": "brand"
+                                    }
+                                },
+                                {
+                                    "wildcard": {
+                                        "query": f"*{query}*",
+                                        "path": "brand_kr"
+                                    }
+                                },
+                                {
+                                    "wildcard": {
+                                        "query": f"*{query}*",
+                                        "path": "subname"
+                                    }
+                                },
+                                {
+                                    "wildcard": {
+                                        "query": f"*{query}*",
+                                        "path": "subname_kr"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "$project": {
+                        "suggestion": {
+                            "$concat": [
+                                {"$ifNull": ["$name_kr", "$name"]},
+                                " ",
+                                {"$ifNull": ["$brand_kr", "$brand"]},
+                                " ",
+                                {"$ifNull": ["$subname_kr", "$subname"]}
+                            ]
+                        }
+                    }
+                },
+                {
+                    "$limit": 10
+                }
+            ]
+        else:
+            # 검색어가 2글자 이상이면 autocomplete 사용
+            pipeline = [
+                {
+                    "$search": {
+                        "index": "product_index",
+                        "compound": {
+                            "should": [
+                                {
+                                    "autocomplete": {
+                                        "query": query,
+                                        "path": "name",
+                                        "fuzzy": {"maxEdits": 1}
+                                    }
+                                },
+                                {
+                                    "autocomplete": {
+                                        "query": query,
+                                        "path": "name_kr",
+                                        "fuzzy": {"maxEdits": 1}
+                                    }
+                                },
+                                {
+                                    "autocomplete": {
+                                        "query": query,
+                                        "path": "brand",
+                                        "fuzzy": {"maxEdits": 1}
+                                    }
+                                },
+                                {
+                                    "autocomplete": {
+                                        "query": query,
+                                        "path": "brand_kr",
+                                        "fuzzy": {"maxEdits": 1}
+                                    }
+                                },
+                                {
+                                    "autocomplete": {
+                                        "query": query,
+                                        "path": "subname",
+                                        "fuzzy": {"maxEdits": 1}
+                                    }
+                                },
+                                {
+                                    "autocomplete": {
+                                        "query": query,
+                                        "path": "subname_kr",
+                                        "fuzzy": {"maxEdits": 1}
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "$project": {
+                        "suggestion": {
+                            "$concat": [
+                                {"$ifNull": ["$name_kr", "$name"]},
+                                " ",
+                                {"$ifNull": ["$brand_kr", "$brand"]},
+                                " ",
+                                {"$ifNull": ["$subname_kr", "$subname"]}
+                            ]
+                        }
+                    }
+                },
+                {
+                    "$limit": 10
+                }
+            ]
+        
+        # 검색 실행
+        result = await db["bonre_products"].aggregate(pipeline).to_list(length=10)
+        
+        # 중복 제거 및 제안 생성
+        suggestions = list({
+            suggestion["suggestion"].strip() 
+            for suggestion in result 
+            if suggestion["suggestion"].strip()
+        })[:10]
+        
+        # 여전히 결과가 없으면 빈 문자열 제거
+        if not suggestions:
+            suggestions = ["검색 결과가 없습니다."]
+        
+        return suggestions
+    except Exception as e:
+        logger.error(f"Error in get_search_suggestions_db: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to fetch search suggestions"
+        )

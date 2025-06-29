@@ -4,14 +4,14 @@ from datetime import datetime, timedelta
 from bson import ObjectId
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Depends, Query, UploadFile, File, Form, FastAPI
+from fastapi import APIRouter, HTTPException, Depends, Query, UploadFile, File, Form, FastAPI, Body
 
 from db.database import db
 from db.models import Product, ProductUpdate, Product_Period, sanitize_data
 
 from db.storage import delete_blob_by_url, upload_imgFile_to_blob
 from router.user.token import allow_admin
-from utils.product_search import search_products
+from utils.product_search import search_products, get_search_suggestions_db
 
 router = APIRouter(
     prefix="/product",
@@ -404,3 +404,23 @@ async def delete_product(product_id: str):
     if result.deleted_count == 1:
         return {"message": "Product deleted successfully"}
     raise HTTPException(status_code=404, detail="Product not found")
+
+@router.post("/suggestions")
+async def get_search_suggestions(query: str = Body(..., description="검색어")):
+    """
+    검색어에 대한 자동완성 제안을 제공하는 API
+    
+    Args:
+        query (str): 검색어
+        
+    Returns:
+        dict: 자동완성 제안 목록
+    """
+    if not query:
+        return {"suggestions": []}
+    
+    try:
+        suggestions = await get_search_suggestions_db(query)
+        return {"suggestions": suggestions}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch suggestions: {str(e)}")

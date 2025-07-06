@@ -283,6 +283,11 @@ async def login_user(login_form: OAuth2PasswordRequestForm = Depends()):
         expires_delta=access_token_expires
     )
     
+    # 터미널에 토큰 출력
+    print("\n=== Login Success ===")
+    print(f"Token: {access_token}")
+    print("==================\n")
+
     return {
         "access_token": access_token,
         "token_type": "bearer",

@@ -188,8 +188,8 @@ class Bookmark(BaseModel):
     @classmethod
     def from_mongo(cls, doc):
         return cls(
-            email=doc["_id"]["email"],
-            product_id=doc["_id"]["product_id"],
+            email=doc["email"],
+            product_id=doc["product_id"],
             created_at=doc["created_at"]
         )
 

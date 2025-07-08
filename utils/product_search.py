@@ -185,8 +185,6 @@ async def get_search_suggestions_db(query: str) -> List[str]:
                             "$concat": [
                                 {"$ifNull": ["$name_kr", "$name"]},
                                 " ",
-                                {"$ifNull": ["$brand_kr", "$brand"]},
-                                " ",
                                 {"$ifNull": ["$subname_kr", "$subname"]}
                             ]
                         }
@@ -255,8 +253,6 @@ async def get_search_suggestions_db(query: str) -> List[str]:
                         "suggestion": {
                             "$concat": [
                                 {"$ifNull": ["$name_kr", "$name"]},
-                                " ",
-                                {"$ifNull": ["$brand_kr", "$brand"]},
                                 " ",
                                 {"$ifNull": ["$subname_kr", "$subname"]}
                             ]

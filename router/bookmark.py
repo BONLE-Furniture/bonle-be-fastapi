@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from db.database import db
-from db.models import Bookmark, sanitize_data
+from db.models import Bookmark, sanitize_data, Product
 from typing import List
 from datetime import datetime
 from router.user.token import allow_admin, get_current_user
@@ -49,6 +49,43 @@ async def get_my_bookmarks(current_user: dict = Depends(get_current_user)):
     email = current_user["email"]
     bookmarks = await db["bonre_bookmarks"].find({"email": email}).to_list(1000)
     return [Bookmark.from_mongo(b) for b in bookmarks]
+
+# 내 북마크의 상품 정보 조회
+@router.get("/me/products")
+async def get_my_bookmarks_products(current_user: dict = Depends(get_current_user)):
+    """
+    현재 로그인한 사용자의 북마크한 상품들의 정보를 반환하는 API
+
+    output: 북마크한 상품들의 정보 리스트
+    """
+    email = current_user["email"]
+    
+    # 사용자의 북마크 목록 조회
+    bookmarks = await db["bonre_bookmarks"].find({"email": email}).to_list(1000)
+    if not bookmarks:
+        return []
+    
+    # 북마크된 상품들의 id 목록
+    product_ids = [ObjectId(bookmark["product_id"]) for bookmark in bookmarks]
+    
+    # 상품 정보 조회
+    items = await db["bonre_products"].find({"_id": {"$in": product_ids}}).to_list(1000)
+    if not items:
+        return []
+        
+    filtered_items = [
+        {
+            "_id": str(item["_id"]),
+            "name_kr": item["name_kr"],
+            "name": item["name"],
+            "brand": item["brand"],
+            "main_image_url": item["main_image_url"],
+            "cheapest": str(
+                item["cheapest"][-1]["price"] if item.get("cheapest") and len(item["cheapest"]) > 0 else None)
+        }
+        for item in items
+    ]
+    return filtered_items
 
 # 북마크 삭제
 @router.delete("/delete-bookmark/{product_id}")

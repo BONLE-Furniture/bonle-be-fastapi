@@ -146,7 +146,7 @@ class Product(BaseModel):
     filter: Optional[object]  # 색상과 재질 필터
     category: Optional[List[str]] = []  # 카테고리 ID 배열
     bookmark_counts: Optional[int] = 0
-    shop_urls: Optional[List[Product_ShopUrl]] = List[Product_ShopUrl]  # 각 상점 URL 정보
+    shop_urls: Optional[List[Product_ShopUrl]] = []  # 각 상점 URL 정보
     main_image_url: Optional[str] = ""  # 이미지 URL
     cheapest: Optional[List[Product_Cheapest]] = []  # 가격 이력 리스트
     upload: bool = False
